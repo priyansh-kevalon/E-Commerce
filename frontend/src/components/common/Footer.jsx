@@ -6,20 +6,20 @@ const COLUMNS = [
   {
     title: 'Get to Know Us',
     links: [
-      { label: 'About Velmora', to: '/' },
+      { label: 'About Velmora', to: '/about' },
+      { label: 'Contact Us', to: '/contact' },
       { label: 'Careers', to: '/' },
       { label: 'Press Releases', to: '/' },
       { label: 'Corporate Information', to: '/' },
-      { label: 'Sustainability', to: '/' },
     ],
   },
   {
     title: 'Shop with Us',
     links: [
       { label: 'All Products', to: '/products' },
-      { label: "Today's Deals", to: '/products?featured=true' },
-      { label: 'New Arrivals', to: '/products?sort=newest' },
-      { label: 'Best Sellers', to: '/products?sort=popular' },
+      { label: "Today's Deals", to: '/deals' },
+      { label: 'New Arrivals', to: '/new-arrivals' },
+      { label: 'Best Sellers', to: '/best-sellers' },
       { label: 'Your Wishlist', to: '/wishlist' },
     ],
   },
@@ -36,10 +36,10 @@ const COLUMNS = [
   {
     title: 'Let Us Help You',
     links: [
-      { label: 'Shipping & Delivery', to: '/products' },
+      { label: 'Shipping & Delivery', to: '/deals' },
       { label: 'Returns & Replacements', to: '/orders' },
       { label: 'Payment Methods', to: '/checkout' },
-      { label: 'Help Centre', to: '/' },
+      { label: 'Help Centre', to: '/contact' },
       { label: 'Track Your Order', to: '/orders' },
     ],
   },

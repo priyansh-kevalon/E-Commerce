@@ -1,6 +1,27 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Home, SlidersHorizontal, X } from 'lucide-react';
+import {
+  ArrowDownAZ,
+  ArrowDownWideNarrow,
+  ArrowRight,
+  ArrowUpDown,
+  ArrowUpWideNarrow,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Flame,
+  Home,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sparkles,
+  Star,
+  Tag,
+  TrendingUp,
+  Truck,
+  X,
+} from 'lucide-react';
 import ProductList from '../components/product/ProductList.jsx';
 import ProductFilter from '../components/product/ProductFilter.jsx';
 import { fetchCategories, fetchProducts } from '../services/productService.js';
@@ -8,12 +29,53 @@ import { PRODUCTS_PER_PAGE, SORT_OPTIONS } from '../utils/constants.js';
 
 const DEFAULT_FILTERS = { category: '', minPrice: '', maxPrice: '', sort: 'newest' };
 
-export default function Products() {
+const SORT_META = {
+  newest: { label: 'Newest first', Icon: Clock },
+  price_asc: { label: 'Price: low to high', Icon: ArrowUpWideNarrow },
+  price_desc: { label: 'Price: high to low', Icon: ArrowDownWideNarrow },
+  rating: { label: 'Top rated', Icon: Star },
+  popular: { label: 'Most popular', Icon: Flame },
+  name_asc: { label: 'Name: A to Z', Icon: ArrowDownAZ },
+};
+
+const PRESETS = {
+  deals: {
+    title: "Today's Deals",
+    kicker: 'Limited time offers',
+    tagline:
+      'Hand-picked offers at prices that disappear fast. Grab them before the clock runs out.',
+    featured: true,
+    sort: '',
+    gradient: 'from-deal via-amber-600 to-orange-500',
+    Icon: Tag,
+  },
+  'new-arrivals': {
+    title: 'New Arrivals',
+    kicker: 'Fresh on the shelf',
+    tagline: 'The latest drops just landed in our catalogue. Be the first to own them.',
+    featured: false,
+    sort: 'newest',
+    gradient: 'from-brand-700 via-brand-600 to-cyan-500',
+    Icon: Sparkles,
+  },
+  'best-sellers': {
+    title: 'Best Sellers',
+    kicker: 'Loved by thousands',
+    tagline: 'The products shoppers keep coming back for — most ordered, most reviewed, most loved.',
+    featured: false,
+    sort: 'popular',
+    gradient: 'from-ink via-brand-900 to-brand-700',
+    Icon: TrendingUp,
+  },
+};
+
+export default function Products({ preset = null }) {
+  const presetConfig = PRESETS[preset] || null;
   const [searchParams] = useSearchParams();
   const search = searchParams.get('search') || '';
   const categoryFromUrl = searchParams.get('category') || '';
-  const sortFromUrl = searchParams.get('sort') || '';
-  const featuredFromUrl = searchParams.get('featured') === 'true';
+  const sortFromUrl = presetConfig ? presetConfig.sort : searchParams.get('sort') || '';
+  const featuredFromUrl = presetConfig ? presetConfig.featured : searchParams.get('featured') === 'true';
 
   const [filters, setFilters] = useState({
     ...DEFAULT_FILTERS,
@@ -28,6 +90,8 @@ export default function Products() {
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
+  const sortRef = useRef(null);
 
   useEffect(() => {
     setFilters((prev) => ({
@@ -95,6 +159,22 @@ export default function Products() {
     };
   }, [filtersOpen]);
 
+  useEffect(() => {
+    if (!sortOpen) return undefined;
+    const onClickOutside = (event) => {
+      if (sortRef.current && !sortRef.current.contains(event.target)) setSortOpen(false);
+    };
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setSortOpen(false);
+    };
+    document.addEventListener('mousedown', onClickOutside);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [sortOpen]);
+
   const handleFilterChange = (partial) => {
     setFilters((prev) => ({ ...prev, ...partial }));
     setPage(1);
@@ -150,6 +230,8 @@ export default function Products() {
   );
 
   const total = pagination?.total ?? 0;
+  const activeSortValue = filters.sort || 'newest';
+  const ActiveMeta = SORT_META[activeSortValue] || SORT_META.newest;
 
   return (
     <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
@@ -158,7 +240,7 @@ export default function Products() {
           <Home size={13} /> Home
         </Link>
         <span>/</span>
-        <span className="font-medium text-slate-700">Products</span>
+        <span className="font-medium text-slate-700">{presetConfig ? presetConfig.title : 'Products'}</span>
         {filters.category && (
           <>
             <span>/</span>
@@ -172,6 +254,53 @@ export default function Products() {
           </>
         )}
       </div>
+
+      {presetConfig && (
+        <section
+          className={`relative mt-3 overflow-hidden rounded-2xl bg-gradient-to-r ${presetConfig.gradient} px-6 py-8 text-white shadow-luxe sm:px-10`}
+        >
+          <div className="pointer-events-none absolute -right-12 -top-20 h-60 w-60 rounded-full bg-white/10 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-24 left-1/4 h-52 w-52 rounded-full bg-black/10 blur-2xl" />
+          <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                <presetConfig.Icon size={12} /> {presetConfig.kicker}
+              </span>
+              <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight sm:text-4xl">
+                {presetConfig.title}
+              </h1>
+              <p className="mt-2 max-w-xl text-sm text-white/85 sm:text-base">
+                {presetConfig.tagline}
+              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] font-medium text-white/80">
+                <span className="inline-flex items-center gap-1.5">
+                  <Truck size={14} /> Free delivery over Rs.999
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck size={14} /> 7-day easy returns
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Check size={14} /> Genuine products
+                </span>
+              </div>
+            </div>
+            {categories.length > 0 && (
+              <div className="flex flex-wrap gap-2 lg:max-w-xs lg:justify-end">
+                {categories.slice(0, 4).map((category) => (
+                  <Link
+                    key={category._id}
+                    to={`/products?category=${encodeURIComponent(category.name)}`}
+                    className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold backdrop-blur-sm transition hover:bg-white hover:text-brand-900"
+                  >
+                    {category.name}
+                    <ArrowRight size={12} />
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       <div className="mt-3 grid gap-4 lg:grid-cols-[248px_1fr]">
         <div className="hidden lg:block">
@@ -191,27 +320,85 @@ export default function Products() {
               <h1 className="text-base font-bold text-slate-800">
                 {search
                   ? `Results for "${search}"`
-                  : filters.category || (featured ? "Today's Deals" : 'All Products')}
+                  : presetConfig
+                    ? presetConfig.title
+                    : filters.category || (featured ? "Today's Deals" : 'All Products')}
               </h1>
               <span className="hidden text-sm text-slate-400 sm:inline">
                 ({total} item{total === 1 ? '' : 's'})
               </span>
             </div>
 
-            <label className="flex items-center gap-2 text-sm text-slate-600">
+            <div className="relative z-30 flex items-center gap-2 text-sm text-slate-600">
               <span className="hidden font-medium sm:inline">Sort by:</span>
-              <select
-                value={filters.sort || 'newest'}
-                onChange={(event) => handleFilterChange({ sort: event.target.value })}
-                className="rounded-sm border border-slate-300 bg-white px-2 py-1.5 text-sm font-medium text-slate-700 outline-none focus:border-brand-500"
-              >
-                {SORT_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <div ref={sortRef} className="relative">
+                <button
+                  type="button"
+                  aria-haspopup="listbox"
+                  aria-expanded={sortOpen}
+                  onClick={() => setSortOpen((open) => !open)}
+                  className={`inline-flex items-center gap-2 rounded-md border bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 shadow-sm transition ${
+                    sortOpen
+                      ? 'border-brand-500 ring-2 ring-brand-100'
+                      : 'border-slate-300 hover:border-brand-400 hover:text-brand-700'
+                  }`}
+                >
+                  <ActiveMeta.Icon size={15} className="text-brand-500" />
+                  {ActiveMeta.label}
+                  <ChevronDown
+                    size={15}
+                    className={`text-slate-400 transition-transform duration-200 ${
+                      sortOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                {sortOpen && (
+                  <div
+                    role="listbox"
+                    aria-label="Sort products"
+                    className="absolute right-0 top-full mt-2 w-64 animate-fade-up rounded-xl border border-slate-200 bg-white p-2 shadow-luxe"
+                  >
+                    <p className="px-2.5 pb-1.5 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                      Sort products
+                    </p>
+                    <div className="space-y-0.5">
+                      {SORT_OPTIONS.map((option) => {
+                        const meta = SORT_META[option.value];
+                        const selected = activeSortValue === option.value;
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            role="option"
+                            aria-selected={selected}
+                            onClick={() => {
+                              handleFilterChange({ sort: option.value });
+                              setSortOpen(false);
+                            }}
+                            className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm transition ${
+                              selected
+                                ? 'bg-brand-50 font-semibold text-brand-700'
+                                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            }`}
+                          >
+                            <span
+                              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${
+                                selected ? 'bg-brand-100 text-brand-600' : 'bg-slate-100 text-slate-400'
+                              }`}
+                            >
+                              <meta.Icon size={15} />
+                            </span>
+                            <span className="flex-1 font-medium">{option.label}</span>
+                            {selected && <Check size={15} className="shrink-0 text-brand-600" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {activeChips.length > 0 && (

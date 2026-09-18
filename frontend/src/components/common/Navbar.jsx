@@ -7,6 +7,7 @@ import {
   Headphones,
   Heart,
   Home,
+  Info,
   LayoutGrid,
   LogOut,
   MapPin,
@@ -14,7 +15,9 @@ import {
   Package,
   RotateCcw,
   Search,
+  ShieldCheck,
   ShoppingCart,
+  Sparkles,
   Tag,
   TrendingUp,
   Truck,
@@ -27,39 +30,36 @@ import { useWishlist } from '../../context/WishlistContext.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 import { fetchCategories } from '../../services/productService.js';
 
+const PRODUCT_COLLECTIONS = [
+  { to: '/products', label: 'All Products' },
+  { to: '/deals', label: "Today's Deals" },
+  { to: '/new-arrivals', label: 'New Arrivals' },
+  { to: '/best-sellers', label: 'Best Sellers' },
+];
+
 const NAV_LINKS = [
-  {
-    to: '/products?featured=true',
-    label: "Today's Deals",
-    isActive: (params) => params.get('featured') === 'true',
-  },
-  {
-    to: '/products?sort=newest',
-    label: 'New Arrivals',
-    isActive: (params) => params.get('sort') === 'newest',
-  },
-  {
-    to: '/products?sort=popular',
-    label: 'Best Sellers',
-    isActive: (params) => params.get('sort') === 'popular',
-  },
-  {
-    to: '/products',
-    label: 'All Products',
-    isActive: (params) =>
-      !params.has('featured') &&
-      !params.has('sort') &&
-      !params.has('category') &&
-      !params.has('search'),
-  },
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About Us' },
+  { to: '/contact', label: 'Contact Us' },
 ];
 
 const UTILITY_LINKS = [
-  { to: '/products?featured=true', label: 'Offers' },
+  { to: '/deals', label: 'Offers' },
   { to: '/orders', label: 'Track Order' },
   { to: '/wishlist', label: 'Wishlist' },
-  { to: '/profile', label: 'Help' },
+  { to: '/contact', label: 'Help' },
 ];
+
+const PRODUCT_MENU_PATHS = ['/products', '/deals', '/new-arrivals', '/best-sellers'];
+
+const isNavLinkActive = (link, pathname) =>
+  link.to === '/'
+    ? pathname === '/'
+    : link.to === '/products'
+      ? PRODUCT_MENU_PATHS.includes(pathname)
+      : pathname === link.to;
+
+const isProductsMenuActive = (pathname) => PRODUCT_MENU_PATHS.includes(pathname);
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -77,13 +77,12 @@ export default function Navbar() {
   const deptsRef = useRef(null);
   const deptsTimer = useRef(null);
 
-  const params = new URLSearchParams(location.search);
-  const activeCategory = params.get('category');
   const firstName = user?.name?.split(' ')[0];
+  const totalProducts = categories.reduce((sum, category) => sum + (category.productCount ?? 0), 0);
 
   useEffect(() => {
     let active = true;
-    fetchCategories({ status: 'active' })
+    fetchCategories({ withCount: true, status: 'active' })
       .then((list) => {
         if (active) setCategories(list);
       })
@@ -269,38 +268,104 @@ export default function Navbar() {
             </button>
 
             {deptsOpen && (
-              <div className="absolute left-0 top-full z-50 mt-2 w-[360px] animate-fade-in rounded-xl border border-slate-200 bg-white p-2 shadow-luxe">
-                <p className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-slate-400">
-                  Browse departments
-                </p>
-                <Link
-                  to="/products"
-                  onClick={() => setDeptsOpen(false)}
-                  className="flex items-center gap-2.5 rounded-lg bg-gradient-to-r from-brand-800 to-brand-700 px-3 py-2.5 text-sm font-bold text-white shadow-glow transition hover:brightness-110"
-                >
-                  <Boxes size={16} /> Shop all products
-                  <ChevronRight size={15} className="ml-auto" />
-                </Link>
-                <div className="my-1.5 h-px bg-slate-100" />
-                {categories.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-0.5 pb-1">
-                    {categories.map((category) => (
-                      <Link
-                        key={category._id}
-                        to={`/products?category=${encodeURIComponent(category.name)}`}
-                        onClick={() => setDeptsOpen(false)}
-                        className="group/row flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
-                      >
-                        <span className="truncate">{category.name}</span>
-                        <span className="shrink-0 text-xs text-slate-400 group-hover/row:text-brand-500">
-                          {category.productCount ?? 0}
-                        </span>
-                      </Link>
-                    ))}
+              <div className="absolute left-0 top-full z-50 mt-2 w-[540px] animate-fade-in overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-luxe">
+                <div className="flex items-center justify-between bg-gradient-to-r from-brand-800 to-brand-700 px-4 py-2.5">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-white">
+                    All Departments
+                  </p>
+                  <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[11px] font-bold text-accent-200">
+                    {totalProducts} products in store
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-[1.35fr_1fr]">
+                  <div className="p-3">
+                    <p className="px-2 pb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">
+                      Shop by department
+                    </p>
+                    {categories.length > 0 ? (
+                      <div className="grid gap-0.5">
+                        {categories.map((category) => (
+                          <Link
+                            key={category._id}
+                            to={`/products?category=${encodeURIComponent(category.name)}`}
+                            onClick={() => setDeptsOpen(false)}
+                            className="group/row flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition hover:bg-brand-50"
+                          >
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-brand-100 text-[11px] font-bold text-brand-700 transition group-hover/row:bg-brand-600 group-hover/row:text-white">
+                              {category.name.charAt(0)}
+                            </span>
+                            <span className="flex-1 truncate text-sm font-medium text-slate-700 group-hover/row:text-brand-800">
+                              {category.name}
+                            </span>
+                            <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-500 group-hover/row:bg-brand-100 group-hover/row:text-brand-600">
+                              {category.productCount ?? 0}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="px-2 py-3 text-sm text-slate-400">Loading departments…</p>
+                    )}
                   </div>
-                ) : (
-                  <p className="px-3 py-4 text-sm text-slate-400">Loading departments…</p>
-                )}
+
+                  <div className="border-l border-slate-100 p-3">
+                    <p className="px-2 pb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">
+                      Popular right now
+                    </p>
+                    <div className="space-y-0.5">
+                      {[
+                        { to: '/deals', label: "Today's Deals", Icon: Tag, tint: 'bg-red-50 text-red-500' },
+                        { to: '/new-arrivals', label: 'New Arrivals', Icon: Sparkles, tint: 'bg-cyan-50 text-cyan-600' },
+                        { to: '/best-sellers', label: 'Best Sellers', Icon: TrendingUp, tint: 'bg-emerald-50 text-emerald-600' },
+                      ].map((item) => (
+                        <Link
+                          key={item.to}
+                          to={item.to}
+                          onClick={() => setDeptsOpen(false)}
+                          className="group/row flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                        >
+                          <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${item.tint}`}>
+                            <item.Icon size={15} />
+                          </span>
+                          {item.label}
+                          <ChevronRight
+                            size={14}
+                            className="ml-auto text-slate-300 transition group-hover/row:translate-x-0.5 group-hover/row:text-brand-500"
+                          />
+                        </Link>
+                      ))}
+                    </div>
+
+                    <div className="my-2.5 h-px bg-slate-100" />
+
+                    <Link
+                      to="/deals"
+                      onClick={() => setDeptsOpen(false)}
+                      className="block rounded-xl bg-gradient-to-br from-deal via-amber-500 to-orange-500 p-3 text-white shadow-glow transition hover:brightness-110"
+                    >
+                      <p className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-white/85">
+                        <Tag size={12} /> Limited time
+                      </p>
+                      <p className="mt-0.5 text-sm font-extrabold leading-tight">
+                        Deals up to 50% off
+                      </p>
+                      <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold">
+                        Shop now <ChevronRight size={12} />
+                      </p>
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-100 p-3">
+                  <Link
+                    to="/products"
+                    onClick={() => setDeptsOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-800 to-brand-700 px-4 py-2.5 text-sm font-bold text-white shadow-glow transition hover:brightness-110"
+                  >
+                    <Boxes size={16} /> Shop all products <ChevronRight size={15} />
+                  </Link>
+                </div>
               </div>
             )}
           </div>
@@ -435,15 +500,8 @@ export default function Navbar() {
       {/* Tier 3: departments band */}
       <div className="hidden bg-mid text-slate-200 lg:block">
         <div className="mx-auto flex h-11 max-w-[1600px] items-center gap-1 px-3 text-[13px] sm:px-5">
-          <button
-            type="button"
-            onClick={() => setDrawerOpen(true)}
-            className="flex h-11 items-center gap-2 border-r border-white/10 pr-3 font-bold text-white transition hover:text-accent-300"
-          >
-            <Menu size={16} /> All Departments
-          </button>
-          {NAV_LINKS.map((link) => {
-            const isActive = link.isActive(params);
+          {NAV_LINKS.slice(0, 1).map((link) => {
+            const isActive = isNavLinkActive(link, location.pathname);
             return (
               <Link
                 key={link.label}
@@ -459,29 +517,56 @@ export default function Navbar() {
               </Link>
             );
           })}
-          {categories.slice(0, 5).map((category) => {
-            const isActive = activeCategory === category.name;
+          <Link
+            to="/products"
+            aria-current={isProductsMenuActive(location.pathname) ? 'page' : undefined}
+            className={`flex items-center gap-1.5 rounded px-3 py-1.5 font-medium transition ${
+              isProductsMenuActive(location.pathname)
+                ? 'bg-white/15 text-white shadow-sm'
+                : 'text-slate-200 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            <LayoutGrid size={15} />
+            All Products
+          </Link>
+          {NAV_LINKS.slice(1).map((link) => {
+            const isActive = isNavLinkActive(link, location.pathname);
             return (
               <Link
-                key={category._id}
-                to={`/products?category=${encodeURIComponent(category.name)}`}
+                key={link.label}
+                to={link.to}
                 aria-current={isActive ? 'page' : undefined}
-                className={`rounded px-3 py-1.5 transition ${
+                className={`rounded px-3 py-1.5 font-medium transition ${
                   isActive
-                    ? 'bg-white/15 text-white'
-                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                    ? 'bg-white/15 text-white shadow-sm'
+                    : 'text-slate-200 hover:bg-white/10 hover:text-white'
                 }`}
               >
-                {category.name}
+                {link.label}
               </Link>
             );
           })}
-          <Link
-            to="/products?featured=true"
-            className="ml-auto inline-flex items-center gap-1.5 rounded-lg bg-accent-500 px-3 py-1.5 text-xs font-bold text-ink transition hover:bg-accent-400 active:scale-95"
-          >
-            <Tag size={14} /> Today&apos;s Deals
-          </Link>
+          <div className="ml-auto hidden shrink-0 items-center xl:flex">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
+              <Truck size={15} className="text-accent-300" />
+              Free delivery over Rs.999
+            </span>
+            <span className="mx-2 h-4 w-px bg-white/10" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
+              <RotateCcw size={15} className="text-accent-300" />
+              7-day easy returns
+            </span>
+            <span className="mx-2 h-4 w-px bg-white/10" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
+              <ShieldCheck size={15} className="text-accent-300" />
+              Secure payments
+            </span>
+            <span className="mx-2 h-4 w-px bg-white/10" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
+              <Headphones size={15} className="text-accent-300" />
+              24/7 support
+            </span>
+          </div>
         </div>
       </div>
 
@@ -513,13 +598,24 @@ export default function Navbar() {
 
             <p className="bg-mid px-5 py-2 text-sm font-bold text-white">Shop by department</p>
             <nav className="p-2">
-              <Link
-                to="/products"
-                onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-800 transition hover:bg-brand-50 hover:text-brand-800"
-              >
-                <Home size={17} className="text-slate-400" /> All Products
-              </Link>
+              {PRODUCT_COLLECTIONS.map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  onClick={() => setDrawerOpen(false)}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition hover:bg-brand-50 hover:text-brand-800 ${
+                    item.label === 'All Products'
+                      ? 'font-semibold text-slate-800'
+                      : 'font-medium text-slate-700'
+                  }`}
+                >
+                  {item.label === 'All Products' && <Home size={17} className="text-slate-400" />}
+                  {item.label === "Today's Deals" && <Tag size={17} className="text-slate-400" />}
+                  {item.label === 'New Arrivals' && <Sparkles size={17} className="text-slate-400" />}
+                  {item.label === 'Best Sellers' && <TrendingUp size={17} className="text-slate-400" />}
+                  {item.label}
+                </Link>
+              ))}
               {categories.map((category) => (
                 <Link
                   key={category._id}
@@ -535,20 +631,6 @@ export default function Navbar() {
 
             <p className="bg-mid px-5 py-2 text-sm font-bold text-white">Help &amp; Settings</p>
             <nav className="p-2">
-              <Link
-                to="/products?featured=true"
-                onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
-              >
-                <Tag size={17} className="text-slate-400" /> Today&apos;s Deals
-              </Link>
-              <Link
-                to="/products?sort=popular"
-                onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
-              >
-                <TrendingUp size={17} className="text-slate-400" /> Best Sellers
-              </Link>
               <Link
                 to="/wishlist"
                 onClick={() => setDrawerOpen(false)}
@@ -573,11 +655,18 @@ export default function Navbar() {
                 </Link>
               )}
               <Link
-                to="/profile"
+                to="/contact"
                 onClick={() => setDrawerOpen(false)}
                 className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
               >
                 <Headphones size={17} className="text-slate-400" /> Help Centre
+              </Link>
+              <Link
+                to="/about"
+                onClick={() => setDrawerOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+              >
+                <Info size={17} className="text-slate-400" /> About Us
               </Link>
               <Link
                 to="/orders"

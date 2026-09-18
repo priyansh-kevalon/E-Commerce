@@ -6,6 +6,8 @@ import Loader from '../components/common/Loader.jsx';
 import Home from '../pages/Home.jsx';
 import Products from '../pages/Products.jsx';
 import ProductDetails from '../pages/ProductDetails.jsx';
+import About from '../pages/About.jsx';
+import Contact from '../pages/Contact.jsx';
 import Cart from '../pages/Cart.jsx';
 import Wishlist from '../pages/Wishlist.jsx';
 import Checkout from '../pages/Checkout.jsx';
@@ -62,6 +64,11 @@ export default function AppRoutes() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/deals" element={<Products preset="deals" />} />
+        <Route path="/new-arrivals" element={<Products preset="new-arrivals" />} />
+        <Route path="/best-sellers" element={<Products preset="best-sellers" />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />

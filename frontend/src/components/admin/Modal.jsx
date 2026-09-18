@@ -5,9 +5,10 @@ const SIZES = {
   sm: 'max-w-md',
   md: 'max-w-xl',
   lg: 'max-w-3xl',
+  xl: 'max-w-4xl',
 };
 
-export default function Modal({ open, title, onClose, children, footer, size = 'md' }) {
+export default function Modal({ open, title, subtitle, onClose, children, footer, size = 'md' }) {
   const dialogRef = useRef(null);
 
   useEffect(() => {
@@ -31,8 +32,8 @@ export default function Modal({ open, title, onClose, children, footer, size = '
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 sm:p-6">
-      <div className="fixed inset-0 bg-slate-900/50" onClick={onClose} aria-hidden="true" />
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 sm:p-8">
+      <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
 
       <div
         ref={dialogRef}
@@ -40,25 +41,28 @@ export default function Modal({ open, title, onClose, children, footer, size = '
         aria-modal="true"
         aria-labelledby="admin-modal-title"
         tabIndex={-1}
-        className={`relative z-10 my-8 w-full ${SIZES[size] || SIZES.md} rounded-md bg-white shadow-xl outline-none`}
+        className={`relative z-10 my-4 w-full ${SIZES[size] || SIZES.md} overflow-hidden rounded-2xl bg-white shadow-luxe outline-none animate-pop`}
       >
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-          <h2 id="admin-modal-title" className="text-base font-semibold text-slate-900">
-            {title}
-          </h2>
+        <div className="relative flex items-start justify-between gap-4 border-b border-slate-100 bg-gradient-to-r from-white via-white to-brand-50/60 px-6 py-5">
+          <div className="min-w-0">
+            {subtitle && <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">{subtitle}</p>}
+            <h2 id="admin-modal-title" className="mt-0.5 font-display text-lg font-extrabold tracking-tight text-slate-900">
+              {title}
+            </h2>
+          </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
           >
             <X size={18} />
           </button>
         </div>
 
-        <div className="px-5 py-5">{children}</div>
+        <div className="max-h-[calc(100vh-16rem)] overflow-y-auto px-6 py-6">{children}</div>
 
-        {footer && <div className="border-t border-slate-100 px-5 py-4">{footer}</div>}
+        {footer && <div className="border-t border-slate-100 bg-slate-50/80 px-6 py-4">{footer}</div>}
       </div>
     </div>
   );
