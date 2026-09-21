@@ -184,13 +184,13 @@ export default function RegisterForm() {
         onClick={() => setAsSeller((value) => !value)}
         className={`flex w-full items-start gap-3 rounded-sm border p-3.5 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ${
           asSeller
-            ? 'border-amber-400 bg-amber-50 ring-2 ring-amber-100'
-            : 'border-slate-300 bg-slate-50 hover:border-amber-300'
+            ? 'border-accent-400 bg-accent-50 ring-2 ring-accent-100'
+            : 'border-slate-300 bg-slate-50 hover:border-accent-300'
         }`}
       >
         <span
           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-sm transition ${
-            asSeller ? 'bg-gradient-to-br from-amber-400 to-amber-600 text-ink' : 'bg-slate-200 text-slate-500'
+            asSeller ? 'bg-gradient-to-br from-accent-400 to-accent-600 text-ink' : 'bg-slate-200 text-slate-500'
           }`}
         >
           <Store size={16} />

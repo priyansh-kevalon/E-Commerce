@@ -77,7 +77,7 @@ export default function Home() {
   }, [activeCategory]);
 
   return (
-    <div className="min-h-screen bg-slate-100 pb-6">
+    <div className="min-h-screen bg-slate-50 pb-6">
       <Hero />
 
       <div className="mx-auto max-w-[1600px] space-y-4 px-3 pt-4 sm:px-4">

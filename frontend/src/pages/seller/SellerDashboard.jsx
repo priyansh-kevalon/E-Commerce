@@ -44,7 +44,7 @@ export default function SellerDashboard() {
 
   return (
     <div className="space-y-6">
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 px-6 py-7 text-ink shadow-luxe sm:px-8">
+      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-600 via-brand-700 to-brand-800 px-6 py-7 text-white shadow-luxe sm:px-8">
         <div className="pointer-events-none absolute -right-10 -top-12 h-44 w-44 rounded-full bg-white/20 blur-2xl" />
         <div className="pointer-events-none absolute -bottom-16 left-1/3 h-40 w-40 rounded-full bg-ink/10 blur-2xl" />
         <div className="relative flex flex-wrap items-center justify-between gap-4">

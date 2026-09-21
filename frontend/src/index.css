@@ -3,17 +3,29 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-300: #93c5fd;
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
-  --color-brand-800: #1e40af;
-  --color-brand-900: #1e3a8a;
-  --color-brand-950: #172554;
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
+
+  --color-secondary-50: #f5f3ff;
+  --color-secondary-100: #ede9fe;
+  --color-secondary-200: #ddd6fe;
+  --color-secondary-300: #c4b5fd;
+  --color-secondary-400: #a78bfa;
+  --color-secondary-500: #8b5cf6;
+  --color-secondary-600: #7c3aed;
+  --color-secondary-700: #6d28d9;
+  --color-secondary-800: #5b21b6;
+  --color-secondary-900: #4c1d95;
+  --color-secondary-950: #2e1065;
 
   --color-accent-50: #fffbeb;
   --color-accent-100: #fef3c7;
@@ -29,7 +41,7 @@
   --color-ink: #0f172a;
   --color-mid: #1e293b;
   --color-star: #f59e0b;
-  --color-rating: #1d4ed8;
+  --color-rating: #4f46e5;
   --color-deal: #b45309;
 
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
@@ -37,8 +49,8 @@
   --font-display: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
 
   --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.05), 0 18px 38px -26px rgba(15, 23, 42, 0.4);
-  --shadow-glow: 0 14px 30px -14px rgba(37, 99, 235, 0.5);
-  --shadow-glow-accent: 0 14px 30px -14px rgba(245, 158, 11, 0.5);
+  --shadow-glow: 0 14px 30px -14px rgba(79, 70, 229, 0.5);
+  --shadow-glow-accent: 0 14px 30px -14px rgba(16, 185, 129, 0.5);
   --shadow-luxe: 0 30px 70px -35px rgba(15, 23, 42, 0.6);
 
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -126,10 +138,10 @@
   @keyframes pulse-glow {
     0%,
     100% {
-      box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.45);
+      box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.45);
     }
     50% {
-      box-shadow: 0 0 0 14px rgba(37, 99, 235, 0);
+      box-shadow: 0 0 0 14px rgba(99, 102, 241, 0);
     }
   }
   @keyframes drawer {
@@ -221,7 +233,7 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-sans);
-  background-color: #f1f5f9;
+  background-color: #f8fafc;
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -241,8 +253,8 @@ h4 {
 }
 
 ::selection {
-  background-color: #bfdbfe;
-  color: #172554;
+  background-color: #c7d2fe;
+  color: #1e1b4b;
 }
 
 * {
@@ -301,18 +313,18 @@ h4 {
   }
 
   .dotted {
-    background-image: radial-gradient(rgba(37, 99, 235, 0.22) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(99, 102, 241, 0.22) 1px, transparent 1px);
     background-size: 18px 18px;
   }
 
   .bg-radial-brand {
-    background-image: radial-gradient(70% 90% at 88% 0%, rgba(245, 158, 11, 0.26) 0%, transparent 55%),
-      radial-gradient(60% 80% at 5% 100%, rgba(37, 99, 235, 0.38) 0%, transparent 55%),
-      linear-gradient(140deg, #0f172a 0%, #1e3a8a 60%, #1d4ed8 100%);
+    background-image: radial-gradient(70% 90% at 88% 0%, rgba(16, 185, 129, 0.26) 0%, transparent 55%),
+      radial-gradient(60% 80% at 5% 100%, rgba(79, 70, 229, 0.4) 0%, transparent 55%),
+      linear-gradient(140deg, #0f172a 0%, #312e81 60%, #4f46e5 100%);
   }
 
   .text-gradient {
-    background-image: linear-gradient(100deg, #2563eb 0%, #1e3a8a 55%, #f59e0b 100%);
+    background-image: linear-gradient(100deg, #4f46e5 0%, #312e81 55%, #10b981 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -320,7 +332,7 @@ h4 {
   }
 
   .text-gradient-anim {
-    background-image: linear-gradient(100deg, #2563eb 0%, #1e3a8a 40%, #f59e0b 65%, #2563eb 100%);
+    background-image: linear-gradient(100deg, #4f46e5 0%, #312e81 40%, #10b981 65%, #4f46e5 100%);
     background-size: 220% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -402,10 +414,10 @@ input[type='number'] {
    Admin panel design system
    ========================================================= */
 .admin-bg {
-  background-color: #f4f6fb;
+  background-color: #f8fafc;
   background-image:
-    radial-gradient(circle at 12% -5%, rgba(37, 99, 235, 0.08), transparent 34%),
-    radial-gradient(circle at 100% 4%, rgba(245, 158, 11, 0.07), transparent 30%),
+    radial-gradient(circle at 12% -5%, rgba(79, 70, 229, 0.08), transparent 34%),
+    radial-gradient(circle at 100% 4%, rgba(16, 185, 129, 0.07), transparent 30%),
     radial-gradient(rgba(15, 23, 42, 0.045) 1px, transparent 1px);
   background-size: auto, auto, 22px 22px;
 }
@@ -428,17 +440,17 @@ input[type='number'] {
 .admin-sidebar {
   background-color: #0b1220;
   background-image:
-    radial-gradient(90% 55% at 90% 0%, rgba(245, 158, 11, 0.14), transparent 55%),
-    radial-gradient(70% 70% at 0% 100%, rgba(37, 99, 235, 0.3), transparent 55%),
+    radial-gradient(90% 55% at 90% 0%, rgba(16, 185, 129, 0.14), transparent 55%),
+    radial-gradient(70% 70% at 0% 100%, rgba(79, 70, 229, 0.3), transparent 55%),
     linear-gradient(180deg, #0d1526 0%, #0b1220 100%);
 }
 
 .admin-hero {
   background-color: #0f172a;
   background-image:
-    radial-gradient(90% 130% at 100% 0%, rgba(37, 99, 235, 0.5), transparent 55%),
-    radial-gradient(70% 120% at 0% 100%, rgba(245, 158, 11, 0.28), transparent 55%),
-    linear-gradient(115deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
+    radial-gradient(90% 130% at 100% 0%, rgba(79, 70, 229, 0.5), transparent 55%),
+    radial-gradient(70% 120% at 0% 100%, rgba(16, 185, 129, 0.28), transparent 55%),
+    linear-gradient(115deg, #0f172a 0%, #1e1b4b 55%, #4f46e5 100%);
 }
 
 .admin-table {
@@ -483,8 +495,8 @@ input[type='number'] {
   transition: color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 }
 .admin-btn-icon:hover {
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: #eef2ff;
+  color: #4f46e5;
   transform: translateY(-1px);
 }
 .admin-btn-icon.danger:hover {
@@ -507,8 +519,8 @@ html.dark *::-webkit-scrollbar-thumb:hover {
   background-color: #3a4d6e;
 }
 html.dark ::selection {
-  background-color: #1e3a8a;
-  color: #eff6ff;
+  background-color: #4338ca;
+  color: #eef2ff;
 }
 
 .dark .theme-store {
@@ -535,10 +547,10 @@ html.dark ::selection {
   background-color: #1e293b;
 }
 .dark .theme-store .bg-brand-50 {
-  background-color: #12233f;
+  background-color: #1e1b4b;
 }
 .dark .theme-store .bg-brand-100 {
-  background-color: #16305c;
+  background-color: #312e81;
 }
 .dark .theme-store .bg-accent-50 {
   background-color: #2a2113;
@@ -567,17 +579,33 @@ html.dark ::selection {
   color: #7d8ca6;
 }
 .dark .theme-store .text-brand-800 {
-  color: #bfdbfe;
+  color: #c7d2fe;
 }
 .dark .theme-store .text-brand-700 {
-  color: #93c5fd;
+  color: #a5b4fc;
 }
 .dark .theme-store .text-brand-600 {
-  color: #60a5fa;
+  color: #818cf8;
 }
 .dark .theme-store .text-accent-700,
 .dark .theme-store .text-accent-600 {
   color: #fbbf24;
+}
+.dark .theme-store .text-secondary-700,
+.dark .theme-store .text-secondary-600 {
+  color: #c4b5fd;
+}
+.dark .theme-store .bg-secondary-50 {
+  background-color: #2e1065;
+}
+.dark .theme-store .bg-secondary-100 {
+  background-color: #4c1d95;
+}
+.dark .theme-store .border-secondary-200 {
+  border-color: #5b21b6;
+}
+.dark .theme-store .hover\:bg-secondary-50:hover {
+  background-color: #2e1065;
 }
 
 /* Borders & rings */
@@ -591,7 +619,7 @@ html.dark ::selection {
   border-color: #2c3d5c;
 }
 .dark .theme-store .border-brand-200 {
-  border-color: #1e3a8a;
+  border-color: #3730a3;
 }
 .dark .theme-store .border-accent-200 {
   border-color: #92400e;
@@ -623,10 +651,10 @@ html.dark ::selection {
   background-color: #24324c;
 }
 .dark .theme-store .hover\:bg-brand-50:hover {
-  background-color: #12233f;
+  background-color: #1e1b4b;
 }
 .dark .theme-store .hover\:bg-brand-100:hover {
-  background-color: #16305c;
+  background-color: #312e81;
 }
 .dark .theme-store .hover\:border-slate-300:hover {
   border-color: #33445f;

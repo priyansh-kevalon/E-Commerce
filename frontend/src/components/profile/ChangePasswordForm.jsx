@@ -158,8 +158,8 @@ export default function ChangePasswordForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="admin-card overflow-hidden">
-      <div className="flex items-center gap-3.5 border-b border-slate-100 bg-gradient-to-r from-white to-amber-50/60 px-6 py-5">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-glow-accent">
+      <div className="flex items-center gap-3.5 border-b border-slate-100 bg-gradient-to-r from-white to-accent-50/60 px-6 py-5">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent-400 to-accent-600 text-white shadow-glow-accent">
           <KeyRound size={20} />
         </span>
         <div>

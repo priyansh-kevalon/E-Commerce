@@ -65,21 +65,21 @@ export default function SellerLayout() {
   const linkClass = ({ isActive }) =>
     `group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition ${
       isActive
-        ? 'bg-gradient-to-r from-amber-500/30 via-amber-600/10 to-transparent text-white ring-1 ring-inset ring-white/10'
+        ? 'bg-gradient-to-r from-accent-500/30 via-accent-600/10 to-transparent text-white ring-1 ring-inset ring-white/10'
         : 'text-slate-400 hover:bg-white/5 hover:text-white'
     }`;
 
   const sidebar = (
     <>
       <div className="flex h-[4.5rem] items-center gap-3 border-b border-white/10 px-5">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-ink shadow-glow ring-1 ring-white/20">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent-400 to-accent-600 text-ink shadow-glow ring-1 ring-white/20">
           <Store size={20} />
         </span>
         <div className="min-w-0 leading-tight">
           <p className="truncate font-display text-base font-extrabold tracking-tight text-white">
             {APP_NAME}
           </p>
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-amber-300/90">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-accent-300/90">
             Seller center
           </p>
         </div>
@@ -103,11 +103,11 @@ export default function SellerLayout() {
                   {({ isActive }) => (
                     <>
                       {isActive && (
-                        <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-gradient-to-b from-amber-300 to-amber-500" />
+                        <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-gradient-to-b from-accent-300 to-accent-500" />
                       )}
                       <link.icon
                         size={18}
-                        className={`shrink-0 transition ${isActive ? 'text-amber-300' : 'group-hover:text-white'}`}
+                        className={`shrink-0 transition ${isActive ? 'text-accent-300' : 'group-hover:text-white'}`}
                       />
                       <span className="truncate">{link.label}</span>
                     </>
@@ -187,7 +187,7 @@ export default function SellerLayout() {
             <nav className="hidden items-center gap-1.5 text-xs text-slate-400 sm:flex">
               <span>Seller center</span>
               <ChevronRight size={12} />
-              <span className="font-medium text-amber-600">{meta.title}</span>
+              <span className="font-medium text-accent-600">{meta.title}</span>
             </nav>
             <h1 className="truncate font-display text-lg font-extrabold tracking-tight text-slate-900 lg:text-xl">
               {meta.title}
@@ -197,7 +197,7 @@ export default function SellerLayout() {
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
             <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-500 shadow-sm ring-1 ring-slate-200">
               <Bell size={17} />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-500 ring-2 ring-white" />
+              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-accent-500 ring-2 ring-white" />
             </span>
 
             <span className="h-8 w-px bg-slate-200" />
