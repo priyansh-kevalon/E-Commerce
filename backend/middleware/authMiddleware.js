@@ -36,4 +36,34 @@ export const protect = async (req, res, next) => {
   }
 };
 
+/**
+ * Optional protection.
+ * Like `protect`, but silently continues when no/invalid token is present so
+ * public routes can render differently for signed-in users.
+ */
+export const optionalProtect = async (req, res, next) => {
+  try {
+    let token;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+
+    if (!token) {
+      return next();
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (user && user.isActive) {
+      req.user = user;
+    }
+
+    return next();
+  } catch (error) {
+    return next();
+  }
+};
+
 export default protect;

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowUp, Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react';
+import { Cpu, Facebook, Instagram, Mail, MapPin, Phone, Twitter, Youtube } from 'lucide-react';
 import { APP_NAME } from '../../utils/constants.js';
 
 const COLUMNS = [
@@ -57,14 +57,6 @@ export default function Footer() {
   return (
     <footer className="mt-12">
       <div className="h-1 w-full animate-gradient bg-gradient-to-r from-brand-700 via-brand-600 to-brand-800 bg-[length:200%_auto]" />
-      <button
-        type="button"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="group flex w-full items-center justify-center gap-2 bg-mid py-3.5 text-sm font-medium text-white transition hover:bg-slate-600"
-      >
-        <ArrowUp size={15} className="transition-transform duration-300 group-hover:-translate-y-0.5" />
-        Back to top
-      </button>
 
       <div className="bg-ink text-slate-300">
         <div className="mx-auto grid max-w-[1200px] gap-8 px-6 py-12 sm:grid-cols-2 lg:grid-cols-4">

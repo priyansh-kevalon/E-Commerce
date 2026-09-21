@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AlertCircle, Lock, Mail } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import Button from '../common/Button.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-const fieldClass = (invalid) =>
-  `w-full rounded-sm border bg-slate-50 py-3 pl-10 pr-3 text-sm text-slate-700 outline-none transition focus:bg-white focus:ring-4 ${
+const fieldClass = (invalid, revealable = false) =>
+  `w-full rounded-sm border bg-slate-50 py-3 pl-10 text-sm text-slate-700 outline-none transition focus:bg-white focus:ring-4 ${
+    revealable ? 'pr-10' : 'pr-3'
+  } ${
     invalid
       ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
       : 'border-slate-200 focus:border-brand-400 focus:ring-brand-100'
@@ -23,6 +25,7 @@ export default function LoginForm() {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -48,7 +51,9 @@ export default function LoginForm() {
     try {
       const loggedIn = await login({ email: form.email.trim(), password: form.password });
       const hasRequestedPage = Boolean(location.state?.from?.pathname);
-      navigate(loggedIn?.role === 'admin' && !hasRequestedPage ? '/admin' : redirectTo, { replace: true });
+      const home =
+        loggedIn?.role === 'admin' ? '/admin' : loggedIn?.role === 'seller' ? '/seller' : '/';
+      navigate(!hasRequestedPage ? home : redirectTo, { replace: true });
     } catch (err) {
       setServerError(err.message);
     } finally {
@@ -94,13 +99,21 @@ export default function LoginForm() {
           <input
             id="login-password"
             name="password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             autoComplete="current-password"
             value={form.password}
             onChange={handleChange}
             placeholder="Enter your password"
-            className={fieldClass(Boolean(errors.password))}
+            className={fieldClass(Boolean(errors.password), true)}
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword((value) => !value)}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-slate-400 transition hover:bg-slate-200/70 hover:text-slate-600"
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
         </div>
         {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password}</p>}
       </div>

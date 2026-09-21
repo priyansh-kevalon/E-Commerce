@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
-  CheckCircle2,
+  ArrowUpRight,
   Clock3,
   Package,
   PackagePlus,
@@ -10,31 +11,36 @@ import {
   Search,
   ShieldCheck,
   Trash2,
-  XCircle,
 } from 'lucide-react';
 import Button from '../../components/common/Button.jsx';
 import Loader from '../../components/common/Loader.jsx';
 import Modal from '../../components/admin/Modal.jsx';
 import ProductForm from '../../components/admin/ProductForm.jsx';
-import { fetchProducts, fetchCategories } from '../../services/productService.js';
-import { createProduct, updateProduct, deleteProduct } from '../../services/adminService.js';
+import { fetchCategories } from '../../services/productService.js';
 import {
-  formatCurrency,
-  getDiscountPercent,
-  getEffectivePrice,
-  getProductImage,
-  getStockInfo,
-} from '../../utils/helpers.js';
+  fetchMyProducts,
+  createMyProduct,
+  updateMyProduct,
+  deleteMyProduct,
+} from '../../services/sellerService.js';
+import { formatCurrency, getProductImage } from '../../utils/helpers.js';
 
 const LIMIT = 10;
 
-export default function AdminProducts() {
+const STATUS_META = {
+  pending: { label: 'Pending review', className: 'bg-amber-50 text-amber-700 ring-amber-200', icon: Clock3 },
+  approved: { label: 'Live', className: 'bg-emerald-50 text-emerald-700 ring-emerald-200', icon: ShieldCheck },
+  rejected: { label: 'Rejected', className: 'bg-rose-50 text-rose-700 ring-rose-200', icon: PackageX },
+};
+
+export default function SellerProducts() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, totalPages: 0 });
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('');
+  const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
@@ -50,12 +56,11 @@ export default function AdminProducts() {
     setLoading(true);
     setLoadError('');
     try {
-      const data = await fetchProducts({
+      const data = await fetchMyProducts({
         search: query || undefined,
-        category: category || undefined,
+        status: status || undefined,
         page,
         limit: LIMIT,
-        sort: 'newest',
       });
       setProducts(data.products);
       setPagination(data.pagination);
@@ -64,7 +69,7 @@ export default function AdminProducts() {
     } finally {
       setLoading(false);
     }
-  }, [query, category, page, reloadKey]);
+  }, [query, status, page, reloadKey]);
 
   useEffect(() => {
     loadProducts();
@@ -75,6 +80,16 @@ export default function AdminProducts() {
       .then(setCategories)
       .catch(() => setCategories([]));
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('create') === '1') {
+      setEditing(null);
+      setFormError('');
+      setModalOpen(true);
+      searchParams.delete('create');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const openCreate = () => {
     setEditing(null);
@@ -93,11 +108,11 @@ export default function AdminProducts() {
     setFormError('');
     try {
       if (editing) {
-        await updateProduct(editing._id, payload);
+        await updateMyProduct(editing._id, payload);
         setNotice({ type: 'success', message: 'Product updated successfully.' });
       } else {
-        await createProduct(payload);
-        setNotice({ type: 'success', message: 'Product created successfully.' });
+        await createMyProduct(payload);
+        setNotice({ type: 'success', message: 'Product submitted. It goes live after admin approval.' });
       }
       setModalOpen(false);
       loadProducts();
@@ -111,24 +126,8 @@ export default function AdminProducts() {
   const handleDelete = async (product) => {
     if (!window.confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
     try {
-      await deleteProduct(product._id);
+      await deleteMyProduct(product._id);
       setNotice({ type: 'success', message: 'Product deleted successfully.' });
-      loadProducts();
-    } catch (err) {
-      setNotice({ type: 'error', message: err.message });
-    }
-  };
-
-  const handleStatus = async (product, status) => {
-    try {
-      await updateProduct(product._id, { status });
-      setNotice({
-        type: 'success',
-        message:
-          status === 'approved'
-            ? `"${product.name}" is now live on the store.`
-            : `"${product.name}" was rejected.`,
-      });
       loadProducts();
     } catch (err) {
       setNotice({ type: 'error', message: err.message });
@@ -141,13 +140,6 @@ export default function AdminProducts() {
     setQuery(search.trim());
   };
 
-  const stockPill = (product) => {
-    const info = getStockInfo(product.stock);
-    if (info.tone === 'danger') return 'bg-red-50 text-red-600 ring-red-200';
-    if (info.tone === 'warning') return 'bg-amber-50 text-amber-700 ring-amber-200';
-    return 'bg-emerald-50 text-emerald-700 ring-emerald-200';
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -155,8 +147,8 @@ export default function AdminProducts() {
           <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900">Products</h1>
           <p className="mt-1 text-sm text-slate-500">
             {pagination.total
-              ? `${pagination.total} product${pagination.total === 1 ? '' : 's'} in your catalogue`
-              : 'Create, edit and remove catalogue items.'}
+              ? `${pagination.total} product${pagination.total === 1 ? '' : 's'} in your store`
+              : 'List a product and start selling today.'}
           </p>
         </div>
         <Button onClick={openCreate}>
@@ -189,7 +181,7 @@ export default function AdminProducts() {
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search products..."
+              placeholder="Search your products..."
               aria-label="Search products"
               className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-700 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
             />
@@ -197,20 +189,18 @@ export default function AdminProducts() {
         </form>
 
         <select
-          value={category}
+          value={status}
           onChange={(event) => {
-            setCategory(event.target.value);
+            setStatus(event.target.value);
             setPage(1);
           }}
-          aria-label="Filter by category"
+          aria-label="Filter by status"
           className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"
         >
-          <option value="">All categories</option>
-          {categories.map((item) => (
-            <option key={item._id} value={item._id}>
-              {item.name}
-            </option>
-          ))}
+          <option value="">All statuses</option>
+          <option value="pending">Pending review</option>
+          <option value="approved">Live</option>
+          <option value="rejected">Rejected</option>
         </select>
       </div>
 
@@ -234,6 +224,12 @@ export default function AdminProducts() {
               <Package size={22} />
             </span>
             <p className="text-sm text-slate-400">No products found.</p>
+            <Link
+              to="/seller/products?create=1"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-brand-700 hover:text-brand-800"
+            >
+              <ArrowUpRight size={15} /> List your first product
+            </Link>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -242,18 +238,15 @@ export default function AdminProducts() {
                 <tr>
                   <th>Product</th>
                   <th>Status</th>
-                  <th>Seller</th>
-                  <th>Category</th>
                   <th>Price</th>
                   <th>Stock</th>
-                  <th>Featured</th>
                   <th className="text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {products.map((product) => {
-                  const discount = getDiscountPercent(product);
-                  const stock = getStockInfo(product.stock);
+                  const meta = STATUS_META[product.status] || STATUS_META.pending;
+                  const Icon = meta.icon;
                   return (
                     <tr key={product._id} className="group">
                       <td>
@@ -276,96 +269,21 @@ export default function AdminProducts() {
                         </div>
                       </td>
                       <td>
-                        <div className="flex flex-col items-start gap-1.5">
-                          {product.status === 'approved' && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200">
-                              <ShieldCheck size={12} /> Live
-                            </span>
-                          )}
-                          {product.status === 'pending' && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 ring-1 ring-inset ring-amber-200">
-                              <Clock3 size={12} /> Pending review
-                            </span>
-                          )}
-                          {product.status === 'rejected' && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 ring-1 ring-inset ring-rose-200">
-                              <XCircle size={12} /> Rejected
-                            </span>
-                          )}
-                          {product.status !== 'approved' && (
-                            <button
-                              type="button"
-                              onClick={() => handleStatus(product, 'approved')}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 transition hover:text-emerald-700"
-                            >
-                              <CheckCircle2 size={12} /> Approve
-                            </button>
-                          )}
-                          {product.status !== 'rejected' && (
-                            <button
-                              type="button"
-                              onClick={() => handleStatus(product, 'rejected')}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-500 transition hover:text-rose-600"
-                            >
-                              <XCircle size={12} /> Reject
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                      <td>
-                        <span className="text-xs text-slate-500">
-                          {product.seller ? (
-                            <span className="inline-flex items-center gap-1 rounded-lg bg-amber-50 px-2 py-0.5 font-semibold text-amber-700">
-                              <PackagePlus size={11} /> Seller
-                            </span>
-                          ) : (
-                            <span className="rounded-lg bg-brand-50 px-2 py-0.5 font-semibold text-brand-700">
-                              Store
-                            </span>
-                          )}
-                        </span>
-                      </td>
-                      <td>
-                        <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
-                          {product.category?.name || 'Uncategorized'}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-800">
-                            {formatCurrency(getEffectivePrice(product))}
-                          </span>
-                          {discount > 0 && (
-                            <>
-                              <span className="text-xs text-slate-400 line-through">
-                                {formatCurrency(product.price)}
-                              </span>
-                              <span className="rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600 ring-1 ring-inset ring-emerald-200">
-                                -{discount}%
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                      <td>
                         <span
-                          className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${stockPill(product)}`}
+                          className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${meta.className}`}
                         >
-                          {product.stock === 0 ? (
-                            <><PackageX size={12} /> {stock.label}</>
-                          ) : (
-                            <><span className={`h-1.5 w-1.5 rounded-full ${stock.tone === 'warning' ? 'bg-amber-500' : 'bg-emerald-500'}`} /> {product.stock} {product.stock === 1 ? 'unit' : 'units'}</>
-                          )}
+                          <Icon size={12} /> {meta.label}
                         </span>
                       </td>
                       <td>
-                        {product.isFeatured ? (
-                          <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700 ring-1 ring-inset ring-brand-200">
-                            Featured
-                          </span>
-                        ) : (
-                          <span className="text-xs text-slate-400">—</span>
-                        )}
+                        <span className="font-bold text-slate-800">
+                          {formatCurrency(product.discountPrice > 0 ? product.discountPrice : product.price)}
+                        </span>
+                      </td>
+                      <td>
+                        <span className="text-sm text-slate-600">
+                          {product.stock} {product.stock === 1 ? 'unit' : 'units'}
+                        </span>
                       </td>
                       <td className="text-right">
                         <div className="flex justify-end gap-1.5">
@@ -425,7 +343,11 @@ export default function AdminProducts() {
       <Modal
         open={modalOpen}
         title={editing ? 'Edit product' : 'New product'}
-        subtitle={editing ? 'Update your catalogue item' : 'Add to your catalogue'}
+        subtitle={
+          editing
+            ? 'Update your listing'
+            : 'Your product will go live after admin approval'
+        }
         onClose={() => setModalOpen(false)}
         size="lg"
       >
@@ -436,6 +358,7 @@ export default function AdminProducts() {
           onCancel={() => setModalOpen(false)}
           submitting={saving}
           serverError={formError}
+          sellerMode
         />
       </Modal>
     </div>

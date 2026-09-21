@@ -5,6 +5,8 @@ import {
   CalendarClock,
   Check,
   CreditCard,
+  Eye,
+  EyeOff,
   KeyRound,
   Lock,
   ShieldCheck,
@@ -121,6 +123,7 @@ export default function CheckoutForm({
     paymentMethod: defaultValues?.paymentMethod || 'COD',
   });
   const [card, setCard] = useState({ number: '', name: '', expiry: '', cvv: '' });
+  const [showCvv, setShowCvv] = useState(false);
   const [upi, setUpi] = useState({ app: '', vpa: '' });
   const [errors, setErrors] = useState({});
 
@@ -416,15 +419,23 @@ export default function CheckoutForm({
                     <input
                       id="card-cvv"
                       name="cvv"
-                      type="password"
+                      type={showCvv ? 'text' : 'password'}
                       inputMode="numeric"
                       autoComplete="cc-csc"
                       value={card.cvv}
                       onChange={handleCardChange}
                       placeholder="123"
                       aria-invalid={Boolean(errors.card_cvv)}
-                      className={`${inputClass(Boolean(errors.card_cvv))} pl-10 font-mono`}
+                      className={`${inputClass(Boolean(errors.card_cvv))} pl-10 pr-10 font-mono`}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowCvv((value) => !value)}
+                      aria-label={showCvv ? 'Hide CVV' : 'Show CVV'}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-slate-400 transition hover:bg-slate-200/70 hover:text-slate-600"
+                    >
+                      {showCvv ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
                   </div>
                   {errors.card_cvv && <p className="mt-1 text-xs text-red-600">{errors.card_cvv}</p>}
                 </div>

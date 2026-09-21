@@ -49,7 +49,7 @@ const toFormState = (product) => {
   };
 };
 
-export default function ProductForm({ product, categories, onSubmit, onCancel, submitting, serverError }) {
+export default function ProductForm({ product, categories, onSubmit, onCancel, submitting, serverError, sellerMode = false }) {
   const [form, setForm] = useState(() => toFormState(product));
   const [errors, setErrors] = useState({});
 
@@ -90,13 +90,13 @@ export default function ProductForm({ product, categories, onSubmit, onCancel, s
       price: Number(form.price),
       discountPrice: form.discountPrice === '' ? 0 : Number(form.discountPrice),
       stock: Number(form.stock),
-      rating: form.rating === '' ? 0 : Number(form.rating),
+      ...(sellerMode ? {} : { rating: form.rating === '' ? 0 : Number(form.rating) }),
       images: form.images
         .split('\n')
         .map((line) => line.trim())
         .filter(Boolean),
       description: form.description.trim(),
-      isFeatured: form.isFeatured,
+      ...(sellerMode ? {} : { isFeatured: form.isFeatured }),
     });
   };
 
@@ -182,11 +182,13 @@ export default function ProductForm({ product, categories, onSubmit, onCancel, s
               {errors.stock && <p className="mt-1 text-xs text-red-600">{errors.stock}</p>}
             </div>
 
-            <div>
-              <FieldLabel>Rating (0 - 5)</FieldLabel>
-              <input name="rating" type="number" min="0" max="5" step="0.1" value={form.rating} onChange={handleChange} className={inputClass(errors.rating)} placeholder="4.5" />
-              {errors.rating && <p className="mt-1 text-xs text-red-600">{errors.rating}</p>}
-            </div>
+            {!sellerMode && (
+              <div>
+                <FieldLabel>Rating (0 - 5)</FieldLabel>
+                <input name="rating" type="number" min="0" max="5" step="0.1" value={form.rating} onChange={handleChange} className={inputClass(errors.rating)} placeholder="4.5" />
+                {errors.rating && <p className="mt-1 text-xs text-red-600">{errors.rating}</p>}
+              </div>
+            )}
           </div>
         </div>
 
@@ -210,6 +212,7 @@ export default function ProductForm({ product, categories, onSubmit, onCancel, s
           </div>
         </div>
 
+        {!sellerMode && (
         <div className="flex items-center justify-between border-t border-slate-100 pt-5">
           <div className="flex items-start gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
@@ -236,6 +239,7 @@ export default function ProductForm({ product, categories, onSubmit, onCancel, s
             />
           </button>
         </div>
+      )}
       </div>
 
       <div className="mt-6 flex justify-end gap-3 border-t border-slate-100 pt-5">

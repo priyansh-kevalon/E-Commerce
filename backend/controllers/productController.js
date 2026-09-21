@@ -78,6 +78,13 @@ export const getProducts = async (req, res, next) => {
 
     const filter = {};
 
+    // Marketplace visibility: anonymous visitors and ordinary customers only
+    // see approved products. Admins (and the seller dashboard, which uses its
+    // own endpoint) see everything.
+    if (!(req.user && req.user.role === 'admin')) {
+      filter.status = 'approved';
+    }
+
     // ---- Search (name / brand / description) ----
     if (search && String(search).trim()) {
       const regex = new RegExp(escapeRegex(String(search).trim()), 'i');
@@ -176,7 +183,8 @@ export const getProducts = async (req, res, next) => {
 
 /**
  * @route   GET /api/products/:id
- * @desc    Get a single product with its category
+ * @desc    Get a single product with its category. Non-approved products are
+ *          only visible to the admin and the selling seller.
  * @access  Public
  */
 export const getProduct = async (req, res, next) => {
@@ -188,6 +196,16 @@ export const getProduct = async (req, res, next) => {
     if (!product) {
       return errorResponse(res, 'Product not found', 404);
     }
+
+    if (product.status !== 'approved') {
+      const isAdmin = req.user && req.user.role === 'admin';
+      const isOwner =
+        req.user && product.seller && product.seller.toString() === req.user._id.toString();
+      if (!isAdmin && !isOwner) {
+        return errorResponse(res, 'Product not found', 404);
+      }
+    }
+
     return successResponse(res, 'Product fetched successfully', { product });
   } catch (error) {
     next(error);
@@ -211,7 +229,7 @@ export const createProduct = async (req, res, next) => {
       return errorResponse(res, 'Selected category does not exist', 400);
     }
 
-    const product = await Product.create(req.body);
+    const product = await Product.create({ ...req.body, seller: null, status: 'approved' });
     await product.populate('category', 'name');
 
     return successResponse(res, 'Product created successfully', { product }, 201);
@@ -256,6 +274,7 @@ export const updateProduct = async (req, res, next) => {
       'rating',
       'numReviews',
       'isFeatured',
+      'status',
     ];
 
     editableFields.forEach((field) => {

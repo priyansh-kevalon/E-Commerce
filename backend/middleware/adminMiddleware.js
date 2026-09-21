@@ -11,4 +11,15 @@ export const admin = (req, res, next) => {
   return errorResponse(res, 'Access denied, admin only', 403);
 };
 
+/**
+ * Seller middleware.
+ * Must be used after `protect`. Allows only users with role = "seller".
+ */
+export const seller = (req, res, next) => {
+  if (req.user && req.user.role === 'seller') {
+    return next();
+  }
+  return errorResponse(res, 'Access denied, sellers only', 403);
+};
+
 export default admin;

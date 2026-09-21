@@ -103,8 +103,8 @@ export const getUsers = async (req, res, next) => {
     const filter = {};
 
     if (role) {
-      if (!['customer', 'admin'].includes(role)) {
-        return errorResponse(res, 'Role filter must be either customer or admin', 400);
+      if (!['customer', 'seller', 'admin'].includes(role)) {
+        return errorResponse(res, 'Role filter must be either customer, seller or admin', 400);
       }
       filter.role = role;
     }
@@ -155,8 +155,8 @@ export const updateUser = async (req, res, next) => {
     const isSelf = user._id.equals(req.user._id);
 
     if (role !== undefined) {
-      if (!['customer', 'admin'].includes(role)) {
-        return errorResponse(res, 'Role must be either customer or admin', 400);
+      if (!['customer', 'seller', 'admin'].includes(role)) {
+        return errorResponse(res, 'Role must be either customer, seller or admin', 400);
       }
       if (isSelf && role !== user.role) {
         return errorResponse(res, 'You cannot change your own role', 400);

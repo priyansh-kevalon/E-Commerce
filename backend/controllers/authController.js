@@ -18,7 +18,8 @@ const buildAuthPayload = (user) => ({
 
 /**
  * @route   POST /api/auth/register
- * @desc    Register a new customer account
+ * @desc    Register a new customer (or seller) account. Regular users can
+ *          never self-assign the admin role.
  * @access  Public
  */
 export const register = async (req, res, next) => {
@@ -29,13 +30,14 @@ export const register = async (req, res, next) => {
     }
 
     const { name, email, password } = req.body;
+    const role = req.body.role === 'seller' ? 'seller' : 'customer';
 
     const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
     if (existingUser) {
       return errorResponse(res, 'Email is already registered', 409);
     }
 
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password, role });
 
     return res.status(201).json({
       success: true,

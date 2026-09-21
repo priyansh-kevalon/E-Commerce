@@ -51,6 +51,7 @@ export default function AdminUsers() {
   }, [loadUsers]);
 
   const admins = users.filter((item) => item.role === 'admin').length;
+  const sellers = users.filter((item) => item.role === 'seller').length;
   const active = users.filter((item) => item.isActive).length;
 
   const handleSearch = (event) => {
@@ -93,7 +94,7 @@ export default function AdminUsers() {
       <div>
         <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-900">Customers</h1>
         <p className="mt-1 text-sm text-slate-500">
-          {users.length ? `${users.length} user${users.length === 1 ? '' : 's'} · ${active} active · ${admins} admin${admins === 1 ? '' : 's'}` : 'Manage accounts, roles and access.'}
+          {users.length ? `${users.length} user${users.length === 1 ? '' : 's'} · ${active} active · ${admins} admin${admins === 1 ? '' : 's'} · ${sellers} seller${sellers === 1 ? '' : 's'}` : 'Manage accounts, roles and access.'}
         </p>
       </div>
 
@@ -133,6 +134,7 @@ export default function AdminUsers() {
         >
           <option value="">All roles</option>
           <option value="customer">Customers</option>
+          <option value="seller">Sellers</option>
           <option value="admin">Admins</option>
         </select>
       </div>
@@ -210,6 +212,7 @@ export default function AdminUsers() {
                             className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-semibold text-slate-700 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             <option value="customer">Customer</option>
+                            <option value="seller">Seller</option>
                             <option value="admin">Admin</option>
                           </select>
                         )}

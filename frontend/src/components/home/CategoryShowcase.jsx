@@ -55,18 +55,23 @@ export default function CategoryShowcase({ categories = [] }) {
             delay={index * 70}
             className="group flex flex-col items-center gap-2.5 text-center"
           >
-            <span className="relative h-20 w-20 overflow-hidden rounded-full bg-slate-100 p-0.5 ring-2 ring-transparent transition duration-300 group-hover:-translate-y-1 group-hover:ring-brand-400 group-hover:shadow-glow">
-              <img
-                src={imageFor(category.name)}
-                alt={category.name}
-                loading="lazy"
-                className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-110"
-              />
-              <span className="absolute inset-0 rounded-full bg-gradient-to-t from-brand-600/45 to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
-            </span>
-            <span className="text-xs font-semibold text-slate-700 transition group-hover:text-brand-600">
-              {category.name}
-            </span>
+            <Link
+              to={`/products?category=${encodeURIComponent(category.name)}`}
+              className="flex flex-col items-center gap-2.5 outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-brand-400"
+            >
+              <span className="relative h-20 w-20 overflow-hidden rounded-full bg-slate-100 p-0.5 ring-2 ring-transparent transition duration-300 group-hover:-translate-y-1 group-hover:ring-brand-400 group-hover:shadow-glow">
+                <img
+                  src={imageFor(category.name)}
+                  alt={category.name}
+                  loading="lazy"
+                  className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-110"
+                />
+                <span className="absolute inset-0 rounded-full bg-gradient-to-t from-brand-600/45 to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
+              </span>
+              <span className="text-xs font-semibold text-slate-700 transition group-hover:text-brand-600">
+                {category.name}
+              </span>
+            </Link>
           </Reveal>
         ))}
       </div>

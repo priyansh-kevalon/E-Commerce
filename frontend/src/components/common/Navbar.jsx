@@ -1,26 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Boxes,
   ChevronDown,
-  ChevronRight,
   Headphones,
   Heart,
   Home,
   Info,
   LayoutGrid,
   LogOut,
-  MapPin,
   Menu,
   Package,
   RotateCcw,
   Search,
-  ShieldCheck,
   ShoppingCart,
   Sparkles,
+  Store,
   Tag,
   TrendingUp,
-  Truck,
   User,
   X,
 } from 'lucide-react';
@@ -37,48 +33,36 @@ const PRODUCT_COLLECTIONS = [
   { to: '/best-sellers', label: 'Best Sellers' },
 ];
 
-const NAV_LINKS = [
+const NAV_ITEMS = [
   { to: '/', label: 'Home' },
+  { to: '/products', label: 'Products' },
   { to: '/about', label: 'About Us' },
   { to: '/contact', label: 'Contact Us' },
 ];
 
-const UTILITY_LINKS = [
-  { to: '/deals', label: 'Offers' },
-  { to: '/orders', label: 'Track Order' },
-  { to: '/wishlist', label: 'Wishlist' },
-  { to: '/contact', label: 'Help' },
-];
-
 const PRODUCT_MENU_PATHS = ['/products', '/deals', '/new-arrivals', '/best-sellers'];
 
-const isNavLinkActive = (link, pathname) =>
-  link.to === '/'
+const isItemActive = (item, pathname) =>
+  item.to === '/'
     ? pathname === '/'
-    : link.to === '/products'
+    : item.to === '/products'
       ? PRODUCT_MENU_PATHS.includes(pathname)
-      : pathname === link.to;
-
-const isProductsMenuActive = (pathname) => PRODUCT_MENU_PATHS.includes(pathname);
+      : pathname === item.to;
 
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { totalItems: cartCount } = useCart();
   const { totalItems: wishlistCount } = useWishlist();
-  const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, isSeller, logout } = useAuth();
   const [search, setSearch] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
-  const [deptsOpen, setDeptsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [scrolled, setScrolled] = useState(false);
   const acctRef = useRef(null);
-  const deptsRef = useRef(null);
-  const deptsTimer = useRef(null);
 
   const firstName = user?.name?.split(' ')[0];
-  const totalProducts = categories.reduce((sum, category) => sum + (category.productCount ?? 0), 0);
 
   useEffect(() => {
     let active = true;
@@ -102,12 +86,10 @@ export default function Navbar() {
   useEffect(() => {
     const onClickOutside = (event) => {
       if (acctRef.current && !acctRef.current.contains(event.target)) setAcctOpen(false);
-      if (deptsRef.current && !deptsRef.current.contains(event.target)) setDeptsOpen(false);
     };
     const onKeyDown = (event) => {
       if (event.key === 'Escape') {
         setAcctOpen(false);
-        setDeptsOpen(false);
         setDrawerOpen(false);
       }
     };
@@ -121,7 +103,6 @@ export default function Navbar() {
 
   useEffect(() => {
     setAcctOpen(false);
-    setDeptsOpen(false);
   }, [location.pathname, location.search]);
 
   useEffect(() => {
@@ -132,16 +113,6 @@ export default function Navbar() {
       document.body.style.overflow = previous;
     };
   }, [drawerOpen]);
-
-  const openDepts = () => {
-    clearTimeout(deptsTimer.current);
-    setDeptsOpen(true);
-  };
-
-  const closeDepts = () => {
-    clearTimeout(deptsTimer.current);
-    deptsTimer.current = setTimeout(() => setDeptsOpen(false), 180);
-  };
 
   const runSearch = (event) => {
     event.preventDefault();
@@ -163,234 +134,90 @@ export default function Navbar() {
   const searchBar = (
     <form
       onSubmit={runSearch}
-      className="flex h-10 w-full items-stretch overflow-hidden rounded-lg border border-slate-300 bg-white transition focus-within:border-brand-700 focus-within:ring-2 focus-within:ring-brand-100"
+      className="flex h-11 w-full items-center overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-600"
     >
-      <span className="flex items-center pl-3 text-slate-400">
-        <Search size={17} />
+      <span className="flex shrink-0 pl-4 pr-2 text-slate-400">
+        <Search size={18} />
       </span>
       <input
         type="search"
         value={search}
         onChange={(event) => setSearch(event.target.value)}
-        placeholder="Search products, brands and categories"
-        className="min-w-0 flex-1 bg-transparent px-3 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+        placeholder="Search for products, brands and more"
+        className="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-500"
       />
       <button
         type="submit"
         aria-label="Search"
-        className="flex w-14 shrink-0 items-center justify-center bg-brand-800 text-white transition hover:bg-brand-900 active:brightness-90"
+        className="flex h-full shrink-0 items-center justify-center gap-1.5 rounded-r-full bg-brand-700 px-4 text-sm font-semibold text-white transition hover:bg-brand-800 active:brightness-90 sm:px-5"
       >
-        <Search size={18} />
+        <Search size={16} />
+        <span className="hidden sm:inline">Search</span>
       </button>
     </form>
   );
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-shadow duration-300 ${
+      className={`sticky top-0 z-40 bg-white transition-shadow duration-300 ${
         scrolled ? 'shadow-lg shadow-slate-900/[0.08]' : 'shadow-sm'
       }`}
     >
-      {/* Tier 1: utility strip (collapses on scroll) */}
-      <div
-        className={`overflow-hidden bg-ink text-slate-300 transition-all duration-300 ${
-          scrolled ? 'max-h-0' : 'max-h-12'
-        }`}
-      >
-        <div className="mx-auto flex h-9 max-w-[1600px] items-center justify-between gap-4 px-3 text-[12px] sm:px-5">
-          <div className="flex min-w-0 items-center gap-1.5">
-            <MapPin size={13} className="shrink-0 text-accent-400" />
-            <span className="text-slate-400">Deliver to</span>
-            <span className="truncate font-semibold text-white">{firstName || 'you'}</span>
-            <span className="hidden text-slate-400 sm:inline">· Ahmedabad 380001</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="hidden items-center gap-1.5 font-medium text-accent-300 md:inline-flex">
-              <Truck size={13} /> Free delivery over Rs.999
-            </span>
-            {UTILITY_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                to={link.to}
-                className="hidden text-slate-300 transition hover:text-white sm:inline"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Tier 2: main bar */}
-      <div className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-2 px-3 sm:gap-4 sm:px-5">
+      {/* Row 1: brand + search + actions */}
+      <div className="border-b border-slate-100">
+        <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-2 px-3 sm:h-[72px] sm:gap-4 sm:px-5">
           <button
             type="button"
             aria-label="Open menu"
             onClick={() => setDrawerOpen(true)}
-            className="-ml-1 rounded-lg p-2 text-slate-700 transition hover:bg-slate-100 active:scale-95 lg:hidden"
+            className="-ml-1 shrink-0 rounded-lg p-2 text-slate-700 transition hover:bg-slate-100 active:scale-95 lg:hidden"
           >
-            <Menu size={22} />
+            <Menu size={24} />
           </button>
 
           <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label={`${APP_NAME} home`}>
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-800 to-ink text-lg font-extrabold text-white shadow-card transition group-hover:scale-105 group-hover:shadow-glow">
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-800 to-ink text-lg font-extrabold text-white shadow-card transition group-hover:scale-105 group-hover:shadow-glow sm:h-11 sm:w-11">
               V
             </span>
             <span className="hidden sm:block">
-              <span className="block font-display text-xl font-extrabold leading-none tracking-tight text-slate-900 transition group-hover:text-brand-800">
+              <span className="block font-display text-xl font-extrabold leading-none tracking-tight text-slate-900 transition group-hover:text-brand-800 sm:text-[22px]">
                 {APP_NAME}
               </span>
               <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-600">
-                Everything Store
+                Everything Store <span className="text-slate-300">·</span>{' '}
+                <span className="text-amber-500">Explore Plus</span>
               </span>
             </span>
           </Link>
 
-          <div
-            ref={deptsRef}
-            className="relative hidden lg:block"
-            onMouseEnter={openDepts}
-            onMouseLeave={closeDepts}
-          >
-            <button
-              type="button"
-              onClick={() => setDeptsOpen((open) => !open)}
-              aria-expanded={deptsOpen}
-              className={`inline-flex h-10 items-center gap-2 rounded-lg border px-3 text-sm font-semibold transition active:scale-95 ${
-                deptsOpen
-                  ? 'border-brand-700 bg-brand-50 text-brand-800'
-                  : 'border-slate-300 text-slate-700 hover:border-brand-700 hover:text-brand-800'
-              }`}
-            >
-              <LayoutGrid size={16} /> All Departments
-              <ChevronDown size={14} className={`transition-transform ${deptsOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {deptsOpen && (
-              <div className="absolute left-0 top-full z-50 mt-2 w-[540px] animate-fade-in overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-luxe">
-                <div className="flex items-center justify-between bg-gradient-to-r from-brand-800 to-brand-700 px-4 py-2.5">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-white">
-                    All Departments
-                  </p>
-                  <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[11px] font-bold text-accent-200">
-                    {totalProducts} products in store
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-[1.35fr_1fr]">
-                  <div className="p-3">
-                    <p className="px-2 pb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">
-                      Shop by department
-                    </p>
-                    {categories.length > 0 ? (
-                      <div className="grid gap-0.5">
-                        {categories.map((category) => (
-                          <Link
-                            key={category._id}
-                            to={`/products?category=${encodeURIComponent(category.name)}`}
-                            onClick={() => setDeptsOpen(false)}
-                            className="group/row flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition hover:bg-brand-50"
-                          >
-                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-brand-100 text-[11px] font-bold text-brand-700 transition group-hover/row:bg-brand-600 group-hover/row:text-white">
-                              {category.name.charAt(0)}
-                            </span>
-                            <span className="flex-1 truncate text-sm font-medium text-slate-700 group-hover/row:text-brand-800">
-                              {category.name}
-                            </span>
-                            <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-500 group-hover/row:bg-brand-100 group-hover/row:text-brand-600">
-                              {category.productCount ?? 0}
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="px-2 py-3 text-sm text-slate-400">Loading departments…</p>
-                    )}
-                  </div>
-
-                  <div className="border-l border-slate-100 p-3">
-                    <p className="px-2 pb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">
-                      Popular right now
-                    </p>
-                    <div className="space-y-0.5">
-                      {[
-                        { to: '/deals', label: "Today's Deals", Icon: Tag, tint: 'bg-red-50 text-red-500' },
-                        { to: '/new-arrivals', label: 'New Arrivals', Icon: Sparkles, tint: 'bg-cyan-50 text-cyan-600' },
-                        { to: '/best-sellers', label: 'Best Sellers', Icon: TrendingUp, tint: 'bg-emerald-50 text-emerald-600' },
-                      ].map((item) => (
-                        <Link
-                          key={item.to}
-                          to={item.to}
-                          onClick={() => setDeptsOpen(false)}
-                          className="group/row flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
-                        >
-                          <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${item.tint}`}>
-                            <item.Icon size={15} />
-                          </span>
-                          {item.label}
-                          <ChevronRight
-                            size={14}
-                            className="ml-auto text-slate-300 transition group-hover/row:translate-x-0.5 group-hover/row:text-brand-500"
-                          />
-                        </Link>
-                      ))}
-                    </div>
-
-                    <div className="my-2.5 h-px bg-slate-100" />
-
-                    <Link
-                      to="/deals"
-                      onClick={() => setDeptsOpen(false)}
-                      className="block rounded-xl bg-gradient-to-br from-deal via-amber-500 to-orange-500 p-3 text-white shadow-glow transition hover:brightness-110"
-                    >
-                      <p className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-white/85">
-                        <Tag size={12} /> Limited time
-                      </p>
-                      <p className="mt-0.5 text-sm font-extrabold leading-tight">
-                        Deals up to 50% off
-                      </p>
-                      <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold">
-                        Shop now <ChevronRight size={12} />
-                      </p>
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="border-t border-slate-100 p-3">
-                  <Link
-                    to="/products"
-                    onClick={() => setDeptsOpen(false)}
-                    className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-800 to-brand-700 px-4 py-2.5 text-sm font-bold text-white shadow-glow transition hover:brightness-110"
-                  >
-                    <Boxes size={16} /> Shop all products <ChevronRight size={15} />
-                  </Link>
-                </div>
-              </div>
-            )}
+          <div className="hidden min-w-0 flex-1 justify-center md:flex">
+            <div className="w-full max-w-[620px]">{searchBar}</div>
           </div>
 
-          <div className="hidden min-w-0 flex-1 md:block">{searchBar}</div>
+          <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+            <Link
+              to="/register"
+              className="hidden h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-brand-700 xl:flex"
+            >
+              <Store size={18} /> Become a Seller
+            </Link>
 
-          <div className="ml-auto flex items-center gap-0.5 sm:gap-1.5">
             <div className="relative" ref={acctRef}>
               <button
                 type="button"
                 onClick={() => setAcctOpen((open) => !open)}
                 aria-expanded={acctOpen}
-                className={`flex items-center gap-2 rounded-lg px-2 py-2 transition active:scale-95 ${
-                  acctOpen ? 'bg-slate-100' : 'hover:bg-slate-100'
+                className={`flex h-10 items-center gap-1.5 rounded-full border px-3.5 text-sm font-semibold transition active:scale-95 ${
+                  acctOpen
+                    ? 'border-brand-500 bg-brand-50 text-brand-700'
+                    : 'border-slate-300 text-slate-700 hover:border-brand-500 hover:text-brand-700'
                 }`}
               >
-                <User size={22} />
-                <span className="hidden text-left leading-tight sm:block">
-                  <span className="block text-[11px] text-slate-400">
-                    Hello, {firstName || 'sign in'}
-                  </span>
-                  <span className="flex items-center gap-1 text-[13px] font-bold text-slate-800">
-                    Account <ChevronDown size={13} className={`transition-transform ${acctOpen ? 'rotate-180' : ''}`} />
-                  </span>
+                <User size={18} />
+                <span className="hidden sm:inline">
+                  {isAuthenticated ? `Hello, ${firstName || 'there'}` : 'Login'}
                 </span>
+                <ChevronDown size={14} className={`hidden transition-transform sm:block ${acctOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {acctOpen && (
@@ -414,6 +241,15 @@ export default function Navbar() {
                       >
                         <Package size={16} /> Your orders
                       </Link>
+                      {isSeller && (
+                        <Link
+                          to="/seller"
+                          onClick={() => setAcctOpen(false)}
+                          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition hover:bg-slate-100"
+                        >
+                          <Store size={16} /> Seller center
+                        </Link>
+                      )}
                       {isAdmin && (
                         <Link
                           to="/admin"
@@ -460,9 +296,10 @@ export default function Navbar() {
             <Link
               to="/wishlist"
               aria-label="Wishlist"
-              className="relative rounded-lg p-2 text-slate-700 transition hover:bg-slate-100 active:scale-95"
+              className="relative flex h-10 items-center gap-1.5 rounded-full px-3 text-slate-700 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95"
             >
-              <Heart size={22} />
+              <Heart size={19} />
+              <span className="hidden text-sm font-semibold lg:inline">Wishlist</span>
               {wishlistCount > 0 && (
                 <span
                   key={wishlistCount}
@@ -476,20 +313,18 @@ export default function Navbar() {
             <Link
               to="/cart"
               aria-label={`Cart with ${cartCount} items`}
-              className="relative flex items-center gap-2 rounded-lg bg-gradient-to-r from-brand-800 to-brand-700 px-3 py-2 text-white shadow-glow transition hover:brightness-110 active:scale-95"
+              className="relative flex h-10 items-center gap-1.5 rounded-full px-3.5 text-slate-800 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95"
             >
-              <span className="relative">
-                <ShoppingCart size={20} />
-                {cartCount > 0 && (
-                  <span
-                    key={cartCount}
-                    className="absolute -right-2.5 -top-2 flex min-w-[18px] animate-badge items-center justify-center rounded-full bg-accent-500 px-1 text-[10px] font-bold leading-[18px] text-ink ring-2 ring-white"
-                  >
-                    {cartCount}
-                  </span>
-                )}
-              </span>
+              <ShoppingCart size={20} />
               <span className="hidden text-sm font-semibold sm:inline">Cart</span>
+              {cartCount > 0 && (
+                <span
+                  key={cartCount}
+                  className="flex h-5 min-w-[20px] animate-badge items-center justify-center rounded-full bg-brand-700 px-1.5 text-[11px] font-extrabold leading-none text-white"
+                >
+                  {cartCount}
+                </span>
+              )}
             </Link>
           </div>
         </div>
@@ -497,76 +332,26 @@ export default function Navbar() {
         <div className="px-3 pb-3 md:hidden">{searchBar}</div>
       </div>
 
-      {/* Tier 3: departments band */}
-      <div className="hidden bg-mid text-slate-200 lg:block">
-        <div className="mx-auto flex h-11 max-w-[1600px] items-center gap-1 px-3 text-[13px] sm:px-5">
-          {NAV_LINKS.slice(0, 1).map((link) => {
-            const isActive = isNavLinkActive(link, location.pathname);
+      {/* Row 2: nav links */}
+      <div className="border-b border-slate-100 bg-white">
+        <div className="no-scrollbar mx-auto flex h-[52px] max-w-[1600px] items-center justify-center gap-0.5 overflow-x-auto px-3 sm:px-5">
+          {NAV_ITEMS.map((item) => {
+            const isActive = isItemActive(item, location.pathname);
             return (
               <Link
-                key={link.label}
-                to={link.to}
+                key={item.label}
+                to={item.to}
                 aria-current={isActive ? 'page' : undefined}
-                className={`rounded px-3 py-1.5 font-medium transition ${
+                className={`shrink-0 rounded-lg px-3 py-2 text-sm font-semibold transition ${
                   isActive
-                    ? 'bg-white/15 text-white shadow-sm'
-                    : 'text-slate-200 hover:bg-white/10 hover:text-white'
+                    ? 'bg-brand-50 text-brand-700'
+                    : 'text-slate-700 hover:bg-slate-100 hover:text-brand-700'
                 }`}
               >
-                {link.label}
+                {item.label}
               </Link>
             );
           })}
-          <Link
-            to="/products"
-            aria-current={isProductsMenuActive(location.pathname) ? 'page' : undefined}
-            className={`flex items-center gap-1.5 rounded px-3 py-1.5 font-medium transition ${
-              isProductsMenuActive(location.pathname)
-                ? 'bg-white/15 text-white shadow-sm'
-                : 'text-slate-200 hover:bg-white/10 hover:text-white'
-            }`}
-          >
-            <LayoutGrid size={15} />
-            All Products
-          </Link>
-          {NAV_LINKS.slice(1).map((link) => {
-            const isActive = isNavLinkActive(link, location.pathname);
-            return (
-              <Link
-                key={link.label}
-                to={link.to}
-                aria-current={isActive ? 'page' : undefined}
-                className={`rounded px-3 py-1.5 font-medium transition ${
-                  isActive
-                    ? 'bg-white/15 text-white shadow-sm'
-                    : 'text-slate-200 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-          <div className="ml-auto hidden shrink-0 items-center xl:flex">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
-              <Truck size={15} className="text-accent-300" />
-              Free delivery over Rs.999
-            </span>
-            <span className="mx-2 h-4 w-px bg-white/10" />
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
-              <RotateCcw size={15} className="text-accent-300" />
-              7-day easy returns
-            </span>
-            <span className="mx-2 h-4 w-px bg-white/10" />
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
-              <ShieldCheck size={15} className="text-accent-300" />
-              Secure payments
-            </span>
-            <span className="mx-2 h-4 w-px bg-white/10" />
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-white/90 backdrop-blur-sm">
-              <Headphones size={15} className="text-accent-300" />
-              24/7 support
-            </span>
-          </div>
         </div>
       </div>
 
@@ -645,6 +430,15 @@ export default function Navbar() {
               >
                 <Package size={17} className="text-slate-400" /> Your Orders
               </Link>
+              {isSeller && (
+                <Link
+                  to="/seller"
+                  onClick={() => setDrawerOpen(false)}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                >
+                  <Store size={17} className="text-slate-400" /> Seller Center
+                </Link>
+              )}
               {isAdmin && (
                 <Link
                   to="/admin"

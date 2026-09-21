@@ -29,7 +29,7 @@ const navClass = ({ isActive }) =>
   }`;
 
 export default function Profile() {
-  const { user, isAdmin, logout } = useAuth();
+  const { user, isAdmin, isSeller, logout } = useAuth();
   const navigate = useNavigate();
 
   const initials = (user?.name || '?')
@@ -46,12 +46,21 @@ export default function Profile() {
     navigate('/');
   };
 
+  const roleLabel =
+    user?.role === 'admin' ? 'Administrator' : user?.role === 'seller' ? 'Seller' : 'Customer';
+  const roleAccent =
+    user?.role === 'admin'
+      ? 'text-violet-600 bg-violet-50'
+      : user?.role === 'seller'
+      ? 'text-amber-600 bg-amber-50'
+      : 'text-brand-600 bg-brand-50';
+
   const details = [
     {
       icon: ShieldCheck,
       label: 'Account role',
-      value: user?.role === 'admin' ? 'Administrator' : 'Customer',
-      accent: user?.role === 'admin' ? 'text-violet-600 bg-violet-50' : 'text-brand-600 bg-brand-50',
+      value: roleLabel,
+      accent: roleAccent,
     },
     {
       icon: CalendarDays,
@@ -102,6 +111,12 @@ export default function Profile() {
                     <span>{link.label}</span>
                   </NavLink>
                 ))}
+                {isSeller && (
+                  <NavLink to="/seller" className={navClass}>
+                    <Store size={18} className="shrink-0 opacity-80" />
+                    <span>Seller center</span>
+                  </NavLink>
+                )}
                 {isAdmin && (
                   <NavLink to="/admin" className={navClass}>
                     <Store size={18} className="shrink-0 opacity-80" />
