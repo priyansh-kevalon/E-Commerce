@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand-50: #eff6ff;
   --color-brand-100: #dbeafe;
@@ -207,6 +209,10 @@
   color-scheme: light;
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -219,6 +225,11 @@ body {
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html.dark body {
+  background-color: #0d1626;
+  color: #e8eef8;
 }
 
 h1,
@@ -480,3 +491,187 @@ input[type='number'] {
   background: #fef2f2;
   color: #dc2626;
 }
+
+/* =========================================================
+   Dark theme — storefront
+   Scoped to .theme-store (MainLayout / AuthLayout) so the
+   admin and seller panels keep their own light design.
+   ========================================================= */
+html.dark * {
+  scrollbar-color: #2b3a55 transparent;
+}
+html.dark *::-webkit-scrollbar-thumb {
+  background-color: #2b3a55;
+}
+html.dark *::-webkit-scrollbar-thumb:hover {
+  background-color: #3a4d6e;
+}
+html.dark ::selection {
+  background-color: #1e3a8a;
+  color: #eff6ff;
+}
+
+.dark .theme-store {
+  --tw-ring-offset-color: #0d1626;
+  color: #e8eef8;
+}
+
+/* Surfaces */
+.dark .theme-store .bg-white {
+  background-color: #151f33;
+}
+.dark .theme-store .bg-slate-50 {
+  background-color: #0f1a2d;
+}
+.dark .theme-store .bg-slate-100 {
+  background-color: #0d1626;
+}
+.dark .theme-store .bg-slate-200 {
+  background-color: #1e293b;
+}
+.dark .theme-store .bg-slate-800,
+.dark .theme-store .bg-slate-900,
+.dark .theme-store .bg-ink {
+  background-color: #1e293b;
+}
+.dark .theme-store .bg-brand-50 {
+  background-color: #12233f;
+}
+.dark .theme-store .bg-brand-100 {
+  background-color: #16305c;
+}
+.dark .theme-store .bg-accent-50 {
+  background-color: #2a2113;
+}
+.dark .theme-store .bg-accent-100 {
+  background-color: #3a2d14;
+}
+
+/* Text */
+.dark .theme-store .text-slate-900 {
+  color: #e8eef8;
+}
+.dark .theme-store .text-slate-800 {
+  color: #dde7f4;
+}
+.dark .theme-store .text-slate-700 {
+  color: #c9d5e6;
+}
+.dark .theme-store .text-slate-600 {
+  color: #aab8cd;
+}
+.dark .theme-store .text-slate-500 {
+  color: #94a3b8;
+}
+.dark .theme-store .text-slate-400 {
+  color: #7d8ca6;
+}
+.dark .theme-store .text-brand-800 {
+  color: #bfdbfe;
+}
+.dark .theme-store .text-brand-700 {
+  color: #93c5fd;
+}
+.dark .theme-store .text-brand-600 {
+  color: #60a5fa;
+}
+.dark .theme-store .text-accent-700,
+.dark .theme-store .text-accent-600 {
+  color: #fbbf24;
+}
+
+/* Borders & rings */
+.dark .theme-store .border-slate-100 {
+  border-color: #1b2740;
+}
+.dark .theme-store .border-slate-200 {
+  border-color: #22304a;
+}
+.dark .theme-store .border-slate-300 {
+  border-color: #2c3d5c;
+}
+.dark .theme-store .border-brand-200 {
+  border-color: #1e3a8a;
+}
+.dark .theme-store .border-accent-200 {
+  border-color: #92400e;
+}
+.dark .theme-store .ring-slate-100 {
+  --tw-ring-color: #1b2740;
+}
+.dark .theme-store .ring-slate-200 {
+  --tw-ring-color: #24324c;
+}
+.dark .theme-store .divide-slate-100 > :not(:last-child) {
+  border-color: #1b2740;
+}
+.dark .theme-store .divide-slate-200 > :not(:last-child) {
+  border-color: #22304a;
+}
+
+/* Hover states */
+.dark .theme-store .hover\:bg-white:hover {
+  background-color: #151f33;
+}
+.dark .theme-store .hover\:bg-slate-50:hover {
+  background-color: #16233a;
+}
+.dark .theme-store .hover\:bg-slate-100:hover {
+  background-color: #1b2740;
+}
+.dark .theme-store .hover\:bg-slate-200:hover {
+  background-color: #24324c;
+}
+.dark .theme-store .hover\:bg-brand-50:hover {
+  background-color: #12233f;
+}
+.dark .theme-store .hover\:bg-brand-100:hover {
+  background-color: #16305c;
+}
+.dark .theme-store .hover\:border-slate-300:hover {
+  border-color: #33445f;
+}
+.dark .theme-store .hover\:text-slate-900:hover {
+  color: #ffffff;
+}
+
+/* Placeholders */
+.dark .theme-store .placeholder\:text-slate-400::placeholder,
+.dark .theme-store .placeholder\:text-slate-500::placeholder {
+  color: #64748b;
+}
+
+/* Neutral gradient stops */
+.dark .theme-store .from-white {
+  --tw-gradient-from: #151f33;
+}
+.dark .theme-store .from-slate-50 {
+  --tw-gradient-from: #0f1a2d;
+}
+.dark .theme-store .from-slate-100 {
+  --tw-gradient-from: #0d1626;
+}
+.dark .theme-store .to-white {
+  --tw-gradient-to: #151f33;
+}
+.dark .theme-store .to-slate-50 {
+  --tw-gradient-to: #0f1a2d;
+}
+
+/* Primitives */
+.dark .theme-store .glass {
+  background-color: rgba(13, 22, 38, 0.82);
+}
+.dark .theme-store .dotted {
+  background-image: radial-gradient(rgba(96, 165, 250, 0.22) 1px, transparent 1px);
+}
+.dark .theme-store .skeleton {
+  background-image: linear-gradient(90deg, #16233a 25%, #1e293b 37%, #16233a 63%);
+}
+.dark .theme-store .shadow-card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 38px -26px rgba(0, 0, 0, 0.8);
+}
+.dark .theme-store .shadow-luxe {
+  box-shadow: 0 30px 70px -35px rgba(0, 0, 0, 0.9);
+}
+

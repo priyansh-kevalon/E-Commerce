@@ -5,6 +5,7 @@ import ScrollToTop from './components/common/ScrollToTop.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { CartProvider } from './context/CartContext.jsx';
 import { WishlistProvider } from './context/WishlistContext.jsx';
+import { ThemeProvider } from './context/ThemeContext.jsx';
 import { useAuth } from './hooks/useAuth.js';
 
 const MIN_SPLASH_MS = 1500;
@@ -30,15 +31,17 @@ function BootLoader() {
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <WishlistProvider>
-          <BootLoader />
-          <AppRoutes />
-          <ScrollToTop />
-        </WishlistProvider>
-      </CartProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <BootLoader />
+            <AppRoutes />
+            <ScrollToTop />
+          </WishlistProvider>
+        </CartProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

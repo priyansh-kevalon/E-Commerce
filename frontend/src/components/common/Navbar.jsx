@@ -9,12 +9,14 @@ import {
   LayoutGrid,
   LogOut,
   Menu,
+  Moon,
   Package,
   RotateCcw,
   Search,
   ShoppingCart,
   Sparkles,
   Store,
+  Sun,
   Tag,
   TrendingUp,
   User,
@@ -24,6 +26,7 @@ import { APP_NAME } from '../../utils/constants.js';
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
+import { useTheme } from '../../hooks/useTheme.js';
 import { fetchCategories } from '../../services/productService.js';
 
 const PRODUCT_COLLECTIONS = [
@@ -55,6 +58,7 @@ export default function Navbar() {
   const { totalItems: cartCount } = useCart();
   const { totalItems: wishlistCount } = useWishlist();
   const { user, isAuthenticated, isAdmin, isSeller, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const [search, setSearch] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
@@ -134,7 +138,7 @@ export default function Navbar() {
   const searchBar = (
     <form
       onSubmit={runSearch}
-      className="flex h-11 w-full items-center overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-600"
+      className="flex h-11 w-full items-center overflow-hidden rounded-full bg-white ring-1 ring-white/20 transition focus-within:ring-2 focus-within:ring-brand-400"
     >
       <span className="flex shrink-0 pl-4 pr-2 text-slate-400">
         <Search size={18} />
@@ -149,7 +153,7 @@ export default function Navbar() {
       <button
         type="submit"
         aria-label="Search"
-        className="flex h-full shrink-0 items-center justify-center gap-1.5 rounded-r-full bg-brand-700 px-4 text-sm font-semibold text-white transition hover:bg-brand-800 active:brightness-90 sm:px-5"
+        className="flex h-full shrink-0 items-center justify-center gap-1.5 rounded-r-full bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700 active:brightness-90 sm:px-5"
       >
         <Search size={16} />
         <span className="hidden sm:inline">Search</span>
@@ -159,33 +163,33 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-40 bg-white transition-shadow duration-300 ${
-        scrolled ? 'shadow-lg shadow-slate-900/[0.08]' : 'shadow-sm'
+      className={`sticky top-0 z-40 bg-gradient-to-r from-ink via-mid to-brand-900 transition-shadow duration-300 ${
+        scrolled ? 'shadow-lg shadow-brand-950/30' : 'shadow-sm'
       }`}
     >
       {/* Row 1: brand + search + actions */}
-      <div className="border-b border-slate-100">
+      <div className="border-b border-white/10">
         <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-2 px-3 sm:h-[72px] sm:gap-4 sm:px-5">
           <button
             type="button"
             aria-label="Open menu"
             onClick={() => setDrawerOpen(true)}
-            className="-ml-1 shrink-0 rounded-lg p-2 text-slate-700 transition hover:bg-slate-100 active:scale-95 lg:hidden"
+            className="-ml-1 shrink-0 rounded-lg p-2 text-white transition hover:bg-white/10 active:scale-95 lg:hidden"
           >
             <Menu size={24} />
           </button>
 
           <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label={`${APP_NAME} home`}>
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-800 to-ink text-lg font-extrabold text-white shadow-card transition group-hover:scale-105 group-hover:shadow-glow sm:h-11 sm:w-11">
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-lg font-extrabold text-white shadow-card transition group-hover:scale-105 group-hover:shadow-glow sm:h-11 sm:w-11">
               V
             </span>
             <span className="hidden sm:block">
-              <span className="block font-display text-xl font-extrabold leading-none tracking-tight text-slate-900 transition group-hover:text-brand-800 sm:text-[22px]">
+              <span className="block font-display text-xl font-extrabold leading-none tracking-tight text-white transition group-hover:text-brand-300 sm:text-[22px]">
                 {APP_NAME}
               </span>
-              <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-600">
-                Everything Store <span className="text-slate-300">·</span>{' '}
-                <span className="text-amber-500">Explore Plus</span>
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-300">
+                Everything Store <span className="text-white/40">·</span>{' '}
+                <span className="text-brand-300">Explore Plus</span>
               </span>
             </span>
           </Link>
@@ -195,9 +199,19 @@ export default function Navbar() {
           </div>
 
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition hover:bg-white/10 active:scale-95"
+            >
+              {isDark ? <Sun size={19} /> : <Moon size={19} />}
+            </button>
+
             <Link
               to="/register"
-              className="hidden h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-brand-700 xl:flex"
+              className="hidden h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold text-white/90 transition hover:bg-white/10 hover:text-white xl:flex"
             >
               <Store size={18} /> Become a Seller
             </Link>
@@ -209,8 +223,8 @@ export default function Navbar() {
                 aria-expanded={acctOpen}
                 className={`flex h-10 items-center gap-1.5 rounded-full border px-3.5 text-sm font-semibold transition active:scale-95 ${
                   acctOpen
-                    ? 'border-brand-500 bg-brand-50 text-brand-700'
-                    : 'border-slate-300 text-slate-700 hover:border-brand-500 hover:text-brand-700'
+                    ? 'border-brand-400 bg-white/15 text-white'
+                    : 'border-white/30 text-white hover:border-white hover:bg-white/10'
                 }`}
               >
                 <User size={18} />
@@ -296,14 +310,14 @@ export default function Navbar() {
             <Link
               to="/wishlist"
               aria-label="Wishlist"
-              className="relative flex h-10 items-center gap-1.5 rounded-full px-3 text-slate-700 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95"
+              className="relative flex h-10 items-center gap-1.5 rounded-full px-3 text-white transition hover:bg-white/10 active:scale-95"
             >
               <Heart size={19} />
               <span className="hidden text-sm font-semibold lg:inline">Wishlist</span>
               {wishlistCount > 0 && (
                 <span
                   key={wishlistCount}
-                  className="absolute right-0.5 top-0.5 flex min-w-[18px] animate-badge items-center justify-center rounded-full bg-brand-800 px-1 text-[10px] font-bold leading-[18px] text-white"
+                  className="absolute right-0.5 top-0.5 flex min-w-[18px] animate-badge items-center justify-center rounded-full bg-brand-600 px-1 text-[10px] font-bold leading-[18px] text-white"
                 >
                   {wishlistCount}
                 </span>
@@ -313,14 +327,14 @@ export default function Navbar() {
             <Link
               to="/cart"
               aria-label={`Cart with ${cartCount} items`}
-              className="relative flex h-10 items-center gap-1.5 rounded-full px-3.5 text-slate-800 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95"
+              className="relative flex h-10 items-center gap-1.5 rounded-full px-3.5 text-white transition hover:bg-white/10 active:scale-95"
             >
               <ShoppingCart size={20} />
               <span className="hidden text-sm font-semibold sm:inline">Cart</span>
               {cartCount > 0 && (
                 <span
                   key={cartCount}
-                  className="flex h-5 min-w-[20px] animate-badge items-center justify-center rounded-full bg-brand-700 px-1.5 text-[11px] font-extrabold leading-none text-white"
+                  className="flex h-5 min-w-[20px] animate-badge items-center justify-center rounded-full bg-brand-600 px-1.5 text-[11px] font-extrabold leading-none text-white"
                 >
                   {cartCount}
                 </span>
@@ -333,7 +347,7 @@ export default function Navbar() {
       </div>
 
       {/* Row 2: nav links */}
-      <div className="border-b border-slate-100 bg-white">
+      <div className="border-b border-slate-200 bg-white">
         <div className="no-scrollbar mx-auto flex h-[52px] max-w-[1600px] items-center justify-center gap-0.5 overflow-x-auto px-3 sm:px-5">
           {NAV_ITEMS.map((item) => {
             const isActive = isItemActive(item, location.pathname);
@@ -344,8 +358,8 @@ export default function Navbar() {
                 aria-current={isActive ? 'page' : undefined}
                 className={`shrink-0 rounded-lg px-3 py-2 text-sm font-semibold transition ${
                   isActive
-                    ? 'bg-brand-50 text-brand-700'
-                    : 'text-slate-700 hover:bg-slate-100 hover:text-brand-700'
+                    ? 'bg-brand-800 text-white'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-brand-700'
                 }`}
               >
                 {item.label}

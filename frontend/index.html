@@ -16,6 +16,18 @@
       rel="stylesheet"
     />
     <title>Velmora | Modern E-Commerce Store</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('velmora_theme');
+          var prefersDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored === 'light' || stored === 'dark' ? stored : prefersDark ? 'dark' : 'light';
+          if (theme === 'dark') document.documentElement.classList.add('dark');
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

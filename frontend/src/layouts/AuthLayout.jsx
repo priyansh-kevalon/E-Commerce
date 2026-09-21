@@ -4,7 +4,7 @@ import { APP_NAME } from '../utils/constants.js';
 
 export default function AuthLayout() {
   return (
-    <div className="flex min-h-screen">
+    <div className="theme-store flex min-h-screen">
       <div className="relative hidden w-1/2 overflow-hidden bg-ink lg:block">
         <img
           src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=80"
