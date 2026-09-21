@@ -41,7 +41,7 @@ export default function Home() {
     let active = true;
 
     Promise.allSettled([
-      fetchProducts({ sort: 'popular', limit: 10 }),
+      fetchProducts({ sort: 'popular', limit: 5 }),
       fetchCategories({ withCount: true, status: 'active' }),
     ]).then(([products, cats]) => {
       if (!active) return;
@@ -86,6 +86,7 @@ export default function Home() {
           viewAllTo="/products?sort=popular"
           products={bestSellers}
           loading={loading}
+          variant="grid"
         />
 
         <section className="overflow-hidden rounded-xl bg-white">

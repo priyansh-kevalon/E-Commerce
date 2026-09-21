@@ -199,16 +199,6 @@ export default function Navbar() {
           </div>
 
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-              title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition hover:bg-white/10 active:scale-95"
-            >
-              {isDark ? <Sun size={19} /> : <Moon size={19} />}
-            </button>
-
             <Link
               to="/register"
               className="hidden h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-semibold text-white/90 transition hover:bg-white/10 hover:text-white xl:flex"
@@ -340,6 +330,16 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
+
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition hover:bg-white/10 active:scale-95"
+            >
+              {isDark ? <Sun size={19} /> : <Moon size={19} />}
+            </button>
           </div>
         </div>
 
