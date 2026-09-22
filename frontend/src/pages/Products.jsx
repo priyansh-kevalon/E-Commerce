@@ -235,44 +235,51 @@ export default function Products({ preset = null }) {
 
   return (
     <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
-      <div className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-4 py-2.5 text-xs text-slate-500">
-        <Link to="/" className="inline-flex items-center gap-1 transition hover:text-brand-600">
-          <Home size={13} /> Home
+      <nav className="flex items-center gap-1 text-[13px] text-slate-400">
+        <Link
+          to="/"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-xs transition hover:border-brand-300 hover:text-brand-600"
+          aria-label="Go to homepage"
+        >
+          <Home size={13} />
         </Link>
-        <span>/</span>
-        <span className="font-medium text-slate-700">{presetConfig ? presetConfig.title : 'Products'}</span>
+        <ChevronRight size={13} className="text-slate-300" />
+        <span className="font-semibold text-brand-600">
+          {presetConfig ? presetConfig.title : 'Products'}
+        </span>
         {filters.category && (
           <>
-            <span>/</span>
-            <span className="font-medium text-slate-700">{filters.category}</span>
+            <ChevronRight size={13} className="text-slate-300" />
+            <span className="max-w-[140px] truncate font-medium text-slate-500">{filters.category}</span>
           </>
         )}
         {search && (
           <>
-            <span>/</span>
-            <span className="font-medium text-slate-700">Search: {search}</span>
+            <ChevronRight size={13} className="text-slate-300" />
+            <span className="max-w-[220px] truncate font-medium text-slate-500">"{search}"</span>
           </>
         )}
-      </div>
+      </nav>
 
       {presetConfig && (
         <section
-          className={`relative mt-3 overflow-hidden rounded-2xl bg-gradient-to-r ${presetConfig.gradient} px-6 py-8 text-white shadow-luxe sm:px-10`}
+          className={`relative mt-3 overflow-hidden rounded-2xl bg-gradient-to-r ${presetConfig.gradient} px-6 py-8 text-slate-900 shadow-luxe sm:px-10`}
         >
-          <div className="pointer-events-none absolute -right-12 -top-20 h-60 w-60 rounded-full bg-white/10 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-24 left-1/4 h-52 w-52 rounded-full bg-black/10 blur-2xl" />
+          <div className="pointer-events-none absolute -right-14 -top-24 h-64 w-64 rounded-full bg-white/40 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-28 left-1/4 h-56 w-56 rounded-full bg-ember-500/20 blur-2xl" />
+          <div className="pointer-events-none absolute left-0 top-0 h-full w-full bg-gradient-to-b from-transparent via-transparent to-white/10" />
           <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
             <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-900/10 bg-white/70 px-3 py-1 text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
                 <presetConfig.Icon size={12} /> {presetConfig.kicker}
               </span>
               <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight sm:text-4xl">
                 {presetConfig.title}
               </h1>
-              <p className="mt-2 max-w-xl text-sm text-white/85 sm:text-base">
+              <p className="mt-2 max-w-xl text-sm text-slate-700/90 sm:text-base">
                 {presetConfig.tagline}
               </p>
-              <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] font-medium text-white/80">
+              <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] font-semibold text-slate-600">
                 <span className="inline-flex items-center gap-1.5">
                   <Truck size={14} /> Free delivery over Rs.999
                 </span>
@@ -290,7 +297,7 @@ export default function Products({ preset = null }) {
                   <Link
                     key={category._id}
                     to={`/products?category=${encodeURIComponent(category.name)}`}
-                    className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-semibold backdrop-blur-sm transition hover:bg-white hover:text-brand-900"
+                    className="inline-flex items-center gap-1 rounded-full border border-slate-900/10 bg-white/70 px-3 py-1.5 text-xs font-semibold text-slate-700 backdrop-blur-sm transition hover:bg-white hover:text-brand-700"
                   >
                     {category.name}
                     <ArrowRight size={12} />
