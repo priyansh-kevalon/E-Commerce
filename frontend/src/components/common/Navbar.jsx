@@ -311,7 +311,6 @@ export default function Navbar() {
               className="relative flex h-10 items-center gap-1.5 rounded-full px-3 text-white transition hover:bg-white/10 active:scale-95"
             >
               <Heart size={19} />
-              <span className="hidden text-sm font-semibold lg:inline">Wishlist</span>
               {wishlistCount > 0 && (
                 <span
                   key={wishlistCount}
@@ -328,7 +327,6 @@ export default function Navbar() {
               className="relative flex h-10 items-center gap-1.5 rounded-full px-3.5 text-white transition hover:bg-white/10 active:scale-95"
             >
               <ShoppingCart size={20} />
-              <span className="hidden text-sm font-semibold sm:inline">Cart</span>
               {cartCount > 0 && (
                 <span
                   key={cartCount}
@@ -356,7 +354,7 @@ export default function Navbar() {
 
       {/* Row 2: nav links */}
       <div className="border-b border-slate-200 bg-white">
-        <div className="no-scrollbar mx-auto flex h-[52px] max-w-[1600px] items-center justify-center gap-0.5 overflow-x-auto px-3 sm:px-5">
+        <div className="no-scrollbar mx-auto flex h-[52px] max-w-[1600px] items-center justify-center gap-2 overflow-x-auto px-3 sm:px-5">
           {NAV_ITEMS.map((item) => {
             const isActive = isItemActive(item, location.pathname);
             return (
