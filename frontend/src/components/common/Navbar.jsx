@@ -356,22 +356,26 @@ export default function Navbar() {
 
       {/* Row 2: nav links */}
       <div className="border-b border-slate-200 bg-white">
-        <div className="no-scrollbar mx-auto flex h-[52px] max-w-[1600px] items-center justify-center gap-2 overflow-x-auto px-3 sm:px-5">
-          {NAV_ITEMS.map((item) => {
+        <div className="no-scrollbar mx-auto flex h-[52px] max-w-[1600px] items-center justify-center gap-x-5 overflow-x-auto px-3 sm:px-5">
+          {NAV_ITEMS.map((item, position) => {
             const isActive = isItemActive(item, location.pathname);
             return (
-              <Link
-                key={item.label}
-                to={item.to}
-                aria-current={isActive ? 'page' : undefined}
-                className={`shrink-0 rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                  isActive
-                    ? 'bg-brand-800 text-white'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-brand-700'
-                }`}
-              >
-                {item.label}
-              </Link>
+              <div key={item.label} className="flex shrink-0 items-center">
+                {position > 0 && (
+                  <span aria-hidden="true" className="mr-5 h-1 w-1 rounded-full bg-brand-300/70" />
+                )}
+                <Link
+                  to={item.to}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`shrink-0 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                    isActive
+                      ? 'bg-brand-800 text-white'
+                      : 'text-slate-600 hover:bg-slate-100 hover:text-brand-700'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </div>
             );
           })}
         </div>

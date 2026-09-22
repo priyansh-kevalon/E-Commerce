@@ -15,7 +15,7 @@ const SLIDES = [
   {
     eyebrow: 'Big Savings Days',
     title: 'Up to 70% off on Electronics',
-    subtitle: 'Top brands on laptops, audio, wearables and smart home — all in one place.',
+    subtitle: 'Top brands on laptops, audio, wearables and smart home â€” all in one place.',
     priceNote: 'Starting at Rs.499',
     cta: 'Shop Electronics',
     to: '/products?category=Electronics',
@@ -76,7 +76,7 @@ export default function Hero() {
   return (
     <section className="mx-auto max-w-[1600px] px-3 pt-3 sm:px-4 sm:pt-4">
       <div
-        className="group relative h-[340px] overflow-hidden rounded-2xl bg-ink shadow-luxe sm:h-[400px] lg:h-[470px]"
+        className="group relative h-[340px] overflow-hidden rounded-2xl bg-ink sm:h-[400px] lg:h-[470px]"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -88,7 +88,7 @@ export default function Hero() {
             loading={dot === 0 ? 'eager' : 'lazy'}
             aria-hidden={dot !== index}
             className={`absolute inset-0 h-full w-full object-cover transition-all duration-[900ms] ease-out ${
-              dot === index ? 'scale-100 opacity-100' : 'scale-105 opacity-0'
+              dot === index ? 'scale-100 opacity-190' : 'scale-105 opacity-0'
             }`}
           />
         ))}
@@ -147,7 +147,7 @@ export default function Hero() {
           type="button"
           aria-label="Previous slide"
           onClick={() => go(-1)}
-          className="absolute left-3 top-1/2 hidden h-11 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-white/15 text-white backdrop-blur transition hover:bg-white/30 sm:flex"
+          className="absolute left-3 top-1/2 hidden h-10 w-8 -translate-y-1/2 items-center justify-center rounded-lg bg-white/10 text-white/90 backdrop-blur transition hover:bg-white/25 hover:text-white sm:flex"
         >
           <ChevronLeft size={20} />
         </button>
@@ -174,9 +174,6 @@ export default function Hero() {
           ))}
         </div>
 
-        <span className="absolute bottom-4 right-4 hidden text-[11px] font-bold tracking-widest text-white/70 sm:block">
-          {String(index + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
-        </span>
       </div>
 
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
