@@ -163,10 +163,15 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-40 bg-gradient-to-r from-ink via-mid to-brand-900 transition-shadow duration-300 ${
+      className={`relative sticky top-0 z-40 overflow-hidden bg-gradient-to-r from-ink via-mid to-brand-900 transition-shadow duration-300 ${
         scrolled ? 'shadow-lg shadow-brand-950/30' : 'shadow-sm'
       }`}
     >
+      {/* Signature gradient hairline */}
+      <div className="h-[3px] w-full bg-gradient-to-r from-accent-400 via-brand-500 to-brand-600" />
+      {/* Soft brand glow orbs */}
+      <div className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-brand-500/25 blur-3xl" />
+      <div className="pointer-events-none absolute -left-24 top-2 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl" />
       {/* Row 1: brand + search + actions */}
       <div className="border-b border-white/10">
         <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-2 px-3 sm:h-[72px] sm:gap-4 sm:px-5">
@@ -180,7 +185,10 @@ export default function Navbar() {
           </button>
 
           <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label={`${APP_NAME} home`}>
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-lg font-extrabold text-white shadow-card transition group-hover:scale-105 group-hover:shadow-glow sm:h-11 sm:w-11">
+            <span className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-brand-400 via-brand-600 to-brand-800 text-lg font-extrabold text-white shadow-card ring-1 ring-white/30 transition duration-300 group-hover:-rotate-3 group-hover:scale-105 group-hover:shadow-brand-glow sm:h-11 sm:w-11">
+              {/* soft inner glow */}
+              <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.45),transparent_55%)]" />
+              <Sparkles size={15} className="relative z-10 text-accent-300 drop-shadow-[0_0_6px_rgba(245,158,11,0.9)]" />
               V
             </span>
             <span className="hidden sm:block">
