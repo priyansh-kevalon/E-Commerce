@@ -163,15 +163,17 @@ export default function Navbar() {
 
   return (
     <header
-      className={`relative sticky top-0 z-40 overflow-hidden bg-gradient-to-r from-ink via-mid to-brand-900 transition-shadow duration-300 ${
+      className={`relative sticky top-0 z-40 bg-gradient-to-r from-ink via-mid to-brand-900 transition-shadow duration-300 ${
         scrolled ? 'shadow-lg shadow-brand-950/30' : 'shadow-sm'
       }`}
     >
       {/* Signature gradient hairline */}
       <div className="h-[3px] w-full bg-gradient-to-r from-accent-400 via-brand-500 to-brand-600" />
-      {/* Soft brand glow orbs */}
-      <div className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-brand-500/25 blur-3xl" />
-      <div className="pointer-events-none absolute -left-24 top-2 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl" />
+      {/* Soft brand glow orbs (clipped inside header so they never cause scrollbars or clip the dropdown) */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div className="absolute -right-24 -top-28 h-80 w-80 rounded-full bg-brand-500/25 blur-3xl" />
+        <div className="absolute -left-24 top-2 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl" />
+      </div>
       {/* Row 1: brand + search + actions */}
       <div className="border-b border-white/10">
         <div className="mx-auto flex h-14 max-w-[1600px] items-center gap-2 px-3 sm:h-[72px] sm:gap-4 sm:px-5">
