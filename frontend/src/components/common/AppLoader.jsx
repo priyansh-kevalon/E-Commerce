@@ -62,7 +62,7 @@ export default function AppLoader({ visible = true, duration = 3000 }) {
       const timer = window.setTimeout(() => setGone(true), 680);
       return () => window.clearTimeout(timer);
     }
-    setGone(false);
+    setGone(false); 
     return undefined;
   }, [visible]);
 
