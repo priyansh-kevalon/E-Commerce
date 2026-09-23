@@ -5,7 +5,6 @@ import Hero from '../components/home/Hero.jsx';
 import CategoryGrid from '../components/home/CategoryGrid.jsx';
 import PromoBanner from '../components/home/PromoBanner.jsx';
 import TrustBar from '../components/home/TrustBar.jsx';
-import Newsletter from '../components/common/Newsletter.jsx';
 import Reveal from '../components/common/Reveal.jsx';
 import ProductCard from '../components/product/ProductCard.jsx';
 import { ProductCardSkeleton } from '../components/common/Skeleton.jsx';
@@ -101,8 +100,6 @@ export default function Home() {
             <TrustBar />
           </div>
         </section>
-
-        <Newsletter />
       </div>
     </div>
   );

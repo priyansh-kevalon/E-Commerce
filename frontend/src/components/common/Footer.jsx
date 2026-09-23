@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Cpu, Facebook, Instagram, Mail, MapPin, Phone, Twitter, Youtube } from 'lucide-react';
 import { APP_NAME } from '../../utils/constants.js';
+import Newsletter from './Newsletter.jsx';
 
 const COLUMNS = [
   {
@@ -59,6 +60,12 @@ export default function Footer() {
       <div className="h-1 w-full animate-gradient bg-gradient-to-r from-brand-700 via-brand-600 to-brand-800 bg-[length:200%_auto]" />
 
       <div className="bg-ink text-slate-300">
+        <div className="border-b border-white/10">
+          <div className="mx-auto max-w-[1200px] px-6 py-10">
+            <Newsletter />
+          </div>
+        </div>
+
         <div className="mx-auto grid max-w-[1200px] gap-8 px-6 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {COLUMNS.map((column) => (
             <div key={column.title}>
