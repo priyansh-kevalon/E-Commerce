@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AlertCircle, Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import Button from '../common/Button.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const fieldClass = (invalid, revealable = false) =>
-  `w-full rounded-sm border bg-slate-50 py-3 pl-10 text-sm text-slate-700 outline-none transition focus:bg-white focus:ring-4 ${
-    revealable ? 'pr-10' : 'pr-3'
+  `w-full rounded-xl border bg-white py-2.5 pl-11 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-2 ${
+    revealable ? 'pr-11' : 'pr-4'
   } ${
     invalid
-      ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
-      : 'border-slate-200 focus:border-brand-400 focus:ring-brand-100'
+      ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
+      : 'border-slate-300 focus:border-brand-600 focus:ring-brand-100'
   }`;
+
+const labelClass = 'mb-1 block text-xs font-semibold text-slate-700';
 
 export default function LoginForm() {
   const { login } = useAuth();
@@ -62,20 +63,23 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate className="space-y-3.5">
       {serverError && (
-        <div className="flex items-start gap-2 rounded-sm border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+        <div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           <AlertCircle size={16} className="mt-0.5 shrink-0" />
           <span>{serverError}</span>
         </div>
       )}
 
       <div>
-        <label htmlFor="login-email" className="mb-1.5 block text-sm font-medium text-slate-700">
+        <label htmlFor="login-email" className={labelClass}>
           Email address
         </label>
         <div className="relative">
-          <Mail size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Mail
+            size={16}
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+          />
           <input
             id="login-email"
             name="email"
@@ -91,11 +95,14 @@ export default function LoginForm() {
       </div>
 
       <div>
-        <label htmlFor="login-password" className="mb-1.5 block text-sm font-medium text-slate-700">
+        <label htmlFor="login-password" className={labelClass}>
           Password
         </label>
         <div className="relative">
-          <Lock size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Lock
+            size={16}
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+          />
           <input
             id="login-password"
             name="password"
@@ -110,7 +117,7 @@ export default function LoginForm() {
             type="button"
             onClick={() => setShowPassword((value) => !value)}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-slate-400 transition hover:bg-slate-200/70 hover:text-slate-600"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
           >
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
@@ -118,9 +125,13 @@ export default function LoginForm() {
         {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password}</p>}
       </div>
 
-      <Button type="submit" disabled={submitting} className="w-full" size="lg">
+      <button
+        type="submit"
+        disabled={submitting}
+        className="btn-shine inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-6 py-2.5 text-sm font-extrabold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
+      >
         {submitting ? 'Signing in...' : 'Sign in'}
-      </Button>
+      </button>
     </form>
   );
 }

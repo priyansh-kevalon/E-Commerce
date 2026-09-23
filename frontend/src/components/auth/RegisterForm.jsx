@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AlertCircle, Eye, EyeOff, Lock, Mail, Store, User } from 'lucide-react';
-import Button from '../common/Button.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const fieldClass = (invalid, revealable = false) =>
-  `w-full rounded-sm border bg-slate-50 py-3 pl-10 text-sm text-slate-700 outline-none transition focus:bg-white focus:ring-4 ${
-    revealable ? 'pr-10' : 'pr-3'
+  `w-full rounded-xl border bg-white py-2.5 pl-11 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-2 ${
+    revealable ? 'pr-11' : 'pr-4'
   } ${
     invalid
-      ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
-      : 'border-slate-300 focus:border-brand-500 focus:ring-brand-100'
+      ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
+      : 'border-slate-300 focus:border-brand-600 focus:ring-brand-100'
   }`;
+
+const labelClass = 'mb-1 block text-xs font-semibold text-slate-700';
 
 const INITIAL_FORM = { name: '', email: '', password: '', confirmPassword: '' };
 
@@ -71,61 +72,72 @@ export default function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate className="space-y-3.5">
       {serverError && (
-        <div className="flex items-start gap-2 rounded-sm border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+        <div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           <AlertCircle size={16} className="mt-0.5 shrink-0" />
           <span>{serverError}</span>
         </div>
       )}
 
-      <div>
-        <label htmlFor="register-name" className="mb-1.5 block text-sm font-medium text-slate-700">
-          Full name
-        </label>
-        <div className="relative">
-          <User size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            id="register-name"
-            name="name"
-            type="text"
-            autoComplete="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Jane Doe"
-            className={fieldClass(Boolean(errors.name))}
-          />
-        </div>
-        {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="register-email" className="mb-1.5 block text-sm font-medium text-slate-700">
-          Email address
-        </label>
-        <div className="relative">
-          <Mail size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            id="register-email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="you@example.com"
-            className={fieldClass(Boolean(errors.email))}
-          />
-        </div>
-        {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-3.5 sm:grid-cols-2">
         <div>
-          <label htmlFor="register-password" className="mb-1.5 block text-sm font-medium text-slate-700">
+          <label htmlFor="register-name" className={labelClass}>
+            Full name
+          </label>
+          <div className="relative">
+            <User
+              size={16}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+            />
+            <input
+              id="register-name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Aarav Mehta"
+              className={fieldClass(Boolean(errors.name))}
+            />
+          </div>
+          {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+        </div>
+
+        <div>
+          <label htmlFor="register-email" className={labelClass}>
+            Email address
+          </label>
+          <div className="relative">
+            <Mail
+              size={16}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+            />
+            <input
+              id="register-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="you@example.com"
+              className={fieldClass(Boolean(errors.email))}
+            />
+          </div>
+          {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+        </div>
+      </div>
+
+      <div className="grid gap-3.5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="register-password" className={labelClass}>
             Password
           </label>
           <div className="relative">
-            <Lock size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Lock
+              size={16}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+            />
             <input
               id="register-password"
               name="password"
@@ -140,7 +152,7 @@ export default function RegisterForm() {
               type="button"
               onClick={() => setShowPassword((value) => !value)}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-slate-400 transition hover:bg-slate-200/70 hover:text-slate-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
@@ -149,11 +161,14 @@ export default function RegisterForm() {
         </div>
 
         <div>
-          <label htmlFor="register-confirm" className="mb-1.5 block text-sm font-medium text-slate-700">
+          <label htmlFor="register-confirm" className={labelClass}>
             Confirm password
           </label>
           <div className="relative">
-            <Lock size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Lock
+              size={16}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+            />
             <input
               id="register-confirm"
               name="confirmPassword"
@@ -168,7 +183,7 @@ export default function RegisterForm() {
               type="button"
               onClick={() => setShowConfirm((value) => !value)}
               aria-label={showConfirm ? 'Hide password' : 'Show password'}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-1.5 text-slate-400 transition hover:bg-slate-200/70 hover:text-slate-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
             >
               {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
@@ -182,33 +197,38 @@ export default function RegisterForm() {
       <button
         type="button"
         onClick={() => setAsSeller((value) => !value)}
-        className={`flex w-full items-start gap-3 rounded-sm border p-3.5 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ${
+        className={`flex w-full items-center gap-3 rounded-xl border px-4 py-2.5 text-left transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 ${
           asSeller
-            ? 'border-accent-400 bg-accent-50 ring-2 ring-accent-100'
+            ? 'border-accent-300 bg-accent-50 ring-2 ring-accent-100'
             : 'border-slate-300 bg-slate-50 hover:border-accent-300'
         }`}
       >
         <span
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-sm transition ${
-            asSeller ? 'bg-gradient-to-br from-accent-400 to-accent-600 text-ink' : 'bg-slate-200 text-slate-500'
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition ${
+            asSeller
+              ? 'bg-gradient-to-br from-accent-400 to-accent-600 text-ink shadow-glow-accent'
+              : 'bg-white text-slate-500 shadow-card'
           }`}
         >
           <Store size={16} />
         </span>
         <span className="min-w-0">
-          <span className="block text-sm font-semibold text-slate-700">
+          <span className="block truncate text-sm font-semibold text-slate-700">
             Create a seller account <span className="font-normal text-slate-400">(optional)</span>
           </span>
           <span className="mt-0.5 block text-xs leading-relaxed text-slate-500">
-            List your own products on Velmora and start selling. Your listings go live after a
-            quick admin review.
+            List your products on Velmora and start selling after a quick admin review.
           </span>
         </span>
       </button>
 
-      <Button type="submit" disabled={submitting} className="w-full" size="lg">
+      <button
+        type="submit"
+        disabled={submitting}
+        className="btn-shine inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-6 py-2.5 text-sm font-extrabold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
+      >
         {submitting ? 'Creating account...' : asSeller ? 'Start selling' : 'Create account'}
-      </Button>
+      </button>
     </form>
   );
 }
