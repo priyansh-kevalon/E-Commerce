@@ -10,7 +10,7 @@ export default function ProductList({
   onRetry = null,
   emptyText = 'No products found.',
   skeletonCount = 10,
-  gridClassName = 'grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5',
+  gridClassName = 'grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:gap-6 2xl:grid-cols-5',
 }) {
   if (loading) {
     return <ProductGridSkeleton count={skeletonCount} />;

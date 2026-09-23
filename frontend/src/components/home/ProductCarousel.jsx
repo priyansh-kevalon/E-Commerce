@@ -102,7 +102,7 @@ export function ProductGrid({
   emptyText = 'No products yet.',
 }) {
   const gridClass =
-    'grid grid-cols-2 gap-3 p-3 sm:grid-cols-3 sm:p-4 lg:grid-cols-4 xl:grid-cols-5';
+    'grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 sm:gap-5 sm:p-5 lg:grid-cols-4 xl:grid-cols-5';
 
   if (loading) {
     return (

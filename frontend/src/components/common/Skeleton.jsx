@@ -4,14 +4,14 @@ export function Skeleton({ className = '' }) {
 
 export function ProductCardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-md border border-slate-200 bg-white">
+    <div className="overflow-hidden rounded-[22px] border border-secondary-100/80 bg-white shadow-[0_2px_18px_-10px_rgba(15,23,42,0.18)]">
       <div className="skeleton aspect-square w-full" />
-      <div className="space-y-2.5 border-t border-slate-100 p-3">
+      <div className="space-y-2.5 border-t border-secondary-100/70 p-3.5">
+        <div className="skeleton h-2.5 w-1/3 rounded-sm" />
         <div className="skeleton h-3 w-full rounded-sm" />
         <div className="skeleton h-3 w-4/5 rounded-sm" />
-        <div className="skeleton h-3 w-1/3 rounded-sm" />
-        <div className="skeleton h-4 w-2/5 rounded-sm" />
-        <div className="skeleton h-9 w-full rounded-sm" />
+        <div className="skeleton h-6 w-1/2 rounded-md" />
+        <div className="skeleton h-10 w-full rounded-xl" />
       </div>
     </div>
   );
@@ -20,7 +20,7 @@ export function ProductCardSkeleton() {
 export function ProductGridSkeleton({ count = 10, className = '' }) {
   return (
     <div
-      className={`grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 ${className}`}
+      className={`grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:gap-6 2xl:grid-cols-5 ${className}`}
     >
       {Array.from({ length: count }).map((_, index) => (
         <ProductCardSkeleton key={index} />
