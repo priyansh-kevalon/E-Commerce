@@ -14,10 +14,8 @@ import {
   Phone,
   Send,
   ShieldCheck,
-  Sparkles,
   Star,
   Truck,
-  Users,
 } from 'lucide-react';
 import Reveal from '../components/common/Reveal.jsx';
 import { APP_NAME } from '../utils/constants.js';
@@ -27,30 +25,24 @@ const CONTACT_CHANNELS = [
   {
     icon: Phone,
     title: 'Call us',
-    lines: ['+91 90000 00000', '+91 90000 00001'],
+    line: '+91 90000 00000',
     note: 'Mon–Sat, 9 AM – 9 PM',
     href: 'tel:+919000000000',
   },
   {
     icon: Mail,
-    title: 'Write to us',
-    lines: ['support@velmora.com', 'care@velmora.com'],
-    note: 'We reply within 24 hours',
+    title: 'Email us',
+    line: 'support@velmora.com',
+    note: 'Replies within 24 hours',
     href: 'mailto:support@velmora.com',
   },
   {
     icon: MessageCircle,
     title: 'WhatsApp',
-    lines: ['+91 90000 00000', 'Chat with our team'],
+    line: '+91 90000 00000',
     note: 'Replies within 10 minutes',
     href: 'https://wa.me/919000000000',
   },
-];
-
-const HERO_STATS = [
-  { icon: Clock, value: '< 30 min', label: 'Average first reply' },
-  { icon: Headphones, value: '24×7', label: 'WhatsApp support' },
-  { icon: Users, value: '1.2M+', label: 'Customers served' },
 ];
 
 const SUBJECTS = [
@@ -81,7 +73,7 @@ const FAQS = [
     a: `Orders can be cancelled from the Orders page while they are still in Pending or Confirmed status. If items start processing, contact us on WhatsApp and we will do our best to help.`,
   },
   {
-    q: 'Do you deliver outside Ahmedabad?',
+    q: 'Do you deliver outside Gujarat?',
     a: `Yes! We deliver across 28 states with real-time tracking. Shipping timelines (2–4 days) are shown on every product page based on your delivery address.`,
   },
 ];
@@ -96,31 +88,15 @@ const DETAILS = {
   response: 'Average first response: under 30 minutes',
 };
 
-function SectionHead({ eyebrow, title, subtitle, center = true, light = false }) {
+function SectionHead({ eyebrow, title, subtitle }) {
   return (
-    <div className={center ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
-      <p
-        className={`text-xs font-bold uppercase tracking-[0.2em] ${
-          light ? 'text-accent-300' : 'text-brand-600'
-        }`}
-      >
-        {eyebrow}
-      </p>
-      <h2
-        className={`mt-2 font-display text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl ${
-          light ? 'text-white' : 'text-slate-900'
-        }`}
-      >
+    <div className="mx-auto max-w-2xl text-center">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-600">{eyebrow}</p>
+      <h2 className="mt-3 font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
         {title}
       </h2>
       {subtitle && (
-        <p
-          className={`mt-3 text-sm leading-relaxed sm:text-base ${
-            light ? 'text-slate-300' : 'text-slate-600'
-          }`}
-        >
-          {subtitle}
-        </p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">{subtitle}</p>
       )}
     </div>
   );
@@ -177,7 +153,7 @@ export default function Contact() {
   };
 
   const fieldClass = (hasError) =>
-    `w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-2 focus:ring-brand-100 ${
+    `w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-2 focus:ring-brand-100 ${
       hasError ? 'border-red-400 focus:border-red-500' : 'border-slate-300 focus:border-brand-600'
     }`;
 
@@ -186,146 +162,61 @@ export default function Contact() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-ink via-brand-950 to-ink text-white">
+      <section className="relative overflow-hidden border-b border-secondary-100 bg-soft-hero">
         <div className="pointer-events-none absolute inset-0 hero-grid opacity-40" />
-        <div className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-brand-700/40 blur-3xl" />
-        <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-accent-500/20 blur-3xl" />
+        <div className="dotted pointer-events-none absolute inset-0 opacity-30" />
+        <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary-200/50 blur-3xl" />
+        <div className="pointer-events-none absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
 
-        <div className="relative mx-auto max-w-[1200px] px-6 py-16 sm:py-24">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-            <div>
-              <Reveal>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-accent-300 backdrop-blur">
-                  <Headphones size={13} /> We are here for you
+        <div className="relative mx-auto grid max-w-[1200px] items-center gap-10 px-6 py-14 sm:py-20 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+          <div>
+            <Reveal>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-secondary-800 shadow-sm ring-1 ring-secondary-200">
+                <Headphones size={13} className="text-brand-600" /> Contact {APP_NAME}
+              </span>
+              <h1 className="mt-6 text-balance font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl">
+                Let&apos;s talk.{' '}
+                <span className="bg-gradient-to-r from-brand-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent">
+                  We&apos;re here.
                 </span>
-                <h1 className="mt-6 font-display text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-                  Questions? We&apos;d love to{' '}
-                  <span className="bg-gradient-to-r from-accent-300 via-accent-400 to-accent-500 bg-clip-text text-transparent">
-                    help.
-                  </span>
-                </h1>
-                <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
-                  Whether it is an order question, a return, a partnership or just a friendly hello
-                  — reach out and a real person on our team will get back to you.
-                </p>
-              </Reveal>
+              </h1>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
+                An order question, a return, a partnership or just a friendly hello — a real person
+                from our team will get back to you.
+              </p>
+            </Reveal>
 
-              <Reveal delay={120} className="mt-8 flex flex-wrap items-center gap-3">
-                <a
-                  href="tel:+919000000000"
-                  className="btn-shine inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-accent-500 to-accent-600 px-6 py-3 text-sm font-bold text-ink shadow-glow-accent transition hover:brightness-105 active:scale-95"
-                >
-                  <Phone size={16} /> Call now
-                </a>
-                <a
-                  href="https://wa.me/919000000000"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10 active:scale-95"
-                >
-                  <MessageCircle size={16} /> WhatsApp
-                </a>
-                <a
-                  href="mailto:support@velmora.com"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10 active:scale-95"
-                >
-                  <Mail size={16} /> Email us
-                </a>
-              </Reveal>
-
-              <Reveal delay={200} className="mt-10 grid grid-cols-3 gap-3">
-                {HERO_STATS.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur"
-                  >
-                    <stat.icon size={18} className="text-accent-300" />
-                    <p className="mt-2 font-display text-lg font-extrabold sm:text-xl">
-                      {stat.value}
-                    </p>
-                    <p className="mt-0.5 text-[11px] font-medium text-slate-400">{stat.label}</p>
-                  </div>
+            <Reveal delay={120} className="mt-8 flex items-center gap-3">
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star key={star} size={14} className="fill-rating text-rating" />
                 ))}
-              </Reveal>
-            </div>
-
-            <Reveal variant="right" className="relative">
-              <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 shadow-luxe">
-                <img
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80"
-                  alt={`${APP_NAME} support team`}
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
               </div>
-
-              <div className="absolute -bottom-5 -left-4 hidden w-48 overflow-hidden rounded-2xl border-4 border-ink shadow-luxe sm:block">
-                <img
-                  src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=600&q=80"
-                  alt="Support agent helping a customer"
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover"
-                />
-              </div>
-
-              <div className="absolute -right-3 top-6 rounded-2xl border border-white/15 bg-ink/80 px-4 py-3 shadow-luxe backdrop-blur">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent-400 to-accent-600 text-ink">
-                    <Star size={18} className="fill-ink" />
-                  </span>
-                  <div className="leading-tight">
-                    <p className="font-display text-sm font-extrabold text-white">4.8/5</p>
-                    <p className="text-[11px] text-slate-400">Support rating</p>
-                  </div>
-                </div>
-              </div>
+              <p className="text-sm text-slate-600">
+                <span className="font-extrabold text-slate-900">4.8/5</span> support rating ·
+                120k+ reviews
+              </p>
             </Reveal>
           </div>
+
+          <Reveal variant="right" className="relative">
+            <div className="overflow-hidden rounded-[2rem] border border-white shadow-luxe">
+              <img
+                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80"
+                alt={`${APP_NAME} support team`}
+                loading="lazy"
+                className="aspect-[4/3] w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-transparent to-transparent" />
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* Channels */}
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto grid max-w-[1200px] gap-4 px-6 py-10 sm:grid-cols-3">
-          {CONTACT_CHANNELS.map((channel, index) => (
-            <Reveal key={channel.title} delay={index * 90}>
-              <a
-                href={channel.href}
-                className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition duration-300 hover:-translate-y-1.5 hover:border-brand-200 hover:shadow-glow"
-              >
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-ink text-white shadow-card transition group-hover:scale-110">
-                  <channel.icon size={20} />
-                </span>
-                <h2 className="mt-4 font-display text-lg font-bold text-slate-900">
-                  {channel.title}
-                </h2>
-                <ul className="mt-2 space-y-1">
-                  {channel.lines.map((line) => (
-                    <li key={line} className="text-sm font-semibold text-brand-700">
-                      {line}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-3 text-xs text-slate-400">{channel.note}</p>
-              </a>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* Form + sidebar */}
+      {/* Form + info sidebar */}
       <section className="mx-auto max-w-[1200px] px-6 py-16 sm:py-20">
-        <div className="mb-10">
-          <SectionHead
-            eyebrow="Send a message"
-            title="Tell us what's up"
-            subtitle="Fill in the form and our team will get back to you — usually within a few hours."
-          />
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card sm:p-8">
+        <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
+          <div className="rounded-[1.75rem] border border-secondary-100 bg-white p-6 shadow-card sm:p-8">
             {status === 'sent' ? (
               <div className="flex min-h-[420px] flex-col items-center justify-center text-center">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
@@ -342,7 +233,7 @@ export default function Contact() {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="mt-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-brand-700 to-brand-800 px-6 py-2.5 text-sm font-bold text-white shadow-glow transition hover:brightness-110 active:scale-95"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-6 py-2.5 text-sm font-bold text-white shadow-glow transition hover:brightness-110 active:scale-95"
                 >
                   Send another message
                 </button>
@@ -351,12 +242,12 @@ export default function Contact() {
               <>
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500 to-accent-600 text-ink shadow-glow-accent">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-card">
                       <Mail size={19} />
                     </span>
                     <div>
                       <h3 className="font-display text-base font-bold text-slate-900">
-                        Contact form
+                        Send us a message
                       </h3>
                       <p className="text-xs text-slate-500">All fields marked * are required</p>
                     </div>
@@ -431,7 +322,7 @@ export default function Contact() {
                       id="contact-subject"
                       value={form.subject}
                       onChange={(event) => update('subject', event.target.value)}
-                      className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100"
                     >
                       {SUBJECTS.map((subject) => (
                         <option key={subject} value={subject}>
@@ -462,7 +353,7 @@ export default function Contact() {
                     <button
                       type="submit"
                       disabled={status === 'sending'}
-                      className="btn-shine inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-accent-500 to-accent-600 px-6 py-3 text-sm font-bold text-ink shadow-glow-accent transition hover:brightness-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+                      className="btn-shine inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
                     >
                       {status === 'sending' ? (
                         <>
@@ -484,36 +375,60 @@ export default function Contact() {
             )}
           </div>
 
-          <div className="space-y-5">
-            <Reveal className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
-              <div className="relative flex h-36 items-center justify-center bg-gradient-to-br from-brand-800 via-brand-700 to-ink">
-                <div className="pointer-events-none absolute inset-0 hero-grid opacity-30" />
-                <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-accent-300 backdrop-blur">
-                  <MapPin size={22} />
-                </span>
-                <span className="absolute right-3 top-3 rounded-full bg-emerald-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
-                  Head office
-                </span>
-              </div>
-              <div className="p-5">
-                <h3 className="text-sm font-bold text-slate-900">Visit our store</h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-slate-500">
-                  {DETAILS.address}
-                </p>
-                <a
-                  href="https://www.google.com/maps/search/?api=1&query=Ashram+Road+Ahmedabad+Gujarat"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 transition hover:underline"
-                >
-                  Get directions <ArrowRight size={13} />
-                </a>
+          {/* Sidebar */}
+          <div className="space-y-4">
+            <Reveal className="rounded-[1.75rem] border border-secondary-100 bg-white p-5 shadow-card">
+              <h3 className="text-sm font-bold text-slate-900">Reach us directly</h3>
+              <div className="mt-2 divide-y divide-slate-100">
+                {CONTACT_CHANNELS.map((channel) => (
+                  <a
+                    key={channel.title}
+                    href={channel.href}
+                    className="group flex items-center gap-3 py-3"
+                  >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-card transition group-hover:scale-105">
+                      <channel.icon size={17} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-bold text-slate-900">
+                        {channel.title}
+                      </span>
+                      <span className="block truncate text-xs font-semibold text-brand-700">
+                        {channel.line}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-right text-[11px] text-slate-400">
+                      {channel.note}
+                    </span>
+                  </a>
+                ))}
               </div>
             </Reveal>
 
-            <Reveal delay={80} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+            <Reveal delay={80} className="rounded-[1.75rem] border border-secondary-100 bg-white p-5 shadow-card">
               <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
-                <Clock size={16} className="text-brand-700" /> Support hours
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-50 to-secondary-100 text-brand-700 ring-1 ring-secondary-200">
+                  <MapPin size={14} />
+                </span>
+                Our store
+              </h3>
+              <p className="mt-2.5 text-[13px] leading-relaxed text-slate-500">{DETAILS.address}</p>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Ashram+Road+Ahmedabad+Gujarat"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 transition hover:underline"
+              >
+                Get directions <ArrowRight size={13} />
+              </a>
+            </Reveal>
+
+            <Reveal delay={140} className="rounded-[1.75rem] border border-secondary-100 bg-white p-5 shadow-card">
+              <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-50 to-secondary-100 text-brand-700 ring-1 ring-secondary-200">
+                  <Clock size={14} />
+                </span>
+                Support hours
               </h3>
               <ul className="mt-3 space-y-2">
                 {DETAILS.hours.map(([day, hours]) => (
@@ -523,29 +438,19 @@ export default function Contact() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 rounded-xl bg-slate-50 px-4 py-3">
+              <div className="mt-3 rounded-xl bg-slate-50 px-4 py-2.5">
                 <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
                   <Truck size={14} className="text-brand-600" /> {DETAILS.response}
                 </p>
               </div>
             </Reveal>
 
-            <Reveal delay={140}>
+            <Reveal delay={200}>
               <Link
                 to="/orders"
-                className="group flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 px-5 py-4 transition hover:bg-brand-100"
+                className="group flex items-center justify-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-5 py-3 text-sm font-bold text-brand-800 transition hover:bg-brand-100"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-ink text-white">
-                  <Truck size={19} />
-                </span>
-                <span>
-                  <span className="block text-sm font-bold text-brand-900">Track your order</span>
-                  <span className="block text-xs text-brand-700">See live status for any order</span>
-                </span>
-                <ArrowRight
-                  size={16}
-                  className="ml-auto text-brand-600 transition group-hover:translate-x-1"
-                />
+                Track your order <ArrowRight size={15} className="transition group-hover:translate-x-1" />
               </Link>
             </Reveal>
           </div>
@@ -553,7 +458,7 @@ export default function Contact() {
       </section>
 
       {/* FAQ */}
-      <section className="bg-slate-50 py-16 sm:py-20">
+      <section className="border-t border-secondary-100 bg-slate-50 py-16 sm:py-20">
         <div className="mx-auto max-w-[820px] px-6">
           <SectionHead
             eyebrow="FAQs"
@@ -569,7 +474,7 @@ export default function Contact() {
                   key={faq.q}
                   delay={index * 60}
                   className={`overflow-hidden rounded-2xl border bg-white shadow-card transition ${
-                    open ? 'border-brand-200' : 'border-slate-200'
+                    open ? 'border-brand-200' : 'border-secondary-100'
                   }`}
                 >
                   <button
@@ -581,7 +486,9 @@ export default function Contact() {
                     <span className="text-sm font-bold text-slate-900">{faq.q}</span>
                     <span
                       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition ${
-                        open ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-500'
+                        open
+                          ? 'bg-gradient-to-br from-brand-600 to-secondary-600 text-white'
+                          : 'bg-slate-100 text-slate-500'
                       }`}
                     >
                       <ChevronDown
@@ -598,43 +505,6 @@ export default function Contact() {
             })}
           </div>
         </div>
-      </section>
-
-      {/* CTA */}
-      <section className="mx-auto max-w-[1200px] px-6 py-16 sm:py-20">
-        <Reveal className="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-brand-800 via-brand-700 to-ink p-8 text-white shadow-luxe sm:p-12">
-          <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent-500/20 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-20 left-1/4 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-          <div className="relative flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-            <div className="max-w-xl">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-accent-300">
-                <Sparkles size={13} /> Can&apos;t find what you need?
-              </span>
-              <h2 className="mt-4 font-display text-3xl font-extrabold leading-tight sm:text-4xl">
-                Our team replies in minutes
-              </h2>
-              <p className="mt-2 text-sm text-slate-300 sm:text-base">
-                Ping us on WhatsApp and a real person from {APP_NAME} will help you sort it out.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <a
-                href="https://wa.me/919000000000"
-                target="_blank"
-                rel="noreferrer"
-                className="btn-shine inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-accent-500 to-accent-600 px-6 py-3 text-sm font-bold text-ink shadow-glow-accent transition hover:brightness-105 active:scale-95"
-              >
-                <MessageCircle size={16} /> Chat on WhatsApp
-              </a>
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold backdrop-blur transition hover:bg-white/10"
-              >
-                Browse catalogue <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-        </Reveal>
       </section>
     </div>
   );
