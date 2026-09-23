@@ -27,6 +27,7 @@ const AdminProducts = lazy(() => import('../pages/admin/AdminProducts.jsx'));
 const AdminCategories = lazy(() => import('../pages/admin/AdminCategories.jsx'));
 const AdminOrders = lazy(() => import('../pages/admin/AdminOrders.jsx'));
 const AdminUsers = lazy(() => import('../pages/admin/AdminUsers.jsx'));
+const AdminCoupons = lazy(() => import('../pages/admin/AdminCoupons.jsx'));
 const SellerDashboard = lazy(() => import('../pages/seller/SellerDashboard.jsx'));
 const SellerProducts = lazy(() => import('../pages/seller/SellerProducts.jsx'));
 const SellerOrders = lazy(() => import('../pages/seller/SellerOrders.jsx'));
@@ -152,6 +153,7 @@ export default function AppRoutes() {
         <Route path="categories" element={<AdminCategories />} />
         <Route path="orders" element={<AdminOrders />} />
         <Route path="users" element={<AdminUsers />} />
+        <Route path="coupons" element={<AdminCoupons />} />
       </Route>
 
       <Route

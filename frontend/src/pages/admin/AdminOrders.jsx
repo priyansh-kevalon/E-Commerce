@@ -291,6 +291,7 @@ export default function AdminOrders() {
         open={Boolean(selected)}
         title={selected ? `Order #${selected._id.slice(-8).toUpperCase()}` : ''}
         subtitle="Order details"
+        icon={<ShoppingBag size={19} />}
         onClose={() => setSelected(null)}
         size="lg"
       >

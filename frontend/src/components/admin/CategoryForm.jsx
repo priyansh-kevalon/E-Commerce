@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { AlertCircle, FolderTree, Image as ImageIcon } from 'lucide-react';
-import Button from '../common/Button.jsx';
+import { AlertCircle, Image as ImageIcon } from 'lucide-react';
 
 const inputClass = (invalid) =>
   `w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition focus:ring-4 ${
@@ -16,7 +15,7 @@ const FieldLabel = ({ children, required }) => (
   </label>
 );
 
-export default function CategoryForm({ category, onSubmit, onCancel, submitting, serverError }) {
+export default function CategoryForm({ category, onSubmit, serverError }) {
   const [form, setForm] = useState({
     name: category?.name || '',
     description: category?.description || '',
@@ -46,7 +45,7 @@ export default function CategoryForm({ category, onSubmit, onCancel, submitting,
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form id="category-form" onSubmit={handleSubmit} noValidate>
       {serverError && (
         <div className="mb-5 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
           <AlertCircle size={16} className="mt-0.5 shrink-0" />
@@ -55,13 +54,6 @@ export default function CategoryForm({ category, onSubmit, onCancel, submitting,
       )}
 
       <div className="space-y-5">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-            <FolderTree size={16} />
-          </span>
-          <p className="text-sm font-semibold text-slate-800">Category details</p>
-        </div>
-
         <div>
           <FieldLabel required>Category name</FieldLabel>
           <input name="name" value={form.name} onChange={handleChange} className={inputClass(errors.name)} placeholder="e.g. Electronics" />
@@ -109,15 +101,6 @@ export default function CategoryForm({ category, onSubmit, onCancel, submitting,
             </button>
           </div>
         </div>
-      </div>
-
-      <div className="mt-6 flex justify-end gap-3 border-t border-slate-100 pt-5">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={submitting}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={submitting}>
-          {submitting ? 'Saving...' : category ? 'Update category' : 'Create category'}
-        </Button>
       </div>
     </form>
   );

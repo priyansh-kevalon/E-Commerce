@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { AlertCircle, Image as ImageIcon, Star, Tag, ToggleRight } from 'lucide-react';
-import Button from '../common/Button.jsx';
 
 const inputClass = (invalid) =>
   `w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition focus:ring-4 ${
@@ -49,7 +48,7 @@ const toFormState = (product) => {
   };
 };
 
-export default function ProductForm({ product, categories, onSubmit, onCancel, submitting, serverError, sellerMode = false }) {
+export default function ProductForm({ product, categories, onSubmit, serverError, sellerMode = false }) {
   const [form, setForm] = useState(() => toFormState(product));
   const [errors, setErrors] = useState({});
 
@@ -106,7 +105,7 @@ export default function ProductForm({ product, categories, onSubmit, onCancel, s
   const discountPct = hasDiscount ? Math.round(((price - discountPrice) / price) * 100) : 0;
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form id="product-form" onSubmit={handleSubmit} noValidate>
       {serverError && (
         <div className="mb-5 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
           <AlertCircle size={16} className="mt-0.5 shrink-0" />
@@ -240,15 +239,6 @@ export default function ProductForm({ product, categories, onSubmit, onCancel, s
           </button>
         </div>
       )}
-      </div>
-
-      <div className="mt-6 flex justify-end gap-3 border-t border-slate-100 pt-5">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={submitting}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={submitting}>
-          {submitting ? 'Saving...' : product ? 'Update product' : 'Create product'}
-        </Button>
       </div>
     </form>
   );

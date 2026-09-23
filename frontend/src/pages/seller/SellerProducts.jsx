@@ -15,6 +15,7 @@ import {
 import Button from '../../components/common/Button.jsx';
 import Loader from '../../components/common/Loader.jsx';
 import Modal from '../../components/admin/Modal.jsx';
+import ModalFooter from '../../components/admin/ModalFooter.jsx';
 import ProductForm from '../../components/admin/ProductForm.jsx';
 import { fetchCategories } from '../../services/productService.js';
 import {
@@ -348,15 +349,22 @@ export default function SellerProducts() {
             ? 'Update your listing'
             : 'Your product will go live after admin approval'
         }
+        icon={<Package size={19} />}
         onClose={() => setModalOpen(false)}
         size="lg"
+        footer={
+          <ModalFooter
+            formId="product-form"
+            submitting={saving}
+            submitLabel={editing ? 'Update product' : 'Create product'}
+            onCancel={() => setModalOpen(false)}
+          />
+        }
       >
         <ProductForm
           product={editing}
           categories={categories}
           onSubmit={handleSubmit}
-          onCancel={() => setModalOpen(false)}
-          submitting={saving}
           serverError={formError}
           sellerMode
         />

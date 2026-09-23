@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
+  BadgePercent,
   Bell,
   ChevronRight,
   FolderTree,
@@ -35,6 +36,10 @@ const NAV = [
       { to: '/admin/users', label: 'Customers', icon: Users },
     ],
   },
+  {
+    section: 'Marketing',
+    links: [{ to: '/admin/coupons', label: 'Coupons', icon: BadgePercent }],
+  },
 ];
 
 const PAGE_META = {
@@ -43,6 +48,7 @@ const PAGE_META = {
   '/admin/categories': { title: 'Categories', subtitle: 'Organise products into browsable groups' },
   '/admin/orders': { title: 'Orders', subtitle: 'Track and progress customer orders' },
   '/admin/users': { title: 'Customers', subtitle: 'Manage accounts, roles and access' },
+  '/admin/coupons': { title: 'Coupons', subtitle: 'Create and manage discount codes' },
 };
 
 function getPageMeta(pathname) {

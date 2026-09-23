@@ -3,6 +3,7 @@ import { FolderPlus, FolderTree, Layers, Pencil, Plus, RotateCcw, Trash2 } from 
 import Button from '../../components/common/Button.jsx';
 import Loader from '../../components/common/Loader.jsx';
 import Modal from '../../components/admin/Modal.jsx';
+import ModalFooter from '../../components/admin/ModalFooter.jsx';
 import CategoryForm from '../../components/admin/CategoryForm.jsx';
 import { fetchCategories } from '../../services/productService.js';
 import { createCategory, updateCategory, deleteCategory } from '../../services/adminService.js';
@@ -206,13 +207,20 @@ export default function AdminCategories() {
         open={modalOpen}
         title={editing ? 'Edit category' : 'New category'}
         subtitle={editing ? 'Update this browsable group' : 'Organise your catalogue'}
+        icon={<FolderTree size={19} />}
         onClose={() => setModalOpen(false)}
+        footer={
+          <ModalFooter
+            formId="category-form"
+            submitting={saving}
+            submitLabel={editing ? 'Update category' : 'Create category'}
+            onCancel={() => setModalOpen(false)}
+          />
+        }
       >
         <CategoryForm
           category={editing}
           onSubmit={handleSubmit}
-          onCancel={() => setModalOpen(false)}
-          submitting={saving}
           serverError={formError}
         />
       </Modal>

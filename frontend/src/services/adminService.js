@@ -69,3 +69,25 @@ export const updateOrderStatus = async (id, status) => {
   const { data } = await api.put(`/orders/${id}/status`, { status });
   return data.data.order;
 };
+
+// -------------------- Coupons --------------------
+
+export const fetchCoupons = async (params = {}) => {
+  const { data } = await api.get('/admin/coupons', { params });
+  return data.data.coupons;
+};
+
+export const createCoupon = async (payload) => {
+  const { data } = await api.post('/coupons', payload);
+  return data.data.coupon;
+};
+
+export const updateCoupon = async (id, payload) => {
+  const { data } = await api.put(`/coupons/${id}`, payload);
+  return data.data.coupon;
+};
+
+export const deleteCoupon = async (id) => {
+  const { data } = await api.delete(`/coupons/${id}`);
+  return data;
+};

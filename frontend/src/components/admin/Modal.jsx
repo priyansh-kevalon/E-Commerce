@@ -8,7 +8,7 @@ const SIZES = {
   xl: 'max-w-4xl',
 };
 
-export default function Modal({ open, title, subtitle, onClose, children, footer, size = 'md' }) {
+export default function Modal({ open, title, subtitle, icon, onClose, children, footer, size = 'md' }) {
   const dialogRef = useRef(null);
 
   useEffect(() => {
@@ -44,11 +44,25 @@ export default function Modal({ open, title, subtitle, onClose, children, footer
         className={`relative z-10 my-4 w-full ${SIZES[size] || SIZES.md} overflow-hidden rounded-2xl bg-white shadow-luxe outline-none animate-pop`}
       >
         <div className="relative flex items-start justify-between gap-4 border-b border-slate-100 bg-gradient-to-r from-white via-white to-brand-50/60 px-6 py-5">
-          <div className="min-w-0">
-            {subtitle && <p className="text-xs font-semibold uppercase tracking-widest text-brand-600">{subtitle}</p>}
-            <h2 id="admin-modal-title" className="mt-0.5 font-display text-lg font-extrabold tracking-tight text-slate-900">
-              {title}
-            </h2>
+          <div className="flex min-w-0 items-center gap-3.5">
+            {icon && (
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-800 text-white shadow-glow ring-1 ring-white/40">
+                {icon}
+              </span>
+            )}
+            <div className="min-w-0">
+              {subtitle && (
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600">
+                  {subtitle}
+                </p>
+              )}
+              <h2
+                id="admin-modal-title"
+                className="mt-0.5 truncate font-display text-lg font-extrabold tracking-tight text-slate-900"
+              >
+                {title}
+              </h2>
+            </div>
           </div>
           <button
             type="button"
@@ -62,7 +76,11 @@ export default function Modal({ open, title, subtitle, onClose, children, footer
 
         <div className="max-h-[calc(100vh-16rem)] overflow-y-auto px-6 py-6">{children}</div>
 
-        {footer && <div className="border-t border-slate-100 bg-slate-50/80 px-6 py-4">{footer}</div>}
+        {footer && (
+          <div className="flex items-center justify-end gap-3 border-t border-slate-100 bg-gradient-to-r from-slate-50 via-slate-50/80 to-brand-50/40 px-6 py-4">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );
