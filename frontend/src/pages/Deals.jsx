@@ -214,7 +214,7 @@ export default function Deals() {
 
           <div className="shrink-0 lg:pr-2">
             <Link
-              to="#deals-grid"
+              to="/Products"
               className="btn-shine inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-7 py-3 text-sm font-extrabold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:brightness-110"
             >
               Shop the sale <ArrowRight size={16} />

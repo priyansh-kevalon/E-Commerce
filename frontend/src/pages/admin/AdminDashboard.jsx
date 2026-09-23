@@ -213,13 +213,13 @@ function RevenueAreaChart({ data, currency }) {
       >
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#6366f1" stopOpacity="0.55" />
-            <stop offset="55%" stopColor="#6366f1" stopOpacity="0.16" />
-            <stop offset="100%" stopColor="#6366f1" stopOpacity="0.02" />
+            <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.55" />
+            <stop offset="55%" stopColor="#0ea5e9" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.02" />
           </linearGradient>
           <linearGradient id={`${gradientId}-stroke`} x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#4f46e5" />
-            <stop offset="100%" stopColor="#0ea5e9" />
+            <stop offset="0%" stopColor="#0284c7" />
+            <stop offset="100%" stopColor="#f97316" />
           </linearGradient>
         </defs>
 
@@ -274,11 +274,11 @@ function RevenueAreaChart({ data, currency }) {
               cy={points[active][1]}
               r={7.5}
               fill="#ffffff"
-              stroke="#4f46e5"
+              stroke="#0284c7"
               strokeWidth={3}
               className="drop-shadow"
             />
-            <circle cx={points[active][0]} cy={points[active][1]} r={2.5} fill="#4f46e5" />
+            <circle cx={points[active][0]} cy={points[active][1]} r={2.5} fill="#0284c7" />
           </g>
         )}
 

@@ -51,9 +51,9 @@ const METRICS = [
 ];
 
 const CHART_COLORS = {
-  revenue: '#7c3aed',
-  orders: '#0ea5e9',
-  units: '#10b981',
+  revenue: '#0284c7',
+  orders: '#0891b2',
+  units: '#f97316',
 };
 
 const NOTIFICATION_STYLE = {

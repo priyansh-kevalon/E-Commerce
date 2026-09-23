@@ -83,7 +83,7 @@ export default function ProductCard({ product, minimal = false }) {
           src={getProductImage(product)}
           alt={product.name}
           loading="lazy"
-          className="h-full w-full object-contain drop-shadow-[0_14px_16px_rgba(79,70,229,0.22)] transition duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_20px_26px_rgba(79,70,229,0.32)]"
+          className="h-full w-full object-contain drop-shadow-[0_14px_16px_rgba(14,165,233,0.22)] transition duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_20px_26px_rgba(14,165,233,0.32)]"
         />
       </Link>
 
