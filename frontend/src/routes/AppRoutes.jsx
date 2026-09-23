@@ -9,6 +9,7 @@ import { useAuth } from '../hooks/useAuth.js';
 
 const Home = lazy(() => import('../pages/Home.jsx'));
 const Products = lazy(() => import('../pages/Products.jsx'));
+const Deals = lazy(() => import('../pages/Deals.jsx'));
 const ProductDetails = lazy(() => import('../pages/ProductDetails.jsx'));
 const About = lazy(() => import('../pages/About.jsx'));
 const Contact = lazy(() => import('../pages/Contact.jsx'));
@@ -90,7 +91,7 @@ export default function AppRoutes() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/deals" element={<Products preset="deals" />} />
+        <Route path="/deals" element={<Deals />} />
         <Route path="/new-arrivals" element={<Products preset="new-arrivals" />} />
         <Route path="/best-sellers" element={<Products preset="best-sellers" />} />
         <Route path="/about" element={<About />} />

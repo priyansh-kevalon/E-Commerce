@@ -323,6 +323,19 @@ h4 {
       linear-gradient(140deg, #0f172a 0%, #312e81 60%, #4f46e5 100%);
   }
 
+  /* Soft lavender hero surface */
+  .bg-soft-hero {
+    background-color: #faf8ff;
+  }
+  /* Soft lavender product-image surface */
+  .bg-soft-card-image {
+    background-image: linear-gradient(120deg, #f2edff 0%, #ffffff 55%, #faf8ff 100%);
+  }
+  /* Soft lavender promo banner surface */
+  .bg-soft-promo {
+    background-image: linear-gradient(100deg, #ede9fe 0%, #eef2ff 45%, #ede9fe 100%);
+  }
+
   .text-gradient {
     background-image: linear-gradient(100deg, #4f46e5 0%, #312e81 55%, #10b981 100%);
     background-size: 200% auto;
@@ -689,6 +702,15 @@ html.dark ::selection {
 /* Primitives */
 .dark .theme-store .glass {
   background-color: rgba(13, 22, 38, 0.82);
+}
+.dark .theme-store .bg-soft-hero {
+  background-color: #0f1a2d;
+}
+.dark .theme-store .bg-soft-card-image {
+  background-image: linear-gradient(120deg, #16233a 0%, #151f33 55%, #0f1a2d 100%);
+}
+.dark .theme-store .bg-soft-promo {
+  background-image: linear-gradient(100deg, #1e1b4b 0%, #16233a 45%, #1e1b4b 100%);
 }
 .dark .theme-store .dotted {
   background-image: radial-gradient(rgba(96, 165, 250, 0.22) 1px, transparent 1px);

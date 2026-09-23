@@ -4,8 +4,8 @@ import {
   ArrowDownAZ,
   ArrowDownWideNarrow,
   ArrowRight,
-  ArrowUpDown,
   ArrowUpWideNarrow,
+  BadgePercent,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -234,18 +234,19 @@ export default function Products({ preset = null }) {
   const ActiveMeta = SORT_META[activeSortValue] || SORT_META.newest;
 
   return (
-    <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
-      <nav className="flex items-center gap-1 text-[13px] text-slate-400">
+    <div className="mx-auto max-w-[1600px] px-3 py-5 sm:px-5">
+      {/* Breadcrumb */}
+      <nav className="flex items-center gap-1.5 text-[13px] text-slate-400">
         <Link
           to="/"
-          className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-xs transition hover:border-brand-300 hover:text-brand-600"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-brand-300 hover:text-brand-600"
           aria-label="Go to homepage"
         >
           <Home size={13} />
         </Link>
         <ChevronRight size={13} className="text-slate-300" />
         <span className="font-semibold text-brand-600">
-          {presetConfig ? presetConfig.title : 'Products'}
+          {presetConfig ? presetConfig.title : 'Shop'}
         </span>
         {filters.category && (
           <>
@@ -261,78 +262,117 @@ export default function Products({ preset = null }) {
         )}
       </nav>
 
-      {presetConfig && (
-        <section
-          className={`relative mt-3 overflow-hidden rounded-2xl bg-gradient-to-r ${presetConfig.gradient} px-6 py-8 text-slate-900 shadow-luxe sm:px-10`}
-        >
-          <div className="pointer-events-none absolute -right-14 -top-24 h-64 w-64 rounded-full bg-white/40 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-28 left-1/4 h-56 w-56 rounded-full bg-ember-500/20 blur-2xl" />
-          <div className="pointer-events-none absolute left-0 top-0 h-full w-full bg-gradient-to-b from-transparent via-transparent to-white/10" />
-          <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-            <div className="max-w-2xl">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-900/10 bg-white/70 px-3 py-1 text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
-                <presetConfig.Icon size={12} /> {presetConfig.kicker}
-              </span>
-              <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight sm:text-4xl">
-                {presetConfig.title}
-              </h1>
-              <p className="mt-2 max-w-xl text-sm text-slate-700/90 sm:text-base">
-                {presetConfig.tagline}
-              </p>
-              <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] font-semibold text-slate-600">
-                <span className="inline-flex items-center gap-1.5">
-                  <Truck size={14} /> Free delivery over Rs.999
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <ShieldCheck size={14} /> 7-day easy returns
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Check size={14} /> Genuine products
-                </span>
-              </div>
-            </div>
-            {categories.length > 0 && (
-              <div className="flex flex-wrap gap-2 lg:max-w-xs lg:justify-end">
-                {categories.slice(0, 4).map((category) => (
-                  <Link
-                    key={category._id}
-                    to={`/products?category=${encodeURIComponent(category.name)}`}
-                    className="inline-flex items-center gap-1 rounded-full border border-slate-900/10 bg-white/70 px-3 py-1.5 text-xs font-semibold text-slate-700 backdrop-blur-sm transition hover:bg-white hover:text-brand-700"
-                  >
-                    {category.name}
-                    <ArrowRight size={12} />
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
+      {/* Shop hero banner */}
+      <div
+        className={`relative mt-4 overflow-hidden rounded-[26px] border border-secondary-100 bg-soft-hero p-6 sm:p-9 lg:p-11`}
+      >
+        <div className="dotted pointer-events-none absolute inset-0 opacity-40" />
+        <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-secondary-200/40 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 left-1/4 h-64 w-64 rounded-full bg-brand-100/40 blur-3xl" />
 
-      <div className="mt-3 grid gap-4 lg:grid-cols-[248px_1fr]">
-        <div className="hidden lg:block">
-          <div className="sticky top-32">{filterPanel}</div>
+        <div className="relative grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+          <div>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-secondary-800 shadow-sm ring-1 ring-secondary-200">
+              {presetConfig ? <presetConfig.Icon size={13} /> : <Sparkles size={13} />}
+              {presetConfig ? presetConfig.kicker : 'The Velmora Boutique'}
+            </span>
+            <h1 className="mt-4 text-balance font-display text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl lg:text-[44px]">
+              {search
+                ? `Results for "${search}"`
+                : presetConfig
+                  ? presetConfig.title
+                  : filters.category || (featured ? "Today's Deals" : 'Shop the Collection')}
+            </h1>
+            <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">
+              {presetConfig
+                ? presetConfig.tagline
+                : search
+                  ? `Showing the best matches we found for "${search}".`
+                  : 'Handpicked products from verified sellers — delivered fast, backed by easy returns.'}
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] font-semibold text-slate-600">
+              <span className="inline-flex items-center gap-1.5">
+                <Truck size={14} className="text-brand-700" /> Free delivery over ₹999
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <ShieldCheck size={14} className="text-brand-700" /> 7-day easy returns
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <BadgePercent size={14} className="text-brand-700" /> Up to 40% off top picks
+              </span>
+            </div>
+          </div>
+
+          {categories.length > 0 && (
+            <div className="hidden flex-wrap gap-2 lg:flex lg:justify-end">
+              {categories.slice(0, 4).map((category) => (
+                <Link
+                  key={category._id}
+                  to={`/products?category=${encodeURIComponent(category.name)}`}
+                  className="group inline-flex items-center gap-1.5 rounded-full border border-secondary-200 bg-white/85 px-4 py-2 text-xs font-bold text-slate-700 shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-400 hover:text-brand-700 hover:shadow-card"
+                >
+                  {category.name}
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
+      </div>
+
+      <div className="mt-5 grid gap-6 lg:grid-cols-[260px_1fr] lg:items-start">
+        {/* Filter sidebar */}
+        <aside className="hidden lg:sticky lg:top-28 lg:block">{filterPanel}</aside>
 
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-slate-200 bg-white px-4 py-3">
-            <div className="flex items-center gap-2">
+          {/* Category quick pills */}
+          <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pb-1">
+            <button
+              type="button"
+              onClick={handleReset}
+              className={`shrink-0 rounded-full border px-4 py-1.5 text-xs font-bold transition ${
+                !filters.category && !featured
+                  ? 'border-brand-700 bg-brand-700 text-white shadow-sm'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-brand-400 hover:text-brand-700'
+              }`}
+            >
+              All Products
+            </button>
+            {categories.map((category) => (
+              <button
+                key={category._id}
+                type="button"
+                onClick={() => handleFilterChange({ category: category.name })}
+                className={`shrink-0 rounded-full border px-4 py-1.5 text-xs font-bold transition ${
+                  filters.category === category.name
+                    ? 'border-brand-700 bg-brand-700 text-white shadow-sm'
+                    : 'border-slate-200 bg-white text-slate-600 hover:border-brand-400 hover:text-brand-700'
+                }`}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Toolbar */}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <div className="flex items-center gap-2.5">
               <button
                 type="button"
                 onClick={() => setFiltersOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-sm border border-slate-300 px-3 py-1.5 text-sm font-semibold text-slate-700 transition hover:border-brand-400 hover:text-brand-600 lg:hidden"
+                className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 px-3.5 py-1.5 text-sm font-semibold text-slate-700 transition hover:border-brand-400 hover:text-brand-600 lg:hidden"
               >
                 <SlidersHorizontal size={15} /> Filters
               </button>
-              <h1 className="text-base font-bold text-slate-800">
+              <h2 className="text-sm font-extrabold text-slate-900">
                 {search
                   ? `Results for "${search}"`
                   : presetConfig
                     ? presetConfig.title
                     : filters.category || (featured ? "Today's Deals" : 'All Products')}
-              </h1>
-              <span className="hidden text-sm text-slate-400 sm:inline">
-                ({total} item{total === 1 ? '' : 's'})
+              </h2>
+              <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-bold text-brand-700 ring-1 ring-brand-200">
+                {total} item{total === 1 ? '' : 's'}
               </span>
             </div>
 
@@ -344,10 +384,10 @@ export default function Products({ preset = null }) {
                   aria-haspopup="listbox"
                   aria-expanded={sortOpen}
                   onClick={() => setSortOpen((open) => !open)}
-                  className={`inline-flex items-center gap-2 rounded-md border bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 shadow-sm transition ${
+                  className={`inline-flex items-center gap-2 rounded-full border bg-white px-3.5 py-1.5 text-sm font-semibold text-slate-700 shadow-sm transition ${
                     sortOpen
                       ? 'border-brand-500 ring-2 ring-brand-100'
-                      : 'border-slate-300 hover:border-brand-400 hover:text-brand-700'
+                      : 'border-slate-200 hover:border-brand-400 hover:text-brand-700'
                   }`}
                 >
                   <ActiveMeta.Icon size={15} className="text-brand-500" />
@@ -364,7 +404,7 @@ export default function Products({ preset = null }) {
                   <div
                     role="listbox"
                     aria-label="Sort products"
-                    className="absolute right-0 top-full mt-2 w-64 animate-fade-up rounded-xl border border-slate-200 bg-white p-2 shadow-luxe"
+                    className="absolute right-0 top-full mt-2 w-64 animate-fade-up rounded-2xl border border-secondary-100 bg-white p-2 shadow-luxe"
                   >
                     <p className="px-2.5 pb-1.5 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
                       Sort products
@@ -383,15 +423,17 @@ export default function Products({ preset = null }) {
                               handleFilterChange({ sort: option.value });
                               setSortOpen(false);
                             }}
-                            className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm transition ${
+                            className={`flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left text-sm transition ${
                               selected
-                                ? 'bg-brand-50 font-semibold text-brand-700'
+                                ? 'bg-secondary-50 font-semibold text-secondary-800'
                                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                             }`}
                           >
                             <span
-                              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${
-                                selected ? 'bg-brand-100 text-brand-600' : 'bg-slate-100 text-slate-400'
+                              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
+                                selected
+                                  ? 'bg-secondary-100 text-secondary-700'
+                                  : 'bg-slate-100 text-slate-400'
                               }`}
                             >
                               <meta.Icon size={15} />
@@ -408,12 +450,13 @@ export default function Products({ preset = null }) {
             </div>
           </div>
 
+          {/* Active filter chips */}
           {activeChips.length > 0 && (
             <div className="mt-3 flex flex-wrap items-center gap-2">
               {activeChips.map((chip) => (
                 <span
                   key={chip.label}
-                  className="inline-flex items-center gap-1.5 rounded-sm border border-brand-200 bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700"
                 >
                   {chip.label}
                   {chip.clear && (
@@ -433,7 +476,7 @@ export default function Products({ preset = null }) {
             </div>
           )}
 
-          <div className="mt-3">
+          <div className="mt-4">
             <ProductList
               products={data.products}
               loading={loading}
@@ -444,13 +487,14 @@ export default function Products({ preset = null }) {
             />
           </div>
 
+          {/* Pagination */}
           {!loading && !error && pagination && pagination.totalPages > 1 && (
-            <div className="mt-6 flex items-center justify-center gap-1 rounded-md border border-slate-200 bg-white py-3">
+            <div className="mt-7 flex items-center justify-center gap-1.5">
               <button
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={!pagination.hasPrevPage}
-                className="inline-flex items-center gap-1 px-4 py-1.5 text-sm font-semibold text-brand-600 transition hover:bg-brand-50 disabled:text-slate-300 disabled:hover:bg-transparent"
+                className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white"
               >
                 <ChevronLeft size={15} /> Prev
               </button>
@@ -460,10 +504,10 @@ export default function Products({ preset = null }) {
                   key={number}
                   type="button"
                   onClick={() => setPage(number)}
-                  className={`h-8 w-8 rounded-sm text-sm font-bold transition ${
+                  className={`h-9 w-9 rounded-full text-sm font-bold transition ${
                     number === pagination.page
-                      ? 'bg-brand-600 text-white'
-                      : 'text-slate-600 hover:bg-slate-100'
+                      ? 'bg-gradient-to-br from-brand-600 to-brand-800 text-white shadow-glow'
+                      : 'border border-slate-200 bg-white text-slate-600 shadow-sm hover:border-brand-400 hover:text-brand-700'
                   }`}
                 >
                   {number}
@@ -474,7 +518,7 @@ export default function Products({ preset = null }) {
                 type="button"
                 onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                 disabled={!pagination.hasNextPage}
-                className="inline-flex items-center gap-1 px-4 py-1.5 text-sm font-semibold text-brand-600 transition hover:bg-brand-50 disabled:text-slate-300 disabled:hover:bg-transparent"
+                className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white"
               >
                 Next <ChevronRight size={15} />
               </button>
@@ -483,33 +527,36 @@ export default function Products({ preset = null }) {
         </div>
       </div>
 
+      {/* Mobile filter drawer */}
       {filtersOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
             type="button"
             aria-label="Close filters"
             onClick={() => setFiltersOpen(false)}
-            className="absolute inset-0 bg-ink/50"
+            className="absolute inset-0 bg-ink/50 backdrop-blur-sm"
           />
-          <div className="absolute inset-y-0 left-0 w-[85%] max-w-sm overflow-y-auto bg-slate-50 p-3 shadow-2xl">
-            <div className="mb-2 flex items-center justify-between px-1">
-              <p className="text-sm font-bold text-slate-900">Filters</p>
+          <div className="absolute inset-y-0 left-0 flex w-[88%] max-w-sm animate-drawer flex-col bg-slate-50 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3.5">
+              <p className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
+                <SlidersHorizontal size={16} className="text-brand-600" /> Filters
+              </p>
               <button
                 type="button"
                 aria-label="Close filters"
                 onClick={() => setFiltersOpen(false)}
-                className="rounded-full p-2 text-slate-500 transition hover:bg-slate-200"
+                className="rounded-full bg-slate-100 p-2 text-slate-500 transition hover:bg-slate-200"
               >
                 <X size={18} />
               </button>
             </div>
-            {filterPanel}
+            <div className="flex-1 overflow-y-auto p-3">{filterPanel}</div>
             <button
               type="button"
               onClick={() => setFiltersOpen(false)}
-              className="mt-3 w-full rounded-sm bg-brand-600 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
+              className="btn-shine m-3 rounded-full bg-gradient-to-r from-brand-700 to-brand-900 py-3 text-sm font-bold text-white shadow-glow transition hover:brightness-110"
             >
-              Show {total} results
+              Show {total} result{total === 1 ? '' : 's'}
             </button>
           </div>
         </div>

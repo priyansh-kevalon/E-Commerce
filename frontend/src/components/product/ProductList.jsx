@@ -10,6 +10,7 @@ export default function ProductList({
   onRetry = null,
   emptyText = 'No products found.',
   skeletonCount = 10,
+  gridClassName = 'grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5',
 }) {
   if (loading) {
     return <ProductGridSkeleton count={skeletonCount} />;
@@ -50,7 +51,7 @@ export default function ProductList({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+    <div className={gridClassName}>
       {products.map((product, index) => (
         <Reveal key={product._id} delay={(index % 10) * 50}>
           <ProductCard product={product} />

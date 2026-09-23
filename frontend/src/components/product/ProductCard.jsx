@@ -11,7 +11,7 @@ import {
   getStockInfo,
 } from '../../utils/helpers.js';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, minimal = false }) {
   const { addItem } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const [adding, setAdding] = useState(false);
@@ -43,14 +43,14 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-md border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-luxe">
-      {discount >= 20 && (
-        <span className="absolute left-0 top-3 z-10 rounded-r-md bg-gradient-to-r from-accent-500 to-accent-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-ink shadow-sm">
+    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-secondary-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-secondary-200 hover:shadow-card">
+      {discount >= 20 && minimal && (
+        <span className="absolute left-3 top-3 z-10 rounded-full bg-gradient-to-r from-accent-500 to-accent-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-ink shadow-sm">
           {discount}% off
         </span>
       )}
 
-      <div className="relative aspect-square overflow-hidden bg-white">
+      <div className="relative aspect-square overflow-hidden bg-soft-card-image">
         <Link to={`/products/${product._id}`} className="block h-full w-full">
           <img
             src={getProductImage(product)}
@@ -60,28 +60,50 @@ export default function ProductCard({ product }) {
           />
         </Link>
 
-        <button
-          type="button"
-          aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-          onClick={() => toggleWishlist(product)}
-          className={`absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 shadow-sm ring-1 ring-slate-200 transition duration-300 hover:scale-110 ${
-            inWishlist ? 'text-red-500' : 'text-slate-400 hover:text-red-500'
-          }`}
-        >
-          <Heart size={15} className={inWishlist ? 'fill-red-500' : ''} />
-        </button>
+        {minimal ? null : (
+          <button
+            type="button"
+            aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+            onClick={() => toggleWishlist(product)}
+            className={`absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 shadow-sm ring-1 ring-secondary-200 transition duration-300 hover:scale-110 ${
+              inWishlist ? 'text-red-500' : 'text-slate-400 hover:text-red-500'
+            }`}
+          >
+            <Heart size={16} className={inWishlist ? 'fill-red-500' : ''} />
+          </button>
+        )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1.5 border-t border-slate-100 p-3">
+      {minimal ? (
+        <div className="flex flex-1 flex-col gap-1 border-t border-secondary-100 p-2.5">
+          <Link
+            to={`/products/${product._id}`}
+            className="line-clamp-1 text-xs font-semibold leading-snug text-slate-800 transition hover:text-brand-700"
+          >
+            {product.name}
+          </Link>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-sm font-bold text-slate-900">
+              {formatCurrency(effectivePrice)}
+            </span>
+            {discount > 0 && (
+              <span className="text-[11px] text-slate-400 line-through">
+                {formatCurrency(product.price)}
+              </span>
+            )}
+          </div>
+        </div>
+      ) : (
+      <div className="flex flex-1 flex-col gap-1.5 border-t border-secondary-100 p-3.5">
         <Link
           to={`/products/${product._id}`}
-          className="line-clamp-2 min-h-[2.5rem] text-[13px] font-medium leading-snug text-slate-800 transition hover:text-brand-600"
+          className="line-clamp-2 min-h-[2.5rem] text-[13px] font-semibold leading-snug text-slate-800 transition hover:text-brand-700"
         >
           {product.name}
         </Link>
 
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-0.5 rounded-sm bg-rating px-1.5 py-0.5 text-[11px] font-bold text-white">
+          <span className="inline-flex items-center gap-0.5 rounded-md bg-rating px-1.5 py-0.5 text-[11px] font-bold text-white">
             {rating > 0 ? rating.toFixed(1) : 'New'}
             {rating > 0 && <Star size={9} className="fill-white" />}
           </span>
@@ -114,7 +136,7 @@ export default function ProductCard({ product }) {
           type="button"
           disabled={stock.available <= 0 || adding}
           onClick={handleAddToCart}
-          className="btn-shine mt-auto inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-gradient-to-r from-accent-500 to-accent-600 px-3 py-2 text-[13px] font-bold text-ink shadow-glow-accent transition duration-300 hover:brightness-105 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
+          className="btn-shine mt-auto inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-brand-700 to-brand-900 px-3 py-2 text-[13px] font-bold text-white shadow-glow transition duration-300 hover:brightness-110 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
         >
           {feedback?.type === 'success' ? <Check size={15} /> : <ShoppingCart size={15} />}
           {stock.available <= 0 ? 'Notify me' : adding ? 'Adding...' : 'Add to cart'}
@@ -131,6 +153,7 @@ export default function ProductCard({ product }) {
           </p>
         )}
       </div>
+      )}
     </div>
   );
 }
