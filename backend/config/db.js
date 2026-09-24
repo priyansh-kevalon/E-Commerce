@@ -15,6 +15,17 @@ const connectDB = async() => {
             );
         }
 
+        if (
+            /<[a-zA-Z0-9_-]+>/.test(mongoUri) ||
+            mongoUri.includes('@cluster.mongodb.net') ||
+            mongoUri.includes('user:password')
+        ) {
+            throw new Error(
+                'MONGO_URI looks like a placeholder (e.g. "user:password@cluster.mongodb.net"). ' +
+                'Replace it with your REAL Atlas connection string: cloud.mongodb.com -> Database -> Connect -> Drivers -> copy the mongodb+srv://... URI.'
+            );
+        }
+
         const conn = await mongoose.connect(mongoUri, {
             serverSelectionTimeoutMS: 10000,
         });
