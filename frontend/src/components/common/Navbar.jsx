@@ -39,10 +39,10 @@ const PRODUCT_COLLECTIONS = [
 
 const NAV_ITEMS = [
   { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
   { to: '/products', label: 'Shop' },
   { to: '/products', label: 'Categories', dropdown: true },
   { to: '/deals', label: 'Deals' },
-  { to: '/about', label: 'About' },
   { to: '/contact', label: 'Contact' },
 ];
 
