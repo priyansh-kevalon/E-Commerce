@@ -1,0 +1,35 @@
+[
+  {
+    "_id": "6aab8d910cf3cd11074588ac",
+    "name": "PRIYANSH KARELIYA",
+    "email": "priyansh.kevalon@gmail.com",
+    "password": "$2a$10$mX8oXQjLkqS99UutrGNntuuoIT9mn0p2YV10JMABzzy/Ho4BKj5Be",
+    "role": "customer",
+    "isActive": true,
+    "createdAt": "2026-09-17T06:49:53.713Z",
+    "updatedAt": "2026-09-18T06:24:58.080Z",
+    "__v": 0
+  },
+  {
+    "_id": "6aaba51d8fe42a2313352a24",
+    "name": "Administrator",
+    "email": "admin@velmora.com",
+    "password": "$2a$10$Qmwf6Ws7cVMtjP5wkiBh4OjOJRSnZ7yrK7K28mhq.26qZlqFYkOim",
+    "role": "admin",
+    "isActive": true,
+    "createdAt": "2026-09-17T08:30:21.197Z",
+    "updatedAt": "2026-09-17T08:30:21.197Z",
+    "__v": 0
+  },
+  {
+    "_id": "6ab0cafa229dd66bb2eeeb1a",
+    "name": "yash vaghasiya",
+    "email": "yash@gmail.com",
+    "password": "$2a$10$Mhqms0pHKbOt2SQjlJQFFeOtp5vn3oXF66cAD4RZ3g174.hdIQNOG",
+    "role": "seller",
+    "isActive": true,
+    "createdAt": "2026-09-21T06:13:14.911Z",
+    "updatedAt": "2026-09-21T06:13:14.911Z",
+    "__v": 0
+  }
+]

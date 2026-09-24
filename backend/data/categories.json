@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "6aab8a8b6b0d90202d679b8f",
+    "name": "Electronics",
+    "__v": 0,
+    "createdAt": "2026-09-17T06:36:59.900Z",
+    "description": "Gadgets, devices and accessories",
+    "image": "",
+    "status": "active",
+    "updatedAt": "2026-09-18T05:49:01.393Z"
+  },
+  {
+    "_id": "6aab8a8b6b0d90202d679b90",
+    "name": "Fashion",
+    "__v": 0,
+    "createdAt": "2026-09-17T06:36:59.909Z",
+    "description": "Clothing, footwear and accessories",
+    "image": "",
+    "status": "active",
+    "updatedAt": "2026-09-18T05:49:01.413Z"
+  },
+  {
+    "_id": "6aab8a8b6b0d90202d679b91",
+    "name": "Home & Kitchen",
+    "__v": 0,
+    "createdAt": "2026-09-17T06:36:59.911Z",
+    "description": "Everything for your home",
+    "image": "",
+    "status": "active",
+    "updatedAt": "2026-09-18T05:49:01.415Z"
+  },
+  {
+    "_id": "6aab8a8b6b0d90202d679b92",
+    "name": "Sports",
+    "__v": 0,
+    "createdAt": "2026-09-17T06:36:59.913Z",
+    "description": "Fitness and outdoor gear",
+    "image": "",
+    "status": "active",
+    "updatedAt": "2026-09-18T05:49:01.416Z"
+  }
+]
