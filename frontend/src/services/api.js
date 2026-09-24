@@ -2,12 +2,24 @@ import axios from 'axios';
 
 const TOKEN_KEY = 'velmora_token';
 
-/**
- * Shared axios instance.
- * Base URL comes from VITE_API_URL so it stays configurable per environment.
- */
+// Production safety: never let a misconfigured build silently point at the
+// developer's machine. Resolution order:
+//   1. VITE_API_URL baked in at build time (the correct approach for Render).
+//   2. window.__VELMORA_API__ runtime override (set manually via the browser
+//      console if you need to point at a different API without rebuilding).
+//   3. Same-origin `/api` for local development (Vite proxy).
+const LOCAL_API = 'http://localhost:5000/api';
+const isLocalHost =
+  typeof window !== 'undefined' &&
+  ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
+const baseApiUrl =
+  import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined' ? window.__VELMORA_API__ : undefined) ||
+  (isLocalHost ? LOCAL_API : '');
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: baseApiUrl,
   headers: { 'Content-Type': 'application/json' },
   timeout: 20000,
 });
