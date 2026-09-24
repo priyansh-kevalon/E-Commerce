@@ -128,6 +128,12 @@ export const updateCoupon = async (req, res, next) => {
     const coupon = await Coupon.findById(req.params.id);
     if (!coupon) return errorResponse(res, 'Coupon not found', 404);
 
+    // When the code is omitted on update, keep the existing one so partial
+    // updates still work. The form always sends the code; this guards the API.
+    if (req.body.code === undefined || req.body.code === null || String(req.body.code).trim() === '') {
+      req.body.code = coupon.code;
+    }
+
     const { error, payload } = validatePayload(req.body);
     if (error) return errorResponse(res, error, 400);
 

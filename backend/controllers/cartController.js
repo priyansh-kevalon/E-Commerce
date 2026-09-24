@@ -106,7 +106,13 @@ export const addToCart = async (req, res, next) => {
 
     await cart.save();
     await populateCart(cart);
-    return successResponse(res, 'Item added to cart', buildPayload(cart));
+    // New line -> 201 Created, merged quantity -> 200 OK.
+    return successResponse(
+      res,
+      'Item added to cart',
+      buildPayload(cart),
+      existing ? 200 : 201
+    );
   } catch (error) {
     next(error);
   }
