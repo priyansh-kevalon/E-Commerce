@@ -19,16 +19,17 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(
+    import.meta.url));
 
 const app = express();
 
 // -------------------- Middleware --------------------
 app.use(
-  cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    credentials: true,
-  })
+    cors({
+        origin: process.env.CLIENT_URL || 'http://localhost:5173',
+        credentials: true,
+    })
 );
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
@@ -36,11 +37,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // -------------------- Test route --------------------
 app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'E-Commerce API is running',
-    timestamp: new Date().toISOString(),
-  });
+    res.status(200).json({
+        success: true,
+        message: 'E-Commerce API is running',
+        timestamp: new Date().toISOString(),
+    });
 });
 
 // -------------------- API routes --------------------
@@ -65,25 +66,26 @@ app.use(errorHandler);
 // -------------------- Start server --------------------
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
-  try {
-    await connectDB();
-  } catch (err) {
-    // The server still starts so the API can respond; database-backed
-    // endpoints will surface connection errors individually.
-    console.error('Database not reachable - starting API without database...');
-  }
+const startServer = async() => {
+    try {
+        await connectDB();
+    } catch (err) {
+        // The server still starts so the API can respond; database-backed
+        // endpoints will surface connection errors individually.
+        console.error('Database not reachable - starting API without database...');
+    }
 
-  app.listen(PORT, () => {
-    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-  });
+    app.listen(PORT, () => {
+        console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    });
 };
 
 const isMainModule =
-  process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+    process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(
+        import.meta.url);
 
 if (isMainModule) {
-  startServer();
+    startServer();
 }
 
 export { app, startServer };
