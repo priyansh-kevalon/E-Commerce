@@ -41,7 +41,7 @@ export default function Home() {
       {/* 3) Large hero */}
       <Hero />
 
-      <div className="mx-auto max-w-[1600px] space-y-16 px-0 pt-10 sm:space-y-20 sm:pt-14">
+      <div className="mx-auto max-w-[1600px] space-y-10 px-0 pt-6 sm:space-y-14 sm:pt-10">
         {/* 4) Browse by Category */}
         <CategoryGrid categories={categories} />
 

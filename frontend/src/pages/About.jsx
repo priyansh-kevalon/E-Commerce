@@ -127,129 +127,137 @@ export default function About() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-secondary-100 bg-soft-hero">
-        <div className="pointer-events-none absolute inset-0 hero-grid opacity-40" />
-        <div className="dotted pointer-events-none absolute inset-0 opacity-30" />
-        <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary-200/50 blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
+      <section className="relative overflow-hidden">
+        <div className="mx-auto max-w-[1600px] px-3 pt-4 sm:px-4 sm:pt-5 lg:px-6">
+          <div className="relative overflow-hidden rounded-[26px] border border-secondary-100 bg-soft-hero">
+            <div className="pointer-events-none absolute inset-0 hero-grid opacity-40" />
+            <div className="dotted pointer-events-none absolute inset-0 opacity-30" />
+            <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary-200/40 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
 
-        <div className="relative mx-auto max-w-[1200px] px-6 py-14 sm:py-20">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-            <div>
-              <Reveal>
-                <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-secondary-800 shadow-sm ring-1 ring-secondary-200">
-                  <Rocket size={13} className="text-brand-600" /> About {APP_NAME}
-                </span>
-                <h1 className="mt-6 text-balance font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl">
-                  Shopping that feels{' '}
-                  <span className="bg-gradient-to-r from-brand-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent">
-                    effortless.
-                  </span>
-                </h1>
-                <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
-                  {APP_NAME} started in 2019 with a simple belief — everyone deserves a well-stocked
-                  store, honest prices and delivery that actually shows up on time. Today we serve
-                  over a million customers across India.
-                </p>
-              </Reveal>
-
-              <Reveal delay={120} className="mt-8 flex flex-wrap items-center gap-3">
-                <Link
-                  to="/products"
-                  className="btn-shine inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-7 py-3 text-sm font-extrabold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:brightness-110 active:scale-95"
-                >
-                  Shop the store <ArrowRight size={16} />
-                </Link>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-3 text-sm font-bold text-slate-700 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-400 hover:text-brand-700 active:scale-95"
-                >
-                  <MessageCircle size={16} /> Talk to us
-                </Link>
-              </Reveal>
-
-              <Reveal delay={200} className="mt-9 flex flex-wrap items-center gap-4">
-                <div className="flex -space-x-3">
-                  {['A', 'P', 'R', 'S'].map((initial, i) => (
-                    <span
-                      key={initial}
-                      className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-lg ${AVATAR_TINTS[i]}`}
-                    >
-                      {initial}
+            <div className="relative p-7 sm:p-10 lg:p-12">
+              <div className="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14">
+                <div className="animate-fade-up">
+                  <Reveal>
+                    <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-secondary-800 shadow-sm ring-1 ring-secondary-200">
+                      <Rocket size={13} className="text-brand-600" /> About {APP_NAME}
                     </span>
-                  ))}
+                    <h1 className="mt-5 text-balance font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl">
+                      Shopping that feels{' '}
+                      <span className="bg-gradient-to-r from-brand-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent">
+                        effortless.
+                      </span>
+                    </h1>
+                    <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
+                      {APP_NAME} started in 2019 with a simple belief — everyone deserves a
+                      well-stocked store, honest prices and delivery that actually shows up on time.
+                      Today we serve over a million customers across India.
+                    </p>
+                  </Reveal>
+
+                  <Reveal delay={120} className="mt-8 flex flex-wrap items-center gap-3">
+                    <Link
+                      to="/products"
+                      className="btn-shine inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-7 py-3 text-sm font-extrabold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:brightness-110 active:scale-95"
+                    >
+                      Shop the store <ArrowRight size={16} />
+                    </Link>
+                    <Link
+                      to="/contact"
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-3 text-sm font-bold text-slate-700 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-400 hover:text-brand-700 active:scale-95"
+                    >
+                      <MessageCircle size={16} /> Talk to us
+                    </Link>
+                  </Reveal>
+
+                  <Reveal delay={200} className="mt-9 flex flex-wrap items-center gap-4">
+                    <div className="flex -space-x-3">
+                      {['A', 'P', 'R', 'S'].map((initial, i) => (
+                        <span
+                          key={initial}
+                          className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-lg ${AVATAR_TINTS[i]}`}
+                        >
+                          {initial}
+                        </span>
+                      ))}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star key={star} size={13} className="fill-rating text-rating" />
+                        ))}
+                        <span className="ml-1 text-xs font-extrabold text-slate-900">4.8/5</span>
+                        <span className="text-xs font-medium text-slate-500">· 120k+ reviews</span>
+                      </div>
+                      <p className="text-xs font-medium text-slate-500">
+                        Trusted by shoppers in every state, every day.
+                      </p>
+                    </div>
+                  </Reveal>
                 </div>
-                <div>
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} size={13} className="fill-rating text-rating" />
-                    ))}
-                    <span className="ml-1 text-xs font-extrabold text-slate-900">4.8/5</span>
-                    <span className="text-xs font-medium text-slate-500">· 120k+ reviews</span>
+
+                <Reveal variant="right" className="relative">
+                  <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+                    <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
+                      <img
+                        src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
+                        alt={`The ${APP_NAME} team`}
+                        loading="lazy"
+                        className="aspect-[4/3] w-full object-cover transition duration-700 hover:scale-[1.02]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-transparent to-transparent" />
+                    </div>
+
+                    <div className="pointer-events-none absolute -bottom-5 -left-4 hidden animate-float-slow w-40 overflow-hidden rounded-2xl border-4 border-white shadow-luxe sm:block">
+                      <img
+                        src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=600&q=80"
+                        alt="Packing an order"
+                        loading="lazy"
+                        className="aspect-[4/3] w-full object-cover"
+                      />
+                    </div>
+
+                    <div className="pointer-events-none absolute -right-3 top-6 rounded-2xl border border-secondary-200 bg-white/95 px-4 py-3 shadow-luxe backdrop-blur">
+                      <div className="flex items-center gap-2">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-600 to-secondary-600 text-white shadow-glow">
+                          <Truck size={18} />
+                        </span>
+                        <div className="leading-tight">
+                          <p className="font-display text-sm font-extrabold text-slate-900">
+                            2–4 days
+                          </p>
+                          <p className="text-[11px] font-medium text-slate-500">Average delivery</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-xs font-medium text-slate-500">
-                    Trusted by shoppers in every state, every day.
-                  </p>
-                </div>
-              </Reveal>
+                </Reveal>
+              </div>
+
+              <div className="mt-12 grid grid-cols-2 gap-3 border-t border-secondary-200/70 pt-8 sm:grid-cols-4 sm:gap-4">
+                {STATS.map((stat, index) => (
+                  <Reveal
+                    key={stat.label}
+                    delay={index * 90}
+                    className="group rounded-2xl border border-secondary-100 bg-white/90 p-5 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-secondary-300 hover:shadow-card sm:p-6"
+                  >
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-secondary-100 text-brand-700 ring-1 ring-secondary-200">
+                      <stat.icon size={20} />
+                    </span>
+                    <p className="mt-3 font-display text-2xl font-extrabold text-slate-900 sm:text-3xl">
+                      <CountUp value={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
+                    </p>
+                    <p className="mt-1 text-xs font-medium text-slate-500">{stat.label}</p>
+                  </Reveal>
+                ))}
+              </div>
             </div>
-
-            <Reveal variant="right" className="relative">
-              <div className="relative overflow-hidden rounded-[2rem] border border-white shadow-luxe">
-                <img
-                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
-                  alt={`The ${APP_NAME} team`}
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-transparent to-transparent" />
-              </div>
-
-              <div className="absolute -bottom-5 -left-4 hidden w-48 overflow-hidden rounded-2xl border-4 border-white shadow-luxe sm:block">
-                <img
-                  src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=600&q=80"
-                  alt="Packing an order"
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover"
-                />
-              </div>
-
-              <div className="absolute -right-3 top-6 rounded-2xl border border-secondary-200 bg-white/95 px-4 py-3 shadow-luxe backdrop-blur">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-600 to-secondary-600 text-white shadow-glow">
-                    <Truck size={18} />
-                  </span>
-                  <div className="leading-tight">
-                    <p className="font-display text-sm font-extrabold text-slate-900">2–4 days</p>
-                    <p className="text-[11px] font-medium text-slate-500">Average delivery</p>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-
-          <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-            {STATS.map((stat, index) => (
-              <Reveal
-                key={stat.label}
-                delay={index * 90}
-                className="group rounded-2xl border border-secondary-100 bg-white/90 p-5 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-secondary-300 hover:shadow-card sm:p-6"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-secondary-100 text-brand-700 ring-1 ring-secondary-200">
-                  <stat.icon size={20} />
-                </span>
-                <p className="mt-3 font-display text-2xl font-extrabold text-slate-900 sm:text-3xl">
-                  <CountUp value={stat.value} decimals={stat.decimals} suffix={stat.suffix} />
-                </p>
-                <p className="mt-1 text-xs font-medium text-slate-500">{stat.label}</p>
-              </Reveal>
-            ))}
           </div>
         </div>
       </section>
 
       {/* Story */}
-      <section className="mx-auto grid max-w-[1200px] gap-12 px-6 py-16 sm:py-24 lg:grid-cols-2 lg:items-center">
+      <section className="mx-auto grid max-w-[1200px] gap-12 px-6 py-12 sm:py-16 lg:grid-cols-2 lg:items-center">
         <Reveal variant="left" className="relative">
           <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-gradient-to-br from-secondary-200 via-brand-100 to-secondary-100 blur-2xl" />
           <div className="overflow-hidden rounded-[1.75rem] border border-secondary-100 bg-white shadow-luxe">
@@ -303,14 +311,14 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <section className="border-y border-secondary-100 bg-slate-50 py-16 sm:py-24">
+      <section className="border-y border-secondary-100 bg-slate-50 py-12 sm:py-16">
         <div className="mx-auto max-w-[1200px] px-6">
           <SectionHead
             eyebrow="What we stand for"
             title="The values behind every parcel"
             subtitle="Four principles we refuse to compromise on — no matter how big we grow."
           />
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {VALUES.map((item, index) => (
               <Reveal
                 key={item.title}
@@ -331,13 +339,13 @@ export default function About() {
       </section>
 
       {/* How it works */}
-      <section className="mx-auto max-w-[1200px] px-6 py-16 sm:py-24">
+      <section className="mx-auto max-w-[1200px] px-6 py-12 sm:py-16">
         <SectionHead
           eyebrow="How it works"
           title="From wishlist to doorstep in three steps"
           subtitle="A shopping experience designed to be over before you finish your chai."
         />
-        <div className="relative mt-14 grid gap-10 md:grid-cols-3 md:gap-6">
+        <div className="relative mt-10 grid gap-10 md:grid-cols-3 md:gap-6">
           <div className="pointer-events-none absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-transparent via-secondary-300 to-transparent md:block" />
           {STEPS.map((step, index) => (
             <Reveal
@@ -365,14 +373,14 @@ export default function About() {
       </section>
 
       {/* Team */}
-      <section className="border-y border-secondary-100 bg-slate-50 py-16 sm:py-24">
+      <section className="border-y border-secondary-100 bg-slate-50 py-12 sm:py-16">
         <div className="mx-auto max-w-[1200px] px-6">
           <SectionHead
             eyebrow="The people behind it"
             title="Meet the team shipping your orders"
             subtitle="A small, stubborn group of people who care a lot about getting the details right."
           />
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {TEAM.map((member, index) => (
               <Reveal
                 key={member.name}
@@ -414,13 +422,13 @@ export default function About() {
       </section>
 
       {/* Testimonials */}
-      <section className="mx-auto max-w-[1200px] px-6 py-16 sm:py-24">
+      <section className="mx-auto max-w-[1200px] px-6 py-12 sm:py-16">
         <SectionHead
           eyebrow="Customer love"
           title="What our customers say"
           subtitle="Real reviews from real shoppers across India."
         />
-        <div className="mt-12">
+        <div className="mt-8">
           <Testimonials />
         </div>
       </section>

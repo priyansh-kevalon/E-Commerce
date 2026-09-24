@@ -153,72 +153,92 @@ export default function Contact() {
   };
 
   const fieldClass = (hasError) =>
-    `w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-2 focus:ring-brand-100 ${
-      hasError ? 'border-red-400 focus:border-red-500' : 'border-slate-300 focus:border-brand-600'
+    `w-full rounded-xl border bg-slate-50/70 px-3.5 py-2 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-brand-600 focus:bg-white focus:ring-4 focus:ring-brand-100/50 ${
+      hasError ? 'border-red-400 focus:border-red-500 focus:ring-red-100' : 'border-slate-200 focus:border-brand-600'
     }`;
 
-  const labelClass = 'mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500';
+  const labelClass = 'mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500';
 
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-secondary-100 bg-soft-hero">
-        <div className="pointer-events-none absolute inset-0 hero-grid opacity-40" />
-        <div className="dotted pointer-events-none absolute inset-0 opacity-30" />
-        <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary-200/50 blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
+      <section className="relative overflow-hidden">
+        <div className="mx-auto max-w-[1600px] px-3 pt-4 sm:px-4 sm:pt-5 lg:px-6">
+          <div className="relative overflow-hidden rounded-[26px] border border-secondary-100 bg-soft-hero">
+            <div className="pointer-events-none absolute inset-0 hero-grid opacity-40" />
+            <div className="dotted pointer-events-none absolute inset-0 opacity-30" />
+            <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary-200/40 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
 
-        <div className="relative mx-auto grid max-w-[1200px] items-center gap-10 px-6 py-14 sm:py-20 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-          <div>
-            <Reveal>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-secondary-800 shadow-sm ring-1 ring-secondary-200">
-                <Headphones size={13} className="text-brand-600" /> Contact {APP_NAME}
-              </span>
-              <h1 className="mt-6 text-balance font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl">
-                Let&apos;s talk.{' '}
-                <span className="bg-gradient-to-r from-brand-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent">
-                  We&apos;re here.
-                </span>
-              </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
-                An order question, a return, a partnership or just a friendly hello — a real person
-                from our team will get back to you.
-              </p>
-            </Reveal>
+            <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14 lg:p-12">
+              <div className="animate-fade-up">
+                <Reveal>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-secondary-800 shadow-sm ring-1 ring-secondary-200">
+                    <Headphones size={13} className="text-brand-600" /> Contact {APP_NAME}
+                  </span>
+                  <h1 className="mt-5 text-balance font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl">
+                    Let&apos;s talk.{' '}
+                    <span className="bg-gradient-to-r from-brand-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent">
+                      We&apos;re here.
+                    </span>
+                  </h1>
+                  <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
+                    An order question, a return, a partnership or just a friendly hello — a real
+                    person from our team will get back to you.
+                  </p>
+                </Reveal>
 
-            <Reveal delay={120} className="mt-8 flex items-center gap-3">
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} size={14} className="fill-rating text-rating" />
-                ))}
+                <Reveal delay={120} className="mt-8 flex items-center gap-3">
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star key={star} size={14} className="fill-rating text-rating" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-slate-600">
+                    <span className="font-extrabold text-slate-900">4.8/5</span> support rating ·
+                    120k+ reviews
+                  </p>
+                </Reveal>
               </div>
-              <p className="text-sm text-slate-600">
-                <span className="font-extrabold text-slate-900">4.8/5</span> support rating ·
-                120k+ reviews
-              </p>
-            </Reveal>
-          </div>
 
-          <Reveal variant="right" className="relative">
-            <div className="overflow-hidden rounded-[2rem] border border-white shadow-luxe">
-              <img
-                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80"
-                alt={`${APP_NAME} support team`}
-                loading="lazy"
-                className="aspect-[4/3] w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-transparent to-transparent" />
+              <Reveal variant="right" className="relative">
+                <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+                  <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
+                    <img
+                      src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1200&q=80"
+                      alt={`${APP_NAME} support team`}
+                      loading="lazy"
+                      className="aspect-[4/3] w-full object-cover transition duration-700 hover:scale-[1.02]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-transparent to-transparent" />
+                  </div>
+
+                  <div className="pointer-events-none absolute -bottom-5 -left-4 hidden animate-float-slow">
+                    <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 shadow-card ring-1 ring-secondary-100">
+                      <Truck size={16} className="text-brand-700" />
+                      <p className="text-xs font-bold text-slate-800">Avg. reply under 30 min</p>
+                    </div>
+                  </div>
+
+                  <div className="pointer-events-none absolute -right-4 -top-5 hidden animate-float md:block">
+                    <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-4 py-2.5 text-white shadow-glow ring-1 ring-white/20">
+                      <ShieldCheck size={16} className="shrink-0 text-accent-300" />
+                      <p className="text-xs font-bold">24×7 support</p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
+          </div>
         </div>
       </section>
 
       {/* Form + info sidebar */}
-      <section className="mx-auto max-w-[1200px] px-6 py-16 sm:py-20">
-        <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
-          <div className="rounded-[1.75rem] border border-secondary-100 bg-white p-6 shadow-card sm:p-8">
+      <section className="mx-auto max-w-[1120px] px-6 py-8 sm:py-12">
+        <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+          <div className="rounded-2xl border border-secondary-100 bg-white p-5 shadow-card sm:p-6">
             {status === 'sent' ? (
-              <div className="flex min-h-[420px] flex-col items-center justify-center text-center">
+              <div className="flex min-h-[360px] flex-col items-center justify-center text-center">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                   <CheckCircle2 size={32} />
                 </span>
@@ -240,13 +260,13 @@ export default function Contact() {
               </div>
             ) : (
               <>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-card">
-                      <Mail size={19} />
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-card">
+                      <Mail size={18} />
                     </span>
                     <div>
-                      <h3 className="font-display text-base font-bold text-slate-900">
+                      <h3 className="font-display text-lg font-extrabold tracking-tight text-slate-900">
                         Send us a message
                       </h3>
                       <p className="text-xs text-slate-500">All fields marked * are required</p>
@@ -257,7 +277,7 @@ export default function Contact() {
                   </span>
                 </div>
 
-                <form onSubmit={handleSubmit} className="mt-6 grid gap-4 sm:grid-cols-2" noValidate>
+                <form onSubmit={handleSubmit} className="mt-4 grid gap-3.5 sm:grid-cols-2" noValidate>
                   {status === 'error' && submitError && (
                     <div className="flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 sm:col-span-2">
                       <AlertCircle size={17} className="mt-0.5 shrink-0" />
@@ -322,7 +342,7 @@ export default function Contact() {
                       id="contact-subject"
                       value={form.subject}
                       onChange={(event) => update('subject', event.target.value)}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100"
+                      className={fieldClass(false)}
                     >
                       {SUBJECTS.map((subject) => (
                         <option key={subject} value={subject}>
@@ -338,7 +358,7 @@ export default function Contact() {
                     </label>
                     <textarea
                       id="contact-message"
-                      rows={5}
+                      rows={4}
                       value={form.message}
                       onChange={(event) => update('message', event.target.value)}
                       placeholder="Tell us everything we should know — order number, product name, anything."
@@ -376,18 +396,18 @@ export default function Contact() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-4">
-            <Reveal className="rounded-[1.75rem] border border-secondary-100 bg-white p-5 shadow-card">
+          <div className="space-y-3">
+            <Reveal className="rounded-2xl border border-secondary-100 bg-white p-4 shadow-card">
               <h3 className="text-sm font-bold text-slate-900">Reach us directly</h3>
-              <div className="mt-2 divide-y divide-slate-100">
+              <div className="mt-1.5 divide-y divide-slate-100">
                 {CONTACT_CHANNELS.map((channel) => (
                   <a
                     key={channel.title}
                     href={channel.href}
-                    className="group flex items-center gap-3 py-3"
+                    className="group flex items-center gap-3 py-2.5"
                   >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-card transition group-hover:scale-105">
-                      <channel.icon size={17} />
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-card transition group-hover:scale-105">
+                      <channel.icon size={16} />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm font-bold text-slate-900">
@@ -405,7 +425,7 @@ export default function Contact() {
               </div>
             </Reveal>
 
-            <Reveal delay={80} className="rounded-[1.75rem] border border-secondary-100 bg-white p-5 shadow-card">
+            <Reveal delay={80} className="rounded-2xl border border-secondary-100 bg-white p-4 shadow-card">
               <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-50 to-secondary-100 text-brand-700 ring-1 ring-secondary-200">
                   <MapPin size={14} />
@@ -423,7 +443,7 @@ export default function Contact() {
               </a>
             </Reveal>
 
-            <Reveal delay={140} className="rounded-[1.75rem] border border-secondary-100 bg-white p-5 shadow-card">
+            <Reveal delay={140} className="rounded-2xl border border-secondary-100 bg-white p-4 shadow-card">
               <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-50 to-secondary-100 text-brand-700 ring-1 ring-secondary-200">
                   <Clock size={14} />
@@ -458,7 +478,7 @@ export default function Contact() {
       </section>
 
       {/* FAQ */}
-      <section className="border-t border-secondary-100 bg-slate-50 py-16 sm:py-20">
+      <section className="border-t border-secondary-100 bg-slate-50 py-8 sm:py-12">
         <div className="mx-auto max-w-[820px] px-6">
           <SectionHead
             eyebrow="FAQs"
@@ -466,14 +486,14 @@ export default function Contact() {
             subtitle="Still stuck? The fastest way is always our WhatsApp line."
           />
 
-          <div className="mt-10 space-y-3">
+          <div className="mt-6 space-y-2.5">
             {FAQS.map((faq, index) => {
               const open = openFaq === index;
               return (
                 <Reveal
                   key={faq.q}
                   delay={index * 60}
-                  className={`overflow-hidden rounded-2xl border bg-white shadow-card transition ${
+                  className={`overflow-hidden rounded-xl border bg-white shadow-card transition ${
                     open ? 'border-brand-200' : 'border-secondary-100'
                   }`}
                 >
@@ -481,24 +501,24 @@ export default function Contact() {
                     type="button"
                     onClick={() => setOpenFaq(open ? null : index)}
                     aria-expanded={open}
-                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                    className="flex w-full items-center justify-between gap-4 px-4 py-3.5 text-left"
                   >
                     <span className="text-sm font-bold text-slate-900">{faq.q}</span>
                     <span
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition ${
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition ${
                         open
                           ? 'bg-gradient-to-br from-brand-600 to-secondary-600 text-white'
                           : 'bg-slate-100 text-slate-500'
                       }`}
                     >
                       <ChevronDown
-                        size={16}
+                        size={15}
                         className={`transition-transform ${open ? 'rotate-180' : ''}`}
                       />
                     </span>
                   </button>
                   {open && (
-                    <p className="px-5 pb-5 text-sm leading-relaxed text-slate-600">{faq.a}</p>
+                    <p className="px-4 pb-4 text-sm leading-relaxed text-slate-600">{faq.a}</p>
                   )}
                 </Reveal>
               );

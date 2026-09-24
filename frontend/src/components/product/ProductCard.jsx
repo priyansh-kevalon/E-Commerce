@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BadgePercent, Check, Heart, ShoppingCart, Star, Truck } from 'lucide-react';
+import {
+  BadgePercent,
+  Check,
+  Heart,
+  ShoppingCart,
+  Star,
+  Truck,
+} from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import {
@@ -46,73 +53,69 @@ export default function ProductCard({ product, minimal = false }) {
   };
 
   const imagePlate = (
-    <div className="relative aspect-square overflow-hidden bg-soft-card-image">
-      <div className="dotted pointer-events-none absolute inset-0 opacity-25" />
-      <div className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-brand-200/50 blur-3xl transition duration-700 group-hover:bg-brand-300/60" />
-      <div className="pointer-events-none absolute -bottom-14 -left-10 h-36 w-36 rounded-full bg-secondary-200/40 blur-3xl" />
+    <div className="relative m-2.5 overflow-hidden rounded-[18px] ring-1 ring-secondary-100/80">
+      <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-brand-50 via-white to-secondary-50">
+        <div className="dotted pointer-events-none absolute inset-0 opacity-20" />
+        <div className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-brand-200/40 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-10 -left-8 h-32 w-32 rounded-full bg-accent-200/40 blur-2xl" />
 
-      {discount > 0 && (
-        <span
-          className="absolute left-0 top-4 z-20 inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-accent-500 to-accent-600 py-1.5 pl-3 pr-4 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-lg [clip-path:polygon(0_0,100%_0,calc(100%-10px)_50%,100%_100%,0_100%)]"
+        {discount > 0 && (
+          <span className="absolute left-2.5 top-2.5 z-20 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-accent-500 to-accent-600 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide text-white shadow-md">
+            <BadgePercent size={11} />
+            {discount}% off
+          </span>
+        )}
+
+        {!minimal && (
+          <button
+            type="button"
+            aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+            onClick={() => toggleWishlist(product)}
+            className={`absolute right-2.5 top-2.5 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 backdrop-blur-sm transition duration-300 hover:scale-110 active:scale-95 ${
+              inWishlist
+                ? 'text-red-500 ring-red-200'
+                : 'text-slate-400 ring-secondary-200 hover:text-red-500'
+            }`}
+          >
+            <Heart size={14} className={inWishlist ? 'fill-red-500' : ''} />
+          </button>
+        )}
+
+        <Link
+          to={`/products/${product._id}`}
+          className="relative z-10 flex h-full w-full items-center justify-center p-4"
         >
-          <BadgePercent size={12} className="text-white" />
-          {discount}% off
-        </span>
-      )}
-
-      {!minimal && (
-        <button
-          type="button"
-          aria-label={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
-          onClick={() => toggleWishlist(product)}
-          className={`absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-md ring-1 backdrop-blur-sm transition duration-300 hover:scale-110 active:scale-95 ${
-            inWishlist
-              ? 'text-red-500 ring-red-200'
-              : 'text-slate-400 ring-secondary-200 hover:text-red-500'
-          }`}
-        >
-          <Heart size={16} className={inWishlist ? 'fill-red-500' : ''} />
-        </button>
-      )}
-
-      <Link
-        to={`/products/${product._id}`}
-        className="relative z-10 flex h-full w-full items-center justify-center p-4"
-      >
-        <img
-          src={getProductImage(product)}
-          alt={product.name}
-          loading="lazy"
-          className="h-full w-full object-contain drop-shadow-[0_14px_16px_rgba(14,165,233,0.22)] transition duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_20px_26px_rgba(14,165,233,0.32)]"
-        />
-      </Link>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-white/70 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+          <img
+            src={getProductImage(product)}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-contain drop-shadow-[0_10px_16px_rgba(15,23,42,0.18)] transition duration-700 group-hover:scale-105"
+          />
+        </Link>
+      </div>
     </div>
   );
 
   if (minimal) {
     return (
-      <div className="group relative flex flex-col overflow-hidden rounded-[20px] border border-secondary-100/80 bg-white shadow-sm transition-all duration-500 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-card">
+      <div className="group relative flex flex-col overflow-hidden rounded-[22px] border border-secondary-100/80 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-brand-200 hover:shadow-card">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-600 via-accent-500 to-amber-400 transition-transform duration-500 group-hover:scale-x-100" />
         {imagePlate}
-        <div className="flex flex-1 flex-col gap-1 border-t border-secondary-100/70 p-2.5 pt-2">
-          <Link
-            to={`/products/${product._id}`}
-            className="line-clamp-1 text-xs font-bold leading-snug text-slate-800 transition hover:text-brand-700"
-          >
-            {product.name}
-          </Link>
-          <div className="flex items-baseline gap-1.5">
-            <span className="font-display text-[15px] font-extrabold text-slate-900">
-              {formatCurrency(effectivePrice)}
+        <Link
+          to={`/products/${product._id}`}
+          className="line-clamp-1 px-3 text-xs font-bold leading-snug text-slate-800 transition hover:text-brand-700"
+        >
+          {product.name}
+        </Link>
+        <div className="flex items-baseline gap-1.5 px-3 pb-3 pt-0.5">
+          <span className="font-display text-[15px] font-extrabold text-slate-900">
+            {formatCurrency(effectivePrice)}
+          </span>
+          {discount > 0 && (
+            <span className="text-[11px] text-slate-400 line-through">
+              {formatCurrency(product.price)}
             </span>
-            {discount > 0 && (
-              <span className="text-[11px] text-slate-400 line-through">
-                {formatCurrency(product.price)}
-              </span>
-            )}
-          </div>
+          )}
         </div>
       </div>
     );
@@ -124,7 +127,7 @@ export default function ProductCard({ product, minimal = false }) {
 
       {imagePlate}
 
-      <div className="relative flex flex-1 flex-col gap-1.5 border-t border-secondary-100/70 px-3.5 pb-3.5 pt-2.5">
+      <div className="relative flex flex-1 flex-col gap-1.5 px-3.5 pb-3.5 pt-1">
         {category !== 'Uncategorized' && (
           <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-brand-600/80">
             {category}
