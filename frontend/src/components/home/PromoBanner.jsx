@@ -36,13 +36,13 @@ export default function PromoBanner({ product = null }) {
               <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
                 <div className="pointer-events-none absolute inset-0 rounded-[22px] ring-1 ring-inset ring-secondary-200/50" />
                 {product ? (
-                  <div className="relative bg-soft-card-image">
-                    <Link to={`/products/${product._id}`} className="block p-5 sm:p-6" aria-label={product.name}>
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-soft-card-image">
+                    <Link to={`/products/${product._id}`} className="block h-full w-full" aria-label={product.name}>
                       <img
                         src={getProductImage(product)}
                         alt={product.name}
                         loading="lazy"
-                        className="mx-auto aspect-square w-full max-h-[430px] object-contain transition duration-700 hover:scale-[1.03]"
+                        className="h-full w-full object-cover transition duration-700 hover:scale-[1.03]"
                       />
                     </Link>
                     {discount >= 20 && (
