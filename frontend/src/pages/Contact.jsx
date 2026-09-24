@@ -211,17 +211,13 @@ export default function Contact() {
                       className="aspect-[4/3] w-full object-cover transition duration-700 hover:scale-[1.02]"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-transparent to-transparent" />
-                  </div>
 
-                  <div className="pointer-events-none absolute -bottom-5 -left-4 hidden animate-float-slow">
-                    <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 shadow-card ring-1 ring-secondary-100">
+                    <div className="pointer-events-none absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-card ring-1 ring-secondary-100">
                       <Truck size={16} className="text-brand-700" />
                       <p className="text-xs font-bold text-slate-800">Avg. reply under 30 min</p>
                     </div>
-                  </div>
 
-                  <div className="pointer-events-none absolute -right-4 -top-5 hidden animate-float md:block">
-                    <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-4 py-2.5 text-white shadow-glow ring-1 ring-white/20">
+                    <div className="pointer-events-none absolute right-4 top-4 hidden items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-4 py-2 text-white shadow-glow ring-1 ring-white/20 md:flex">
                       <ShieldCheck size={16} className="shrink-0 text-accent-300" />
                       <p className="text-xs font-bold">24×7 support</p>
                     </div>
