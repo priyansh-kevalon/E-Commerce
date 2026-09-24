@@ -127,7 +127,7 @@ export default function OrderDetails() {
           <h1 className="text-xl font-bold text-slate-800">
             Order #{order._id.slice(-8).toUpperCase()}
           </h1>
-          <p className="mt-1 text-sm text-slate-500">Placed on {formatDate(order.createdAt)}</p>
+          <p className="mt-2 text-sm text-slate-500">Placed on {formatDate(order.createdAt)}</p>
         </div>
         <div className="flex items-center gap-2">
           <OrderStatusBadge status={order.orderStatus} />
@@ -139,7 +139,7 @@ export default function OrderDetails() {
         <OrderTimeline status={order.orderStatus} />
       </div>
 
-      <div className="mt-3 grid gap-3 lg:grid-cols-[1fr_320px]">
+      <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="overflow-hidden rounded-md border border-slate-200 bg-white">
           <div className="border-b border-slate-200 px-4 py-3">
             <h2 className="flex items-center gap-2 text-sm font-bold text-slate-800">

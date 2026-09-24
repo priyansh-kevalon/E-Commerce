@@ -59,8 +59,8 @@ export default function Checkout() {
   }
 
   return (
-    <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
-      <div className="grid gap-3 lg:grid-cols-[1fr_360px]">
+    <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-5">
+      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <CheckoutForm
           defaultValues={{ fullName: user?.name || '', country: 'India', paymentMethod: 'COD' }}
           onSubmit={handlePlaceOrder}
@@ -69,7 +69,7 @@ export default function Checkout() {
           total={total}
         />
 
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        <div className="lg:sticky lg:top-28 lg:self-start">
           <div className="rounded-md border border-slate-200 bg-white">
             <h2 className="border-b border-slate-200 px-4 py-3 text-sm font-bold uppercase tracking-wide text-slate-500">
               Order Summary

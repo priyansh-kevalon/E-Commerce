@@ -45,7 +45,7 @@ export default function TrustBar() {
           </span>
           <div>
             <p className="text-sm font-bold text-slate-900">{title}</p>
-            <p className="mt-0.5 text-[12px] text-slate-500">{text}</p>
+            <p className="mt-1 text-[12px] text-slate-500">{text}</p>
           </div>
         </Reveal>
       ))}

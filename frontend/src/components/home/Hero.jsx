@@ -16,7 +16,7 @@ export default function Hero() {
           <div className="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10 lg:p-12 xl:p-14">
             {/* Left: copy */}
             <div className="animate-fade-up">
-              <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-secondary-800 shadow-sm ring-1 ring-secondary-200">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-secondary-800 shadow-sm ring-1 ring-secondary-200">
                 <Sparkles size={13} className="text-brand-700" />
                 New Arrival · 2026 Collection
               </span>

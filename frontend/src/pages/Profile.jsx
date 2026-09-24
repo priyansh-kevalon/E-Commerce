@@ -83,14 +83,14 @@ export default function Profile() {
         <h1 className="mt-1 font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           Hi, {firstName} 👋
         </h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1.5 text-sm text-slate-500 sm:mt-2">
           Manage your personal details, keep your account secure and track your orders.
         </p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[16rem_1fr]">
         {/* Account navigation */}
-        <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <aside className="space-y-4 lg:sticky lg:top-28 lg:self-start">
           <div className="admin-card overflow-hidden">
             <div className="relative overflow-hidden bg-gradient-to-br from-brand-600 to-brand-800 px-5 pb-5 pt-6 text-white">
               <div className="dotted pointer-events-none absolute inset-0 opacity-30" />

@@ -53,8 +53,8 @@ export default function Cart() {
   }
 
   return (
-    <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
-      <div className="grid gap-3 lg:grid-cols-[1fr_360px]">
+    <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-5">
+      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <section className="rounded-md border border-slate-200 bg-white">
           <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
             <h1 className="text-base font-bold text-slate-800">
@@ -85,7 +85,7 @@ export default function Cart() {
           </div>
         </section>
 
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        <div className="lg:sticky lg:top-28 lg:self-start">
           <CartSummary
             itemCount={totalItems}
             subtotal={subtotal}

@@ -30,7 +30,7 @@ export default function Newsletter() {
             <h2 className="mt-3 text-xl font-extrabold sm:text-2xl">
               Get Rs.100 off your first order
             </h2>
-            <p className="mt-1.5 text-sm text-slate-300">
+            <p className="mt-3 text-sm text-slate-300">
               Join the Velmora list for early access to deals and handpicked recommendations.
             </p>
           </div>

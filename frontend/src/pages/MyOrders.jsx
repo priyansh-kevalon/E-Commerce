@@ -39,7 +39,7 @@ export default function MyOrders() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-16 text-center">
+      <div className="mx-auto max-w-3xl px-4 py-24 text-center">
         <p className="text-sm text-red-600">{error}</p>
         <div className="mt-4 flex flex-wrap justify-center gap-3">
           <button
@@ -82,7 +82,7 @@ export default function MyOrders() {
 
   return (
     <div className="mx-auto max-w-4xl px-3 py-4 sm:px-4">
-      <h1 className="mb-3 text-lg font-bold text-slate-800">
+      <h1 className="mb-4 text-lg font-bold text-slate-800">
         My Orders <span className="font-normal text-slate-500">({orders.length})</span>
       </h1>
 

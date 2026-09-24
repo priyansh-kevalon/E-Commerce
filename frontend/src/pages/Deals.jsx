@@ -151,7 +151,7 @@ export default function Deals() {
   ];
 
   return (
-    <div className="mx-auto max-w-[1400px] px-3 py-5 sm:px-5">
+    <div className="mx-auto max-w-[1600px] px-3 py-5 sm:px-5">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-[13px] text-slate-400">
         <Link
@@ -299,7 +299,7 @@ export default function Deals() {
                 <p className="px-2.5 pb-1.5 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
                   Sort deals
                 </p>
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   {SORT_OPTIONS.map((option) => {
                     const meta = SORT_META[option.value];
                     const selected = activeSortValue === option.value;
@@ -353,7 +353,7 @@ export default function Deals() {
 
       {/* Pagination */}
       {!loading && !error && pagination && pagination.totalPages > 1 && (
-        <div className="mt-7 flex items-center justify-center gap-1.5">
+        <div className="mt-7 flex items-center justify-center gap-2">
           <button
             type="button"
             onClick={() => setPage((p) => Math.max(1, p - 1))}

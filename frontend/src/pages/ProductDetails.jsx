@@ -98,11 +98,11 @@ export default function ProductDetailsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <>
       <ProductDetails product={product} />
 
       {related.length > 0 && (
-        <section className="mt-16">
+        <section className="mx-auto mt-16 max-w-[1600px] px-3 sm:px-5">
           <SectionHeading
             eyebrow="You may also like"
             title="Related products"
@@ -112,6 +112,6 @@ export default function ProductDetailsPage() {
           <ProductList products={related} skeletonCount={4} />
         </section>
       )}
-    </div>
+    </>
   );
 }

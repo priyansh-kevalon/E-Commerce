@@ -48,7 +48,7 @@ export default function Wishlist() {
   }
 
   return (
-    <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
+    <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-5">
       <section className="rounded-md border border-slate-200 bg-white">
         <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
           <h1 className="text-base font-bold text-slate-800">
@@ -62,7 +62,7 @@ export default function Wishlist() {
             Clear wishlist
           </button>
         </div>
-        <div className="p-3 sm:p-4">
+        <div className="p-4">
           <ProductList products={products} />
         </div>
       </section>

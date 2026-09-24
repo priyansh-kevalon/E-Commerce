@@ -37,7 +37,7 @@ export default function Home() {
   const promoProduct = bestSellers[1] || bestSellers[0] || null;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-16">
+    <div className="min-h-screen bg-slate-50">
       {/* 3) Large hero */}
       <Hero />
 
@@ -49,16 +49,16 @@ export default function Home() {
         <PromoBanner product={promoProduct} />
 
         {/* 6) Best Sellers */}
-        <section className="mx-auto w-full max-w-[1400px] px-3 sm:px-4 lg:px-6">
+        <section className="mx-auto w-full max-w-[1600px] px-3 sm:px-4 lg:px-6">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-secondary-700">
                 Our Collection
               </p>
-              <h2 className="mt-0.5 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+              <h2 className="mt-1 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
                 Best Sellers
               </h2>
-              <p className="mt-0.5 max-w-lg text-[13px] text-slate-500">
+              <p className="mt-1.5 max-w-lg text-[13px] text-slate-500 sm:mt-2">
                 The most-loved products our customers keep coming back for.
               </p>
             </div>
@@ -71,7 +71,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5 xl:grid-cols-5">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 xl:grid-cols-5">
             {loading
               ? Array.from({ length: 5 }).map((_, index) => (
                   <div key={index}>
@@ -96,7 +96,7 @@ export default function Home() {
               We make shopping effortless
             </h2>
           </div>
-          <div className="mt-7">
+          <div className="mt-6">
             <TrustBar />
           </div>
         </section>

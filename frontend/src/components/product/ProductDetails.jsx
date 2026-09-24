@@ -94,7 +94,7 @@ export default function ProductDetails({ product }) {
 
   return (
     <div className={stock.available > 0 ? 'pb-24 lg:pb-0' : undefined}>
-      <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-4">
+      <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-5">
         <nav className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-4 py-2.5 text-xs text-slate-500">
           <Link to="/products" className="inline-flex items-center gap-1 transition hover:text-brand-600">
             <ChevronLeft size={13} /> Products
@@ -105,7 +105,7 @@ export default function ProductDetails({ product }) {
           <span className="truncate font-medium text-slate-700">{product.name}</span>
         </nav>
 
-        <div className="mt-3 grid gap-6 rounded-md border border-slate-200 bg-white p-4 sm:p-6 lg:grid-cols-[80px_minmax(0,1fr)_340px]">
+        <div className="mt-4 grid gap-6 rounded-md border border-slate-200 bg-white p-4 sm:p-6 lg:grid-cols-[80px_minmax(0,1fr)_340px]">
           <div className="hidden gap-3 lg:flex lg:flex-col">
             {images.map((image, index) => (
               <button
@@ -187,7 +187,7 @@ export default function ProductDetails({ product }) {
             {addError && <p className="mt-2 text-xs text-red-600">{addError}</p>}
           </div>
 
-          <div className="lg:sticky lg:top-32 lg:self-start">
+          <div className="lg:sticky lg:top-28 lg:self-start">
             <p className="text-sm font-medium text-slate-500">{product.brand || getCategoryName(product)}</p>
             <h1 className="mt-1 text-lg font-medium leading-snug text-slate-900">{product.name}</h1>
 
@@ -293,7 +293,7 @@ export default function ProductDetails({ product }) {
           </div>
         </div>
 
-        <div className="mt-3 overflow-hidden rounded-md border border-slate-200 bg-white">
+        <div className="mt-5 overflow-hidden rounded-md border border-slate-200 bg-white">
           <div className="flex gap-1 border-b border-slate-200 px-2 sm:px-4">
             {TABS.map((tab) => (
               <button
@@ -353,7 +353,7 @@ export default function ProductDetails({ product }) {
           </div>
         </div>
 
-        <div className="mt-3">
+        <div className="mt-5">
           <ProductReviews product={product} />
         </div>
       </div>

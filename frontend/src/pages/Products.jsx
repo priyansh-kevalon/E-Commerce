@@ -326,7 +326,7 @@ export default function Products({ preset = null }) {
 
         <div className="min-w-0">
           {/* Category quick pills */}
-          <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pb-1">
+          <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pb-2">
             <button
               type="button"
               onClick={handleReset}
@@ -355,7 +355,7 @@ export default function Products({ preset = null }) {
           </div>
 
           {/* Toolbar */}
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
             <div className="flex items-center gap-2.5">
               <button
                 type="button"
@@ -409,7 +409,7 @@ export default function Products({ preset = null }) {
                     <p className="px-2.5 pb-1.5 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
                       Sort products
                     </p>
-                    <div className="space-y-0.5">
+                    <div className="space-y-1">
                       {SORT_OPTIONS.map((option) => {
                         const meta = SORT_META[option.value];
                         const selected = activeSortValue === option.value;
@@ -489,7 +489,7 @@ export default function Products({ preset = null }) {
 
           {/* Pagination */}
           {!loading && !error && pagination && pagination.totalPages > 1 && (
-            <div className="mt-7 flex items-center justify-center gap-1.5">
+            <div className="mt-7 flex items-center justify-center gap-2">
               <button
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
