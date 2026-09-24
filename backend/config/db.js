@@ -7,13 +7,21 @@ import mongoose from 'mongoose';
  */
 const connectDB = async() => {
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URI, {
-            serverSelectionTimeoutMS: 5000,
+        const mongoUri = process.env.MONGO_URI?.trim();
+
+        if (!mongoUri) {
+            throw new Error(
+                'MONGO_URI is not set. Add your MongoDB Atlas connection string to the MONGO_URI environment variable on the server/Render.'
+            );
+        }
+
+        const conn = await mongoose.connect(mongoUri, {
+            serverSelectionTimeoutMS: 10000,
         });
         console.log(`MongoDB Connected: ${conn.connection.host}`);
         return conn;
     } catch (error) {
-        console.error(`MongoDB connection error: ${error.message}`);
+        console.error(`[DB] MongoDB connection failed: ${error.message}`);
         throw error;
     }
 };
