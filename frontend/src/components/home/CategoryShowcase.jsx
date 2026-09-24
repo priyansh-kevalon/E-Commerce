@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Reveal from '../common/Reveal.jsx';
+import SmartImage from '../common/SmartImage.jsx';
 
 const FALLBACK =
   'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80';
@@ -60,8 +61,8 @@ export default function CategoryShowcase({ categories = [] }) {
               className="flex flex-col items-center gap-2.5 outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-brand-400"
             >
               <span className="relative h-20 w-20 overflow-hidden rounded-full bg-slate-100 p-0.5 ring-2 ring-transparent transition duration-300 group-hover:-translate-y-1 group-hover:ring-brand-400 group-hover:shadow-glow">
-                <img
-                  src={imageFor(category.name)}
+                <SmartImage
+                  images={[imageFor(category.name)]}
                   alt={category.name}
                   loading="lazy"
                   className="h-full w-full rounded-full object-cover transition duration-500 group-hover:scale-110"

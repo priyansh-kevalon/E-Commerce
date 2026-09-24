@@ -16,7 +16,8 @@ import Modal from '../../components/admin/Modal.jsx';
 import { OrderStatusBadge } from '../../components/orders/OrderStatusBadge.jsx';
 import { fetchAllOrders, updateOrderStatus } from '../../services/adminService.js';
 import { ORDER_STATUSES, ORDER_STATUS_STYLES, PAYMENT_STATUS_STYLES } from '../../utils/constants.js';
-import { formatCurrency, formatDate, getProductImage } from '../../utils/helpers.js';
+import { formatCurrency, formatDate } from '../../utils/helpers.js';
+import SmartImage from '../../components/common/SmartImage.jsx';
 
 const LIMIT = 15;
 
@@ -327,8 +328,8 @@ export default function AdminOrders() {
               <ul className="divide-y divide-slate-100 rounded-xl border border-slate-100 bg-white">
                 {selected.orderItems.map((item, index) => (
                   <li key={`${item.product}-${index}`} className="flex items-center gap-3.5 px-4 py-3.5">
-                    <img
-                      src={item.image || getProductImage(null)}
+                    <SmartImage
+                      images={item.image ? [item.image] : []}
                       alt={item.name}
                       className="h-12 w-12 rounded-xl bg-slate-50 object-cover ring-1 ring-slate-200"
                     />

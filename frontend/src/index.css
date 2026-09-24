@@ -227,10 +227,13 @@ html.dark {
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
+  max-width: 100%;
+  overflow-x: clip;
   min-height: 100vh;
   font-family: var(--font-sans);
   background-color: #f2f8fc;

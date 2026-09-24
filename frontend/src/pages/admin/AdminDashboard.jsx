@@ -39,9 +39,8 @@ import { fetchDashboardStats } from '../../services/adminService.js';
 import {
   formatCurrency,
   formatDate,
-  getProductImage,
-  PLACEHOLDER_IMAGE,
 } from '../../utils/helpers.js';
+import SmartImage from '../../components/common/SmartImage.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 import { ORDER_STATUS_STYLES } from '../../utils/constants.js';
 
@@ -805,8 +804,8 @@ export default function AdminDashboard() {
                 return (
                   <li key={product._id} className="flex items-center gap-3.5 px-6 py-3.5">
                     <div className="relative shrink-0">
-                      <img
-                        src={product.image || PLACEHOLDER_IMAGE}
+                      <SmartImage
+                        images={product.image ? [product.image] : []}
                         alt={product.name}
                         className="h-10 w-10 rounded-lg object-cover ring-1 ring-slate-100"
                         loading="lazy"
@@ -871,8 +870,8 @@ export default function AdminDashboard() {
                     className="flex items-center justify-between gap-4 px-6 py-3.5"
                   >
                     <div className="flex min-w-0 items-center gap-3">
-                      <img
-                        src={getProductImage(product)}
+                      <SmartImage
+                        images={product.images}
                         alt={product.name}
                         className="h-11 w-11 shrink-0 rounded-lg object-cover ring-1 ring-slate-100"
                         loading="lazy"

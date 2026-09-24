@@ -15,9 +15,9 @@ import {
   getCategoryName,
   getDiscountPercent,
   getEffectivePrice,
-  getProductImage,
   getStockInfo,
 } from '../../utils/helpers.js';
+import SmartImage from '../common/SmartImage.jsx';
 
 export default function ProductCard({ product, minimal = false }) {
   const { addItem } = useCart();
@@ -85,8 +85,8 @@ export default function ProductCard({ product, minimal = false }) {
           to={`/products/${product._id}`}
           className="relative z-10 flex h-full w-full items-center justify-center p-4"
         >
-          <img
-            src={getProductImage(product)}
+          <SmartImage
+            images={product.images}
             alt={product.name}
             loading="lazy"
             className="h-full w-full object-contain drop-shadow-[0_10px_16px_rgba(15,23,42,0.18)] transition duration-700 group-hover:scale-105"

@@ -23,9 +23,9 @@ import {
   formatCurrency,
   getDiscountPercent,
   getEffectivePrice,
-  getProductImage,
   getStockInfo,
 } from '../../utils/helpers.js';
+import SmartImage from '../../components/common/SmartImage.jsx';
 
 const LIMIT = 10;
 
@@ -260,10 +260,10 @@ export default function AdminProducts() {
                       <td>
                         <div className="flex items-center gap-3.5">
                           <span className="relative shrink-0">
-                            <img
-                              src={getProductImage(product)}
-                              alt={product.name}
-                              className="h-12 w-12 rounded-xl bg-slate-100 object-cover ring-1 ring-slate-200"
+                            <SmartImage
+                              images={product.images}
+                              alt={`${product.name} preview`}
+                              className="h-12 w-12 rounded-xl object-cover ring-1 ring-slate-200"
                             />
                           </span>
                           <div className="min-w-0">

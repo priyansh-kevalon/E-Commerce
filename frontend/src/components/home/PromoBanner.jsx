@@ -10,7 +10,8 @@ import {
   Truck,
 } from 'lucide-react';
 import Reveal from '../common/Reveal.jsx';
-import { getDiscountPercent, getProductImage } from '../../utils/helpers.js';
+import { getDiscountPercent } from '../../utils/helpers.js';
+import SmartImage from '../common/SmartImage.jsx';
 
 const BENEFITS = [
   { icon: Truck, label: 'Free delivery' },
@@ -38,8 +39,8 @@ export default function PromoBanner({ product = null }) {
                 {product ? (
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-soft-card-image">
                     <Link to={`/products/${product._id}`} className="block h-full w-full" aria-label={product.name}>
-                      <img
-                        src={getProductImage(product)}
+                      <SmartImage
+                        images={product.images}
                         alt={product.name}
                         loading="lazy"
                         className="h-full w-full object-cover transition duration-700 hover:scale-[1.03]"

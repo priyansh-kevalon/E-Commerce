@@ -17,6 +17,7 @@ import {
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import ProductReviews from './ProductReviews.jsx';
+import SmartImage from '../common/SmartImage.jsx';
 import {
   formatCurrency,
   formatDate,
@@ -118,15 +119,15 @@ export default function ProductDetails({ product }) {
                   activeImage === image ? 'border-brand-600' : 'border-slate-200 hover:border-slate-400'
                 }`}
               >
-                <img src={image} alt="" className="h-full w-full object-contain" />
+                <SmartImage images={[image]} alt="" className="h-full w-full object-contain" />
               </button>
             ))}
           </div>
 
           <div>
             <div className="relative flex items-center justify-center rounded-md border border-slate-100 bg-white p-4">
-              <img
-                src={activeImage}
+              <SmartImage
+                images={[activeImage]}
                 alt={product.name}
                 className="max-h-[420px] w-full object-contain"
               />
@@ -153,7 +154,7 @@ export default function ProductDetails({ product }) {
                     activeImage === image ? 'border-brand-600' : 'border-slate-200'
                   }`}
                 >
-                  <img src={image} alt="" className="h-full w-full object-contain" />
+                  <SmartImage images={[image]} alt="" className="h-full w-full object-contain" />
                 </button>
               ))}
             </div>

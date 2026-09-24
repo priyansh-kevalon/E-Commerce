@@ -6,7 +6,8 @@ import Loader from '../components/common/Loader.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 import { createOrder } from '../services/orderService.js';
-import { formatCurrency, getEffectivePrice, getProductImage } from '../utils/helpers.js';
+import { formatCurrency, getEffectivePrice } from '../utils/helpers.js';
+import SmartImage from '../components/common/SmartImage.jsx';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -78,8 +79,8 @@ export default function Checkout() {
             <ul className="max-h-72 space-y-3 overflow-y-auto px-4 py-4">
               {items.map((item) => (
                 <li key={item.product._id} className="flex gap-3">
-                  <img
-                    src={getProductImage(item.product)}
+                  <SmartImage
+                    images={item.product.images}
                     alt={item.product.name}
                     className="h-14 w-14 shrink-0 rounded-sm bg-slate-100 object-cover"
                   />

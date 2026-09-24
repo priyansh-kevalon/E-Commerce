@@ -14,7 +14,8 @@ import Loader from '../components/common/Loader.jsx';
 import { OrderStatusBadge, PaymentStatusBadge } from '../components/orders/OrderStatusBadge.jsx';
 import OrderTimeline from '../components/orders/OrderTimeline.jsx';
 import { cancelOrder, fetchOrderById } from '../services/orderService.js';
-import { formatCurrency, formatDate, getProductImage } from '../utils/helpers.js';
+import { formatCurrency, formatDate } from '../utils/helpers.js';
+import SmartImage from '../components/common/SmartImage.jsx';
 import { CANCELLABLE_ORDER_STATUSES } from '../utils/constants.js';
 
 const PAYMENT_LABELS = {
@@ -150,8 +151,8 @@ export default function OrderDetails() {
           <ul className="divide-y divide-slate-100">
             {order.orderItems.map((item, index) => (
               <li key={`${item.product}-${index}`} className="flex items-center gap-4 px-4 py-4">
-                <img
-                  src={item.image || getProductImage(null)}
+                <SmartImage
+                  images={item.image ? [item.image] : []}
                   alt={item.name}
                   className="h-16 w-16 shrink-0 rounded-sm bg-slate-100 object-cover"
                 />

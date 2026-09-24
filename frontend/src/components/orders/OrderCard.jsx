@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { OrderStatusBadge } from './OrderStatusBadge.jsx';
-import { formatCurrency, formatDate, getProductImage } from '../../utils/helpers.js';
+import { formatCurrency, formatDate } from '../../utils/helpers.js';
+import SmartImage from '../common/SmartImage.jsx';
 
 export default function OrderCard({ order }) {
   const itemCount = order.orderItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -26,9 +27,9 @@ export default function OrderCard({ order }) {
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <div className="flex -space-x-3">
           {order.orderItems.slice(0, 4).map((item, index) => (
-            <img
+            <SmartImage
               key={`${item.product}-${index}`}
-              src={item.image || getProductImage(null)}
+              images={item.image ? [item.image] : []}
               alt={item.name}
               className="h-12 w-12 rounded-sm border-2 border-white bg-slate-100 object-cover"
             />

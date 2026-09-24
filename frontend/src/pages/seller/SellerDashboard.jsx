@@ -40,9 +40,8 @@ import { useAuth } from '../../hooks/useAuth.js';
 import {
   formatCurrency,
   formatDate,
-  getProductImage,
-  PLACEHOLDER_IMAGE,
 } from '../../utils/helpers.js';
+import SmartImage from '../../components/common/SmartImage.jsx';
 
 const METRICS = [
   { key: 'revenue', label: 'Revenue' },
@@ -667,8 +666,8 @@ export default function SellerDashboard() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2.5">
-                            <img
-                              src={order.productImage || PLACEHOLDER_IMAGE}
+                            <SmartImage
+                              images={order.productImage ? [order.productImage] : []}
                               alt={order.productName}
                               className="h-9 w-9 shrink-0 rounded-lg bg-slate-50 object-cover ring-1 ring-slate-200"
                             />
@@ -763,11 +762,11 @@ export default function SellerDashboard() {
                       const stock = product.stock || 0;
                       return (
                         <li key={product._id} className="flex items-center gap-3.5 px-5 py-3.5">
-                          <img
-                            src={getProductImage(product)}
-                            alt={product.name}
-                            className="h-11 w-11 shrink-0 rounded-xl bg-slate-50 object-cover ring-1 ring-slate-200"
-                          />
+<SmartImage
+                          images={product.images}
+                          alt={product.name}
+                          className="h-11 w-11 shrink-0 rounded-xl bg-slate-50 object-cover ring-1 ring-slate-200"
+                        />
                           <div className="min-w-0 flex-1">
                             <p className="truncate text-sm font-bold text-slate-800">{product.name}</p>
                             <p className="text-xs text-slate-500">Current stock</p>
@@ -827,8 +826,8 @@ export default function SellerDashboard() {
                       >
                         {index + 1}
                       </span>
-                      <img
-                        src={getProductImage(product)}
+                      <SmartImage
+                        images={product.images}
                         alt={product.name}
                         className="h-11 w-11 shrink-0 rounded-xl bg-slate-50 object-cover ring-1 ring-slate-200"
                       />

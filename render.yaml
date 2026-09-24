@@ -1,0 +1,43 @@
+# Render Blueprint - deploys the backend API and the frontend as two services.
+# Push this repo to GitHub and create the services from this file
+# (Render -> New -> Blueprint). Then set the env vars marked "set in dashboard".
+
+services:
+  # ---- Backend API ---------------------------------------------------------
+  - type: web
+    name: velmora-api
+    plan: free
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+
+  # ---- Frontend (built then served with SPA fallback via server.cjs) ------
+  - type: web
+    name: velmora-web
+    plan: free
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: node server.cjs
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_API_URL
+        sync: false

@@ -31,7 +31,9 @@ export const getDiscountPercent = (product) => {
 };
 
 export const getProductImage = (product) => {
-  if (product?.images?.length) return product.images[0];
+  const images = product?.images;
+  if (Array.isArray(images) && images.length) return images[0];
+  if (typeof images === 'string' && images) return images;
   return PLACEHOLDER_IMAGE;
 };
 

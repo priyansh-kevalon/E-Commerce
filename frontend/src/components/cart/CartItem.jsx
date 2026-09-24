@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
-import { formatCurrency, getEffectivePrice, getProductImage, getStockInfo } from '../../utils/helpers.js';
+import { formatCurrency, getEffectivePrice, getStockInfo } from '../../utils/helpers.js';
+import SmartImage from '../common/SmartImage.jsx';
 
 export default function CartItem({ item }) {
   const { updateQuantity, removeItem } = useCart();
@@ -29,8 +30,8 @@ export default function CartItem({ item }) {
   return (
     <div className="flex gap-4 p-4">
       <Link to={`/products/${product._id}`} className="shrink-0">
-        <img
-          src={getProductImage(product)}
+        <SmartImage
+          images={product.images}
           alt={product.name}
           className="h-20 w-20 rounded-sm bg-slate-100 object-cover sm:h-24 sm:w-24"
         />

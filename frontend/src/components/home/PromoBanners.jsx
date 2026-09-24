@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Reveal from '../common/Reveal.jsx';
+import SmartImage from '../common/SmartImage.jsx';
 
 const BANNERS = [
   {
@@ -56,8 +57,8 @@ export default function PromoBanners() {
                 <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
               </span>
             </div>
-            <img
-              src={banner.image}
+            <SmartImage
+              images={[banner.image]}
               alt=""
               loading="lazy"
               className={`relative h-24 w-24 shrink-0 rounded-md object-cover ring-1 transition duration-500 group-hover:scale-105 group-hover:rotate-2 ${
