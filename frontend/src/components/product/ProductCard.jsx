@@ -83,7 +83,7 @@ export default function ProductCard({ product, minimal = false }) {
           src={getProductImage(product)}
           alt={product.name}
           loading="lazy"
-          className="h-full w-full object-contain drop-shadow-[0_14px_16px_rgba(14,165,233,0.22)] transition duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_20px_26px_rgba(14,165,233,0.32)]"
+          className="h-full w-full object-contain drop-shadow-[0_14px_16px_rgba(14,165,233,0.22)] transition duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_20px_26px_rgba(14,165,233,0.32)]"
         />
       </Link>
 
@@ -93,7 +93,7 @@ export default function ProductCard({ product, minimal = false }) {
 
   if (minimal) {
     return (
-      <div className="group relative flex flex-col overflow-hidden rounded-[20px] border border-secondary-100/80 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-brand-200 hover:shadow-card">
+      <div className="group relative flex flex-col overflow-hidden rounded-[20px] border border-secondary-100/80 bg-white shadow-sm transition-all duration-500 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-card">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-600 via-accent-500 to-amber-400 transition-transform duration-500 group-hover:scale-x-100" />
         {imagePlate}
         <div className="flex flex-1 flex-col gap-1 border-t border-secondary-100/70 p-2.5 pt-2">
@@ -119,7 +119,7 @@ export default function ProductCard({ product, minimal = false }) {
   }
 
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-[22px] border border-secondary-100/80 bg-white shadow-[0_2px_18px_-10px_rgba(15,23,42,0.18)] transition-all duration-500 hover:-translate-y-1.5 hover:border-brand-200/70 hover:shadow-luxe">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-[22px] border border-secondary-100/80 bg-white shadow-[0_2px_18px_-10px_rgba(15,23,42,0.18)] transition-all duration-500 hover:-translate-y-1 hover:border-brand-200/70 hover:shadow-luxe">
       <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-600 via-accent-500 to-amber-400 transition-transform duration-500 group-hover:scale-x-100" />
 
       {imagePlate}

@@ -41,7 +41,7 @@ export default function Home() {
       {/* 3) Large hero */}
       <Hero />
 
-      <div className="mx-auto max-w-[1600px] space-y-14 px-0 pt-10 sm:space-y-16 sm:pt-14">
+      <div className="mx-auto max-w-[1600px] space-y-16 px-0 pt-10 sm:space-y-20 sm:pt-14">
         {/* 4) Browse by Category */}
         <CategoryGrid categories={categories} />
 
@@ -50,28 +50,28 @@ export default function Home() {
 
         {/* 6) Best Sellers */}
         <section className="mx-auto w-full max-w-[1600px] px-3 sm:px-4 lg:px-6">
-          <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-secondary-700">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary-700">
                 Our Collection
               </p>
-              <h2 className="mt-1 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+              <h2 className="mt-1.5 font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                 Best Sellers
               </h2>
-              <p className="mt-1.5 max-w-lg text-[13px] text-slate-500 sm:mt-2">
+              <p className="mt-2.5 max-w-lg text-sm text-slate-500">
                 The most-loved products our customers keep coming back for.
               </p>
             </div>
             <Link
               to="/products?sort=popular"
-              className="group inline-flex items-center gap-1.5 rounded-full border border-secondary-200 bg-white px-4 py-2 text-[13px] font-bold text-slate-800 shadow-sm transition hover:border-secondary-400 hover:text-secondary-800"
+              className="group inline-flex items-center gap-1.5 rounded-full border border-secondary-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-800 shadow-sm transition hover:border-secondary-400 hover:text-secondary-800"
             >
               View All
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 xl:grid-cols-5">
+          <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 lg:gap-5">
             {loading
               ? Array.from({ length: 5 }).map((_, index) => (
                   <div key={index}>
@@ -92,11 +92,14 @@ export default function Home() {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary-700">
               Why Shop With Us
             </p>
-            <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            <h2 className="mt-1.5 font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
               We make shopping effortless
             </h2>
+            <p className="mx-auto mt-2 max-w-lg text-sm text-slate-500">
+              Free delivery, easy returns and round-the-clock support — built into every order.
+            </p>
           </div>
-          <div className="mt-6">
+          <div className="mt-8">
             <TrustBar />
           </div>
         </section>
