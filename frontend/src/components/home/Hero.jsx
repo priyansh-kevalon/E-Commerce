@@ -87,17 +87,13 @@ export default function Hero() {
                   className="aspect-[4/3] w-full rounded-[22px] object-cover transition duration-700 hover:scale-[1.02]"
                   loading="eager"
                 />
-              </div>
 
-              <div className="pointer-events-none absolute -bottom-5 -left-4 animate-float-slow">
-                <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 shadow-card ring-1 ring-secondary-100">
+                <div className="pointer-events-none absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-card ring-1 ring-secondary-100">
                   <BadgePercent size={16} className="text-brand-700" />
                   <p className="text-xs font-bold text-slate-800">Up to 40% off</p>
                 </div>
-              </div>
 
-              <div className="pointer-events-none absolute -right-4 -top-5 hidden animate-float md:block">
-                <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-4 py-2.5 text-white shadow-glow ring-1 ring-white/20">
+                <div className="pointer-events-none absolute right-4 top-4 hidden items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-4 py-2 text-white shadow-glow ring-1 ring-white/20 md:flex">
                   <Award size={16} className="shrink-0 text-accent-300" />
                   <p className="text-xs font-bold">Editor's Pick · 2026</p>
                 </div>
