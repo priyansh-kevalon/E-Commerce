@@ -11,7 +11,6 @@ import {
   MapPin,
   MessageCircle,
   PackageCheck,
-  Quote,
   Rocket,
   Search,
   ShieldCheck,
@@ -269,17 +268,7 @@ export default function About() {
             />
           </div>
 
-          <div className="absolute -bottom-7 -right-2 hidden max-w-[16rem] rounded-2xl border border-secondary-200 bg-white p-5 shadow-luxe sm:block">
-            <Quote size={22} className="text-brand-600" />
-            <p className="mt-2 text-[13px] font-semibold leading-relaxed text-slate-700">
-              "We built the store we always wanted to shop from — nothing more, nothing less."
-            </p>
-            <p className="mt-3 flex items-center justify-between border-t border-slate-100 pt-3">
-              <span className="text-xs font-extrabold text-slate-900">Aarav Mehta</span>
-              <span className="text-[11px] font-medium text-slate-400">Founder, {APP_NAME}</span>
-            </p>
-          </div>
-        </Reveal>
+          </Reveal>
 
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-600">Our story</p>
