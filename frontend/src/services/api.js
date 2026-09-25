@@ -7,8 +7,9 @@ const TOKEN_KEY = 'velmora_token';
 //   1. VITE_API_URL baked in at build time (the correct approach for Render).
 //   2. window.__VELMORA_API__ runtime override (set manually via the browser
 //      console if you need to point at a different API without rebuilding).
-//   3. Same-origin `/api` for local development (Vite proxy).
+//   3. The deployed API outside local development.
 const LOCAL_API = 'http://localhost:5000/api';
+const PRODUCTION_API = 'https://backend-fj6z.onrender.com/api';
 const isLocalHost =
   typeof window !== 'undefined' &&
   ['localhost', '127.0.0.1'].includes(window.location.hostname);
@@ -16,7 +17,7 @@ const isLocalHost =
 const baseApiUrl =
   import.meta.env.VITE_API_URL ||
   (typeof window !== 'undefined' ? window.__VELMORA_API__ : undefined) ||
-  (isLocalHost ? LOCAL_API : '');
+  (isLocalHost ? LOCAL_API : PRODUCTION_API);
 
 const api = axios.create({
   baseURL: baseApiUrl,

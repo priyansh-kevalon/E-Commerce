@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -47,9 +48,14 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // -------------------- Test route --------------------
 app.get('/api/health', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'E-Commerce API is running',
+    const databaseConnected = mongoose.connection.readyState === 1;
+
+    res.status(databaseConnected ? 200 : 503).json({
+        success: databaseConnected,
+        message: databaseConnected
+            ? 'E-Commerce API is running'
+            : 'Database is not connected',
+        database: databaseConnected ? 'connected' : 'disconnected',
         timestamp: new Date().toISOString(),
     });
 });
