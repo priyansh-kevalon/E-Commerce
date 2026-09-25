@@ -145,7 +145,7 @@ return (
 
         <div>
           <FieldLabel required>Discount type</FieldLabel>
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-1 gap-2.5 min-[480px]:grid-cols-3">
             {TYPES.map((type) => {
               const Icon = type.icon;
               const selected = form.type === type.value;

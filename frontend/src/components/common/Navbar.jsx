@@ -189,7 +189,7 @@ export default function Navbar() {
     >
       {/* Main nav row */}
       <div className="border-b border-slate-200 bg-white shadow-sm">
-        <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-2 px-3 sm:px-5 lg:h-[76px]">
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-1.5 px-3 sm:gap-2 sm:px-5 lg:h-[76px]">
           <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
@@ -324,13 +324,13 @@ export default function Navbar() {
           </nav>
 
           {/* Right: actions */}
-          <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+          <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-2">
             <button
               type="button"
               onClick={() => setSearchOpen((open) => !open)}
               aria-label="Toggle search"
               aria-expanded={searchOpen}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95 sm:h-10 sm:w-10"
             >
               <Search size={20} />
             </button>
@@ -340,7 +340,7 @@ export default function Navbar() {
                 type="button"
                 onClick={() => setAcctOpen((open) => !open)}
                 aria-expanded={acctOpen}
-                className={`flex h-10 items-center gap-1.5 rounded-full border px-3.5 text-sm font-semibold transition active:scale-95 ${
+                className={`flex h-9 items-center gap-1.5 rounded-full border px-2.5 text-sm font-semibold transition active:scale-95 sm:h-10 sm:px-3.5 ${
                   acctOpen
                     ? 'border-brand-400 bg-brand-50 text-brand-700'
                     : 'border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-100'
@@ -429,7 +429,7 @@ export default function Navbar() {
             <Link
               to="/wishlist"
               aria-label="Wishlist"
-              className="relative flex h-10 items-center gap-1.5 rounded-full px-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95"
+              className="relative flex h-9 items-center gap-1.5 rounded-full px-2 text-slate-600 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95 sm:h-10 sm:px-2.5"
             >
               <Heart size={20} />
               {wishlistCount > 0 && (
@@ -445,7 +445,7 @@ export default function Navbar() {
             <Link
               to="/cart"
               aria-label={`Cart with ${cartCount} items`}
-              className="relative flex h-10 items-center gap-1.5 rounded-full px-3 text-slate-600 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95"
+              className="relative flex h-9 items-center gap-1.5 rounded-full px-2 text-slate-600 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95 sm:h-10 sm:px-3"
             >
               <ShoppingCart size={21} />
               {cartCount > 0 && (
@@ -463,7 +463,7 @@ export default function Navbar() {
               onClick={toggleTheme}
               aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
               title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 active:scale-95"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 active:scale-95 sm:h-10 sm:w-10"
             >
               {isDark ? <Sun size={19} /> : <Moon size={19} />}
             </button>

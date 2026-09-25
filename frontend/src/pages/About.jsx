@@ -383,7 +383,7 @@ export default function About() {
                     loading="lazy"
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-x-0 bottom-0 flex translate-y-3 items-center justify-end gap-2 bg-gradient-to-t from-ink/80 to-transparent p-4 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="absolute inset-x-0 bottom-0 flex items-center justify-end gap-2 bg-gradient-to-t from-ink/80 to-transparent p-4 transition duration-300 sm:translate-y-3 sm:opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
                     <a
                       href="#"
                       aria-label={`${member.name} on LinkedIn`}

@@ -51,7 +51,7 @@ export default function Hero() {
                 </Link>
               </div>
 
-              <div className="mt-10 flex items-center gap-6 border-t border-secondary-200/70 pt-6 sm:gap-8">
+              <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-secondary-200/70 pt-6 sm:gap-x-8">
                 {[
                   { value: '10k+', label: 'Products' },
                   { value: '40k+', label: 'Happy buyers' },
@@ -60,7 +60,7 @@ export default function Hero() {
                   <div
                     key={stat.label}
                     className={`flex items-center gap-2 ${
-                      index > 0 ? 'border-l border-secondary-200/70 pl-6 sm:pl-8' : ''
+                      index > 0 ? 'border-l border-secondary-200/70 pl-5 sm:pl-8' : ''
                     }`}
                   >
                     <p className="font-display text-lg font-extrabold text-slate-900 sm:text-xl">

@@ -532,7 +532,7 @@ export default function AdminDashboard() {
                 : 'Everything looks good — here is what is happening in your store.'}
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Link
               to="/admin/products"
               className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-slate-900 shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
@@ -746,7 +746,7 @@ export default function AdminDashboard() {
               {recentOrders.map((order, index) => (
                 <li
                   key={order._id}
-                  className="group flex items-center justify-between gap-4 px-6 py-3.5 transition hover:bg-slate-50/80"
+                  className="group flex flex-col gap-2.5 px-5 py-3.5 transition hover:bg-slate-50/80 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6"
                 >
                   <div className="flex min-w-0 items-center gap-3.5">
                     <span
@@ -765,7 +765,7 @@ export default function AdminDashboard() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex shrink-0 items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <span className="text-sm font-bold text-slate-800">
                       {formatCurrency(order.totalAmount)}
                     </span>
@@ -867,7 +867,7 @@ export default function AdminDashboard() {
                 return (
                   <li
                     key={product._id}
-                    className="flex items-center justify-between gap-4 px-6 py-3.5"
+                    className="flex flex-col gap-2.5 px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6"
                   >
                     <div className="flex min-w-0 items-center gap-3">
                       <SmartImage
@@ -895,7 +895,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex shrink-0 items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       <span
                         className={`rounded-full px-2.5 py-1 text-xs font-bold ${
                           product.stock === 0

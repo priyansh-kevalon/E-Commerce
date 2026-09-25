@@ -96,12 +96,12 @@ export default function ProductDetails({ product }) {
   return (
     <div className={stock.available > 0 ? 'pb-24 lg:pb-0' : undefined}>
       <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-5">
-        <nav className="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-4 py-2.5 text-xs text-slate-500">
-          <Link to="/products" className="inline-flex items-center gap-1 transition hover:text-brand-600">
+        <nav className="flex min-w-0 items-center gap-1.5 overflow-hidden rounded-md border border-slate-200 bg-white px-4 py-2.5 text-xs text-slate-500">
+          <Link to="/products" className="inline-flex shrink-0 items-center gap-1 transition hover:text-brand-600">
             <ChevronLeft size={13} /> Products
           </Link>
           <span>/</span>
-          <span className="font-medium text-slate-700">{getCategoryName(product)}</span>
+          <span className="shrink-0 font-medium text-slate-700">{getCategoryName(product)}</span>
           <span>/</span>
           <span className="truncate font-medium text-slate-700">{product.name}</span>
         </nav>

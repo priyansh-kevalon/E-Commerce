@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Bell,
@@ -61,6 +61,16 @@ export default function SellerLayout() {
     logout();
     navigate('/');
   };
+
+  // Lock body scroll while the mobile drawer is open.
+  useEffect(() => {
+    if (!open) return undefined;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
 
   const linkClass = ({ isActive }) =>
     `group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition ${
@@ -167,6 +177,14 @@ export default function SellerLayout() {
             onClick={() => setOpen(false)}
           />
           <aside className="admin-sidebar absolute inset-y-0 left-0 flex w-72 flex-col animate-drawer">
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+              className="absolute right-3 top-[1.125rem] z-10 flex h-9 w-9 items-center justify-center rounded-lg text-slate-300 transition hover:bg-white/10 hover:text-white lg:hidden"
+            >
+              <X size={20} />
+            </button>
             {sidebar}
           </aside>
         </div>

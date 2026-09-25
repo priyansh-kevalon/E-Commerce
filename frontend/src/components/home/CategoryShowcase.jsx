@@ -48,7 +48,7 @@ export default function CategoryShowcase({ categories = [] }) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 p-4 sm:grid-cols-4 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 p-4 min-[420px]:grid-cols-3 sm:grid-cols-4 lg:grid-cols-6">
         {categories.map((category, index) => (
           <Reveal
             key={category._id}

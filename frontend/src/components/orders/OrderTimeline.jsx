@@ -29,7 +29,7 @@ export default function OrderTimeline({ status }) {
   const progress = currentIndex / (STEPS.length - 1);
 
   return (
-    <div className="rounded-md border border-slate-200 bg-white p-6">
+    <div className="rounded-md border border-slate-200 bg-white p-4 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-base font-bold text-slate-800">Order tracking</h2>
         <span className="rounded-sm bg-brand-50 px-3 py-1 text-xs font-bold text-brand-600">
@@ -37,10 +37,10 @@ export default function OrderTimeline({ status }) {
         </span>
       </div>
 
-      <div className="relative mt-7 flex items-start justify-between">
-        <div className="absolute left-5 right-5 top-5 h-0.5 rounded-full bg-slate-200" />
+      <div className="relative mt-6 flex items-start justify-between sm:mt-7">
+        <div className="absolute left-5 right-5 top-[18px] h-0.5 rounded-full bg-slate-200 sm:top-5" />
         <div
-          className="absolute left-5 top-5 h-0.5 rounded-full bg-gradient-to-r from-brand-500 to-brand-600 transition-all duration-500"
+          className="absolute left-5 top-[18px] h-0.5 rounded-full bg-gradient-to-r from-brand-500 to-brand-600 transition-all duration-500 sm:top-5"
           style={{ width: `calc((100% - 2.5rem) * ${progress})` }}
         />
 
@@ -51,14 +51,14 @@ export default function OrderTimeline({ status }) {
           return (
             <div key={step.status} className="relative z-10 flex flex-1 flex-col items-center gap-2">
               <span
-                className={`flex h-10 w-10 items-center justify-center rounded-full ring-4 ring-white transition ${
+                className={`flex h-9 w-9 items-center justify-center rounded-full ring-4 ring-white transition sm:h-10 sm:w-10 ${
                   done ? 'bg-brand-600 text-white' : 'bg-slate-100 text-slate-400'
                 } ${active ? 'scale-110' : ''}`}
               >
-                <Icon size={17} />
+                <Icon size={16} />
               </span>
               <span
-                className={`text-center text-[11px] font-bold leading-tight ${
+                className={`text-center text-[10px] font-bold leading-tight sm:text-[11px] ${
                   done ? 'text-slate-800' : 'text-slate-400'
                 }`}
               >
