@@ -12,11 +12,15 @@ dotenv.config();
  *   npm run seed:admin -- --reset-password   (also resets the password)
  */
 const seedAdmin = async () => {
-  const email = (process.env.ADMIN_EMAIL || 'admin@velmora.com').toLowerCase();
-  const password = process.env.ADMIN_PASSWORD || 'Admin@123';
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const password = process.env.ADMIN_PASSWORD;
   const resetPassword = process.argv.includes('--reset-password');
 
   try {
+    if (!email || !password) {
+      throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be configured before seeding an admin.');
+    }
+
     await connectDB();
 
     let user = await User.findOne({ email }).select('+password');
@@ -32,10 +36,6 @@ const seedAdmin = async () => {
     } else {
       await User.create({ name: 'Administrator', email, password, role: 'admin' });
       console.log(`Admin account created: ${email}`);
-    }
-
-    if (resetPassword || !user) {
-      console.log(`Admin password: ${password}`);
     }
 
     await mongoose.connection.close();
