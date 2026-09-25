@@ -15,7 +15,8 @@
     "seed:extra": "node utils/addProducts.js",
     "seed:all": "node utils/seedAdmin.js && node utils/seedData.js && node utils/addProducts.js",
     "export:data": "node utils/exportData.js",
-    "import:data": "node utils/importData.js"
+    "import:data": "node utils/importData.js",
+    "migrate:data": "node utils/migrateDatabase.js"
   },
   "keywords": [
     "ecommerce",
