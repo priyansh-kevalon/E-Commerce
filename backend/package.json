@@ -16,6 +16,7 @@
     "seed:all": "node utils/seedAdmin.js && node utils/seedData.js && node utils/addProducts.js",
     "export:data": "node utils/exportData.js",
     "import:data": "node utils/importData.js",
+    "import:products": "node utils/importData.js --products-only",
     "migrate:data": "node utils/migrateDatabase.js"
   },
   "keywords": [

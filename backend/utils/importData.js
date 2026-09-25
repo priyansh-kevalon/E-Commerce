@@ -10,6 +10,8 @@ dotenv.config();
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const MONGO_URI = process.env.MONGO_URI?.trim();
+const MONGO_DB_NAME = process.env.MONGO_DB_NAME?.trim();
+const importProductsOnly = process.argv.includes('--products-only');
 
 if (!MONGO_URI) {
     console.error('MONGO_URI is not set - set it to your MongoDB Atlas URI first.');
@@ -32,7 +34,10 @@ const restore = (doc, refFields = []) => {
     return d;
 };
 
-const conn = await mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 10000 });
+const conn = await mongoose.connect(MONGO_URI, {
+    serverSelectionTimeoutMS: 10000,
+    ...(MONGO_DB_NAME ? { dbName: MONGO_DB_NAME } : {}),
+});
 console.log(`Connected: ${conn.connection.host}/${conn.connection.name}`);
 
 const plans = [
@@ -40,11 +45,14 @@ const plans = [
     { file: 'products.json', model: Product, refFields: ['category', 'seller'] },
     { file: 'users.json', model: User, refFields: [] },
 ];
+const selectedPlans = importProductsOnly
+    ? plans.filter(({ file }) => file !== 'users.json')
+    : plans;
 
 let totalInserted = 0;
 let totalPresent = 0;
 
-for (const { file, model, refFields } of plans) {
+for (const { file, model, refFields } of selectedPlans) {
     const filePath = path.join(DATA_DIR, file);
     let raw;
     try {

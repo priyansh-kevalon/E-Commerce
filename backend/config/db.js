@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 const connectDB = async() => {
     try {
         const mongoUri = process.env.MONGO_URI?.trim();
+        const mongoDbName = process.env.MONGO_DB_NAME?.trim();
 
         if (!mongoUri) {
             throw new Error(
@@ -28,6 +29,7 @@ const connectDB = async() => {
 
         const conn = await mongoose.connect(mongoUri, {
             serverSelectionTimeoutMS: 10000,
+            ...(mongoDbName ? { dbName: mongoDbName } : {}),
         });
         console.log(`MongoDB Connected: ${conn.connection.host}`);
         return conn;
