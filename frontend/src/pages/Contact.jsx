@@ -231,8 +231,8 @@ export default function Contact() {
 
       {/* Form + info sidebar */}
       <section className="mx-auto max-w-[1120px] px-6 py-8 sm:py-12">
-        <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-          <div className="rounded-2xl border border-secondary-100 bg-white p-5 shadow-card sm:p-6">
+        <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+          <div className="order-1 rounded-2xl border border-secondary-100 bg-white p-5 shadow-card sm:p-6 lg:order-2">
             {status === 'sent' ? (
               <div className="flex min-h-[360px] flex-col items-center justify-center text-center">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
@@ -392,7 +392,7 @@ export default function Contact() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-3">
+          <div className="order-2 space-y-3 lg:order-1">
             <Reveal className="rounded-2xl border border-secondary-100 bg-white p-4 shadow-card">
               <h3 className="text-sm font-bold text-slate-900">Reach us directly</h3>
               <div className="mt-1.5 divide-y divide-slate-100">
