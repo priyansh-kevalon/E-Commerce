@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../components/common/Navbar.jsx';
+import Newsletter from '../components/common/Newsletter.jsx';
 import Footer from '../components/common/Footer.jsx';
 
 export default function MainLayout() {
@@ -13,6 +14,11 @@ export default function MainLayout() {
           <Outlet />
         </div>
       </main>
+      <div className="border-t border-secondary-100 bg-white">
+        <div className="mx-auto max-w-[1200px] px-6 pt-10 pb-4">
+          <Newsletter />
+        </div>
+      </div>
       <Footer />
     </div>
   );

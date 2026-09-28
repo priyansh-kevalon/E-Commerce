@@ -31,7 +31,7 @@ export default function PromoBanner({ product = null }) {
           <div className="pointer-events-none absolute -left-20 -top-24 h-72 w-72 rounded-full bg-white/60 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-32 right-0 h-80 w-80 rounded-full bg-brand-200/40 blur-3xl" />
 
-          <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 lg:p-12">
+          <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:p-12">
             {/* Left: product image */}
             <div className="relative mx-auto w-full max-w-sm lg:max-w-none">
               <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
@@ -47,7 +47,7 @@ export default function PromoBanner({ product = null }) {
                       />
                     </Link>
                     {discount >= 20 && (
-                      <span className="absolute left-4 top-4 rounded-full bg-gradient-to-r from-accent-500 to-accent-600 px-3 py-1 text-xs font-extrabold text-ink shadow-sm">
+                      <span className="absolute right-4 top-4 rounded-full bg-gradient-to-r from-accent-500 to-accent-600 px-3 py-1 text-xs font-extrabold text-ink shadow-sm">
                         {discount}% OFF
                       </span>
                     )}
@@ -61,15 +61,15 @@ export default function PromoBanner({ product = null }) {
                 )}
               </div>
 
-              {/* floating chips (desktop only, outside the card edges) */}
-              <div className="pointer-events-none absolute -left-5 top-8 hidden animate-float lg:block">
-                <div className="flex items-center gap-1.5 rounded-full bg-white px-3.5 py-2 shadow-card ring-1 ring-secondary-100">
+              {/* floating chips (desktop only, kept inside the image column so they never cross into the copy) */}
+              <div className="pointer-events-none absolute left-3 top-3 hidden animate-float lg:block">
+                <div className="flex items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-2 shadow-card ring-1 ring-secondary-100 backdrop-blur">
                   <Star size={13} className="fill-amber-400 text-amber-400" />
                   <p className="text-[12px] font-bold text-slate-800">Loved by shoppers</p>
                 </div>
               </div>
-              <div className="pointer-events-none absolute -right-4 -bottom-5 hidden animate-float-slow lg:block">
-                <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2.5 shadow-card ring-1 ring-secondary-100">
+              <div className="pointer-events-none absolute bottom-3 right-3 hidden animate-float-slow lg:block">
+                <div className="flex items-center gap-2 rounded-full bg-white/95 px-4 py-2.5 shadow-card ring-1 ring-secondary-100 backdrop-blur">
                   <ShoppingBag size={15} className="text-brand-700" />
                   <p className="text-xs font-bold text-slate-800">Limited stock</p>
                 </div>
@@ -77,7 +77,7 @@ export default function PromoBanner({ product = null }) {
             </div>
 
             {/* Right: copy */}
-            <div>
+            <div className="min-w-0">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-800 px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-white shadow-sm">
                 <BadgePercent size={13} /> Special Offer
               </span>
