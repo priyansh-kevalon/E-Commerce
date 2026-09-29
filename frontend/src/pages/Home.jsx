@@ -6,6 +6,7 @@ import CategoryGrid from '../components/home/CategoryGrid.jsx';
 import PromoBanner from '../components/home/PromoBanner.jsx';
 import TrustBar from '../components/home/TrustBar.jsx';
 import Reveal from '../components/common/Reveal.jsx';
+import Newsletter from '../components/common/Newsletter.jsx';
 import ProductCard from '../components/product/ProductCard.jsx';
 import { ProductCardSkeleton } from '../components/common/Skeleton.jsx';
 import { fetchCategories, fetchProducts } from '../services/productService.js';
@@ -101,6 +102,15 @@ export default function Home() {
           </div>
           <div className="mt-8">
             <TrustBar />
+          </div>
+        </section>
+
+        {/* 8) Newsletter (home page only) */}
+        <section>
+          <div className="border-t border-secondary-100 bg-white">
+            <div className="mx-auto max-w-[1200px] px-6 pt-10 pb-4">
+              <Newsletter />
+            </div>
           </div>
         </section>
       </div>
