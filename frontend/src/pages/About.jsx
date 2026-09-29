@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BadgeCheck,
   Boxes,
-  ChevronRight,
   HeartHandshake,
   IndianRupee,
   Leaf,
@@ -312,7 +311,7 @@ export default function About() {
               <Reveal
                 key={item.title}
                 delay={index * 90}
-                className="group rounded-2xl border border-secondary-100 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary-300 hover:shadow-glow"
+                className="group rounded-2xl border border-secondary-100 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary-300"
               >
                 <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-card transition duration-300 group-hover:scale-110">
                   <item.icon size={20} />
@@ -334,28 +333,21 @@ export default function About() {
           title="From wishlist to doorstep in three steps"
           subtitle="A shopping experience designed to be over before you finish your chai."
         />
-        <div className="relative mt-10 grid gap-10 md:grid-cols-3 md:gap-6">
-          <div className="pointer-events-none absolute left-0 right-0 top-7 hidden h-px bg-gradient-to-r from-transparent via-secondary-300 to-transparent md:block" />
+        <div className="mt-10 grid items-stretch gap-6 md:grid-cols-3 md:gap-x-12">
           {STEPS.map((step, index) => (
             <Reveal
               key={step.title}
-              delay={index * 110}
-              className="group relative rounded-2xl border border-secondary-100 bg-white p-6 text-center shadow-card transition duration-300 hover:-translate-y-1 hover:border-secondary-300 hover:shadow-glow md:text-left"
+              delay={index * 100}
+              className="relative flex h-full flex-col rounded-2xl border border-secondary-100 bg-white p-7 shadow-card transition duration-300 hover:-translate-y-1 hover:border-secondary-300"
             >
-              <div className="relative mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary-500 to-brand-700 text-white shadow-glow md:mx-0">
+              <span className="pointer-events-none absolute right-5 top-4 select-none font-display text-4xl font-extrabold leading-none text-secondary-100">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary-500 to-brand-700 text-white shadow-sm">
                 <step.icon size={22} />
-                <span className="absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-white text-[11px] font-extrabold text-brand-700 ring-1 ring-secondary-200">
-                  {index + 1}
-                </span>
-              </div>
-              <h3 className="mt-4 font-display text-lg font-bold text-slate-900">{step.title}</h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-slate-500">{step.text}</p>
-              {index < STEPS.length - 1 && (
-                <ChevronRight
-                  size={18}
-                  className="absolute -right-3 top-1/2 hidden -translate-y-1/2 text-secondary-400 md:block"
-                />
-              )}
+              </span>
+              <h3 className="mt-6 font-display text-lg font-bold text-slate-900">{step.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">{step.text}</p>
             </Reveal>
           ))}
         </div>
@@ -374,7 +366,7 @@ export default function About() {
               <Reveal
                 key={member.name}
                 delay={index * 90}
-                className="group overflow-hidden rounded-2xl border border-secondary-100 bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:border-secondary-300 hover:shadow-glow"
+                className="group overflow-hidden rounded-2xl border border-secondary-100 bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:border-secondary-300"
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
