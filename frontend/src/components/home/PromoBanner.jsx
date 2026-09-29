@@ -23,7 +23,7 @@ export default function PromoBanner({ product = null }) {
   const discount = getDiscountPercent(product);
 
   return (
-    <section className="mx-auto max-w-[1600px] px-3 sm:px-4 lg:px-6">
+    <section className="mx-auto w-full max-w-[1600px] px-3 sm:px-4 lg:px-6">
       <Reveal variant="zoom">
         <div className="relative overflow-hidden rounded-[26px] bg-soft-promo shadow-card ring-1 ring-secondary-200">
           {/* soft background layers */}
@@ -31,7 +31,7 @@ export default function PromoBanner({ product = null }) {
           <div className="pointer-events-none absolute -left-20 -top-24 h-72 w-72 rounded-full bg-white/60 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-32 right-0 h-80 w-80 rounded-full bg-brand-200/40 blur-3xl" />
 
-          <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:p-12">
+          <div className="relative grid items-center gap-6 p-4 sm:p-6 lg:grid-cols-2 lg:gap-8 lg:p-7">
             {/* Left: product image */}
             <div className="relative mx-auto w-full max-w-sm lg:max-w-none">
               <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
@@ -82,28 +82,28 @@ export default function PromoBanner({ product = null }) {
                 <BadgePercent size={13} /> Special Offer
               </span>
 
-              <h2 className="mt-5 text-balance font-display text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-[44px]">
+              <h2 className="mt-4 text-balance font-display text-2xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-[32px]">
                 Grab up to <span className="text-gradient">50% off</span> top picks
               </h2>
 
-              <p className="mt-4 max-w-md text-sm leading-8 text-slate-600">
+              <p className="mt-3 max-w-md text-sm leading-7 text-slate-600">
                 Handpicked deals, limited stock. Don't miss out on the season's best products at
                 unbeatable prices.
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <Link
                   to="/products?sort=popular"
-                  className="btn-shine inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-secondary-700 to-brand-800 px-8 py-3.5 text-sm font-bold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                  className="btn-shine inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-secondary-700 to-brand-800 px-6 py-3 text-sm font-bold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:brightness-110"
                 >
                   Shop the Sale <ArrowRight size={16} />
                 </Link>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-secondary-300 bg-white/80 px-4 py-2.5 text-xs font-bold text-slate-700">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-secondary-300 bg-white/80 px-3.5 py-2 text-xs font-bold text-slate-700">
                   <Clock size={14} className="text-brand-700" /> Ends soon
                 </span>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-secondary-200/70 pt-5 sm:gap-x-7">
+              <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2.5 border-t border-secondary-200/70 pt-4 sm:gap-x-7">
                 {BENEFITS.map(({ icon: Icon, label }, index) => (
                   <span
                     key={label}
@@ -111,7 +111,7 @@ export default function PromoBanner({ product = null }) {
                       index > 0 ? 'border-l border-secondary-200/70 pl-4 sm:pl-7' : ''
                     }`}
                   >
-                    <Icon size={16} className="shrink-0 text-brand-600" />
+                    <Icon size={15} className="shrink-0 text-brand-600" />
                     {label}
                   </span>
                 ))}

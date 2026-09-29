@@ -72,16 +72,25 @@ export default function CategoryGrid({ categories = [] }) {
 
   return (
     <section className="mx-auto max-w-[1600px] px-3 sm:px-4 lg:px-6">
-      <div className="text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary-700">
-          Browse by Category
-        </p>
-        <h2 className="mt-1.5 font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-          What are you looking for today?
-        </h2>
-        <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
-          From everyday essentials to the latest trends — find it all in one place.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary-700">
+            Browse by Category
+          </p>
+          <h2 className="mt-1.5 font-display text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            What are you looking for today?
+          </h2>
+          <p className="mt-2.5 max-w-lg text-sm text-slate-500">
+            From everyday essentials to the latest trends — find it all in one place.
+          </p>
+        </div>
+        <Link
+          to="/products"
+          className="group inline-flex items-center gap-1.5 rounded-full border border-secondary-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-800 shadow-sm transition hover:border-secondary-400 hover:text-secondary-800"
+        >
+          View All Products
+          <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+        </Link>
       </div>
 
       <div className={`mt-7 grid gap-3 sm:gap-4 lg:gap-5 ${gridClass}`}>
@@ -124,16 +133,6 @@ export default function CategoryGrid({ categories = [] }) {
             </Link>
           </Reveal>
         ))}
-      </div>
-
-      <div className="mt-8 flex justify-end">
-        <Link
-          to="/products"
-          className="group inline-flex items-center gap-1.5 rounded-full border border-secondary-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-800 shadow-sm transition hover:border-secondary-400 hover:text-secondary-800"
-        >
-          View All Products
-          <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-        </Link>
       </div>
     </section>
   );

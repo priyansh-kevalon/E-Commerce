@@ -1,22 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
-  ArrowDownAZ,
-  ArrowDownWideNarrow,
-  ArrowRight,
-  ArrowUpWideNarrow,
   BadgePercent,
-  Check,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Clock,
-  Flame,
   Home,
   ShieldCheck,
+  ShoppingBag,
   SlidersHorizontal,
   Sparkles,
-  Star,
   Tag,
   TrendingUp,
   Truck,
@@ -25,18 +17,9 @@ import {
 import ProductList from '../components/product/ProductList.jsx';
 import ProductFilter from '../components/product/ProductFilter.jsx';
 import { fetchCategories, fetchProducts } from '../services/productService.js';
-import { PRODUCTS_PER_PAGE, SORT_OPTIONS } from '../utils/constants.js';
+import { PRODUCTS_PER_PAGE } from '../utils/constants.js';
 
 const DEFAULT_FILTERS = { category: '', minPrice: '', maxPrice: '', sort: 'newest' };
-
-const SORT_META = {
-  newest: { label: 'Newest first', Icon: Clock },
-  price_asc: { label: 'Price: low to high', Icon: ArrowUpWideNarrow },
-  price_desc: { label: 'Price: high to low', Icon: ArrowDownWideNarrow },
-  rating: { label: 'Top rated', Icon: Star },
-  popular: { label: 'Most popular', Icon: Flame },
-  name_asc: { label: 'Name: A to Z', Icon: ArrowDownAZ },
-};
 
 const PRESETS = {
   deals: {
@@ -90,8 +73,6 @@ export default function Products({ preset = null }) {
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
-  const sortRef = useRef(null);
 
   useEffect(() => {
     setFilters((prev) => ({
@@ -159,22 +140,6 @@ export default function Products({ preset = null }) {
     };
   }, [filtersOpen]);
 
-  useEffect(() => {
-    if (!sortOpen) return undefined;
-    const onClickOutside = (event) => {
-      if (sortRef.current && !sortRef.current.contains(event.target)) setSortOpen(false);
-    };
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') setSortOpen(false);
-    };
-    document.addEventListener('mousedown', onClickOutside);
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', onClickOutside);
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  }, [sortOpen]);
-
   const handleFilterChange = (partial) => {
     setFilters((prev) => ({ ...prev, ...partial }));
     setPage(1);
@@ -230,8 +195,6 @@ export default function Products({ preset = null }) {
   );
 
   const total = pagination?.total ?? 0;
-  const activeSortValue = filters.sort || 'newest';
-  const ActiveMeta = SORT_META[activeSortValue] || SORT_META.newest;
 
   return (
     <div className="mx-auto max-w-[1600px] px-3 py-5 sm:px-5">
@@ -263,66 +226,64 @@ export default function Products({ preset = null }) {
       </nav>
 
       {/* Shop hero banner */}
-      <div
-        className={`relative mt-4 overflow-hidden rounded-[26px] border border-secondary-100 bg-soft-hero p-6 sm:p-9 lg:p-11`}
-      >
-        <div className="dotted pointer-events-none absolute inset-0 opacity-40" />
-        <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-secondary-200/40 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 left-1/4 h-64 w-64 rounded-full bg-brand-100/40 blur-3xl" />
+<div className={`relative mt-4 overflow-hidden rounded-[26px] border border-secondary-100 bg-soft-hero p-7 sm:p-11 lg:p-14`}>
+          <div className="dotted pointer-events-none absolute inset-0 opacity-40" />
+          <div className="pointer-events-none absolute -right-16 -top-20 h-72 w-72 rounded-full bg-secondary-200/40 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 left-1/4 h-72 w-72 rounded-full bg-brand-100/40 blur-3xl" />
 
-        <div className="relative grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
-          <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-secondary-800 shadow-sm ring-1 ring-secondary-200">
-              {presetConfig ? <presetConfig.Icon size={13} /> : <Sparkles size={13} />}
-              {presetConfig ? presetConfig.kicker : 'The Velmora Boutique'}
-            </span>
-            <h1 className="mt-4 text-balance font-display text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl lg:text-[44px]">
-              {search
-                ? `Results for "${search}"`
-                : presetConfig
-                  ? presetConfig.title
-                  : filters.category || (featured ? "Today's Deals" : 'Shop the Collection')}
-            </h1>
-            <p className="mt-3 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">
-              {presetConfig
-                ? presetConfig.tagline
-                : search
-                  ? `Showing the best matches we found for "${search}".`
-                  : 'Handpicked products from verified sellers — delivered fast, backed by easy returns.'}
-            </p>
-            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] font-semibold text-slate-600">
-              <span className="inline-flex items-center gap-1.5">
-                <Truck size={14} className="text-brand-700" /> Free delivery over ₹999
+          <div className="relative grid gap-9 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-extrabold uppercase tracking-[0.16em] text-secondary-800 shadow-sm ring-1 ring-secondary-200">
+                {presetConfig ? <presetConfig.Icon size={14} /> : <Sparkles size={14} />}
+                {presetConfig ? presetConfig.kicker : 'The Velmora Boutique'}
               </span>
-              <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck size={14} className="text-brand-700" /> 7-day easy returns
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <BadgePercent size={14} className="text-brand-700" /> Up to 40% off top picks
-              </span>
+              <h1 className="mt-5 text-balance font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-slate-900 sm:text-5xl lg:text-[54px]">
+                {search
+                  ? `Results for "${search}"`
+                  : presetConfig
+                    ? presetConfig.title
+                    : filters.category || (featured ? "Today's Deals" : 'Shop the Collection')}
+              </h1>
+              <p className="mt-4 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
+                {presetConfig
+                  ? presetConfig.tagline
+                  : search
+                    ? `Showing the best matches we found for "${search}".`
+                    : 'Handpicked products from verified sellers — delivered fast, backed by easy returns.'}
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-2.5 text-sm font-semibold text-slate-600">
+                <span className="inline-flex items-center gap-1.5">
+                  <Truck size={16} className="text-brand-700" /> Free delivery over ₹999
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck size={16} className="text-brand-700" /> 7-day easy returns
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <BadgePercent size={16} className="text-brand-700" /> Up to 40% off top picks
+                </span>
+              </div>
+            </div>
+
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative aspect-[4/3] w-full max-w-xl overflow-hidden rounded-[26px] shadow-luxe ring-1 ring-secondary-100">
+                <img
+                  src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80"
+                  alt="Shopping"
+                  loading="lazy"
+                  className="h-full w-full object-cover transition duration-700 hover:scale-105"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-ink/20 via-transparent to-transparent" />
+                <span className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-4 py-2 text-sm font-bold text-slate-800 shadow-card ring-1 ring-secondary-100 backdrop-blur">
+                  <ShoppingBag size={16} className="text-brand-700" /> Shop the collection
+                </span>
+              </div>
             </div>
           </div>
-
-          {categories.length > 0 && (
-            <div className="hidden flex-wrap gap-2 lg:flex lg:justify-end">
-              {categories.slice(0, 4).map((category) => (
-                <Link
-                  key={category._id}
-                  to={`/products?category=${encodeURIComponent(category.name)}`}
-                  className="group inline-flex items-center gap-1.5 rounded-full border border-secondary-200 bg-white/85 px-4 py-2 text-xs font-bold text-slate-700 shadow-sm backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-brand-400 hover:text-brand-700 hover:shadow-card"
-                >
-                  {category.name}
-                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              ))}
-            </div>
-          )}
         </div>
-      </div>
 
       <div className="mt-5 grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
-        {/* Filter sidebar - sticks below the navbar while the product grid scrolls */}
-        <aside className="hidden lg:sticky lg:top-[92px] lg:block lg:max-h-[calc(100vh-108px)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1">
+        {/* Filter sidebar */}
+        <aside className="hidden lg:block">
           {filterPanel}
         </aside>
 
@@ -376,79 +337,6 @@ export default function Products({ preset = null }) {
               <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-bold text-brand-700 ring-1 ring-brand-200">
                 {total} item{total === 1 ? '' : 's'}
               </span>
-            </div>
-
-            <div className="relative z-30 flex items-center gap-2 text-sm text-slate-600">
-              <span className="hidden font-medium sm:inline">Sort by:</span>
-              <div ref={sortRef} className="relative">
-                <button
-                  type="button"
-                  aria-haspopup="listbox"
-                  aria-expanded={sortOpen}
-                  onClick={() => setSortOpen((open) => !open)}
-                  className={`inline-flex items-center gap-2 rounded-full border bg-white px-3.5 py-1.5 text-sm font-semibold text-slate-700 shadow-sm transition ${
-                    sortOpen
-                      ? 'border-brand-500 ring-2 ring-brand-100'
-                      : 'border-slate-200 hover:border-brand-400 hover:text-brand-700'
-                  }`}
-                >
-                  <ActiveMeta.Icon size={15} className="text-brand-500" />
-                  {ActiveMeta.label}
-                  <ChevronDown
-                    size={15}
-                    className={`text-slate-400 transition-transform duration-200 ${
-                      sortOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-
-                {sortOpen && (
-                  <div
-                    role="listbox"
-                    aria-label="Sort products"
-                    className="absolute right-0 top-full mt-2 w-64 animate-fade-up rounded-2xl border border-secondary-100 bg-white p-2 shadow-luxe"
-                  >
-                    <p className="px-2.5 pb-1.5 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                      Sort products
-                    </p>
-                    <div className="space-y-1">
-                      {SORT_OPTIONS.map((option) => {
-                        const meta = SORT_META[option.value];
-                        const selected = activeSortValue === option.value;
-                        return (
-                          <button
-                            key={option.value}
-                            type="button"
-                            role="option"
-                            aria-selected={selected}
-                            onClick={() => {
-                              handleFilterChange({ sort: option.value });
-                              setSortOpen(false);
-                            }}
-                            className={`flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left text-sm transition ${
-                              selected
-                                ? 'bg-secondary-50 font-semibold text-secondary-800'
-                                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                            }`}
-                          >
-                            <span
-                              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
-                                selected
-                                  ? 'bg-secondary-100 text-secondary-700'
-                                  : 'bg-slate-100 text-slate-400'
-                              }`}
-                            >
-                              <meta.Icon size={15} />
-                            </span>
-                            <span className="flex-1 font-medium">{option.label}</span>
-                            {selected && <Check size={15} className="shrink-0 text-brand-600" />}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 

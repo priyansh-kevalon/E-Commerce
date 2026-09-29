@@ -80,7 +80,7 @@ export default function Home() {
                   </div>
                 ))
               : bestSellers.slice(0, 5).map((product, index) => (
-                  <Reveal key={product._id} delay={index * 60} variant="zoom">
+                  <Reveal key={product._id} delay={index * 60} variant="zoom" className="h-full">
                     <ProductCard product={product} minimal />
                   </Reveal>
                 ))}

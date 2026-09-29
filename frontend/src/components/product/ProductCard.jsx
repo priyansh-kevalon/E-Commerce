@@ -98,23 +98,44 @@ export default function ProductCard({ product, minimal = false }) {
 
   if (minimal) {
     return (
-      <div className="group relative flex flex-col overflow-hidden rounded-[22px] border border-secondary-100/80 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-brand-200 hover:shadow-card">
+      <div className="group relative flex h-full flex-col overflow-hidden rounded-[22px] border border-secondary-100/80 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-brand-200 hover:shadow-card">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-0.5 origin-left scale-x-0 bg-gradient-to-r from-brand-600 via-accent-500 to-amber-400 transition-transform duration-500 group-hover:scale-x-100" />
         {imagePlate}
-        <Link
-          to={`/products/${product._id}`}
-          className="line-clamp-1 px-3 text-xs font-bold leading-snug text-slate-800 transition hover:text-brand-700"
-        >
-          {product.name}
-        </Link>
-        <div className="flex items-baseline gap-1.5 px-3 pb-3 pt-0.5">
-          <span className="font-display text-[15px] font-extrabold text-slate-900">
-            {formatCurrency(effectivePrice)}
-          </span>
-          {discount > 0 && (
-            <span className="text-[11px] text-slate-400 line-through">
-              {formatCurrency(product.price)}
+        <div className="flex flex-1 flex-col px-3 pb-3 pt-0.5">
+          <Link
+            to={`/products/${product._id}`}
+            className="line-clamp-2 text-xs font-bold leading-snug text-slate-800 transition hover:text-brand-700"
+          >
+            {product.name}
+          </Link>
+          <div className="mt-0.5 flex items-baseline gap-1.5">
+            <span className="font-display text-[15px] font-extrabold text-slate-900">
+              {formatCurrency(effectivePrice)}
             </span>
+            {discount > 0 && (
+              <span className="text-[11px] text-slate-400 line-through">
+                {formatCurrency(product.price)}
+              </span>
+            )}
+          </div>
+          <button
+            type="button"
+            disabled={stock.available <= 0 || adding}
+            onClick={handleAddToCart}
+            className="btn-shine mt-auto inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand-700 to-brand-900 px-3 py-2.5 text-[12px] font-bold text-white shadow-glow transition duration-300 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-100 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
+          >
+            {feedback?.type === 'success' ? <Check size={14} /> : <ShoppingCart size={14} />}
+            {stock.available <= 0 ? 'Sold out' : adding ? 'Adding...' : 'Add to cart'}
+          </button>
+          {feedback && (
+            <p
+              role="status"
+              className={`text-center text-[11px] ${
+                feedback.type === 'error' ? 'text-red-600' : 'text-emerald-600'
+              }`}
+            >
+              {feedback.message}
+            </p>
           )}
         </div>
       </div>
