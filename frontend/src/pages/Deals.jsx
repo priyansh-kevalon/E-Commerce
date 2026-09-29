@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   ArrowDownAZ,
   ArrowDownWideNarrow,
-  ArrowRight,
   ArrowUpWideNarrow,
   Check,
   ChevronDown,
@@ -212,13 +211,20 @@ export default function Deals() {
             </div>
           </div>
 
-          <div className="shrink-0 lg:pr-2">
-            <Link
-              to="/Products"
-              className="btn-shine inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-7 py-3 text-sm font-extrabold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 hover:brightness-110"
-            >
-              Shop the sale <ArrowRight size={16} />
-            </Link>
+          <div className="relative shrink-0 lg:pr-2">
+<div className="relative aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[26px] shadow-luxe ring-1 ring-secondary-100">
+                <img
+                  src="https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=1000&q=80"
+                  alt="Deals"
+                  loading="lazy"
+                  className="h-full w-full object-cover transition duration-700 hover:scale-105"
+                />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-ink/25 via-transparent to-transparent" />
+              <span className="pointer-events-none absolute -bottom-6 -right-4 flex h-28 w-28 rotate-12 flex-col items-center justify-center rounded-full bg-gradient-to-br from-accent-500 to-accent-600 text-white shadow-glow-accent ring-4 ring-white/60">
+                <span className="font-display text-2xl font-extrabold leading-none">40%</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest">Off</span>
+              </span>
+            </div>
           </div>
         </div>
       </section>
