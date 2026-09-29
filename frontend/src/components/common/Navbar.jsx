@@ -10,14 +10,12 @@ import {
   LayoutGrid,
   LogOut,
   Menu,
-  Moon,
   Package,
   RotateCcw,
   Search,
   ShoppingCart,
   Sparkles,
   Store,
-  Sun,
   Tag,
   TrendingUp,
   User,
@@ -27,7 +25,6 @@ import { APP_NAME } from '../../utils/constants.js';
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
-import { useTheme } from '../../hooks/useTheme.js';
 import { fetchCategories } from '../../services/productService.js';
 
 const PRODUCT_COLLECTIONS = [
@@ -40,18 +37,14 @@ const PRODUCT_COLLECTIONS = [
 const NAV_ITEMS = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
-  { to: '/products', label: 'Shop' },
-  { to: '/products', label: 'Categories', dropdown: true },
+  { to: '/products', label: 'Shop', dropdown: true },
   { to: '/deals', label: 'Deals' },
   { to: '/contact', label: 'Contact' },
 ];
 
-const PRODUCT_MENU_PATHS = ['/products', '/deals', '/new-arrivals', '/best-sellers'];
+const PRODUCT_MENU_PATHS = ['/products', '/new-arrivals', '/best-sellers'];
 
 const isItemActive = (item, pathname, search) => {
-  if (item.dropdown) {
-    return pathname === '/products' && new URLSearchParams(search).has('category');
-  }
   if (item.to === '/') return pathname === '/';
   if (item.to === '/products') return PRODUCT_MENU_PATHS.includes(pathname);
   return pathname === item.to;
@@ -63,13 +56,11 @@ export default function Navbar() {
   const { totalItems: cartCount } = useCart();
   const { totalItems: wishlistCount } = useWishlist();
   const { user, isAuthenticated, isAdmin, isSeller, logout } = useAuth();
-  const { isDark, toggleTheme } = useTheme();
   const [search, setSearch] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [acctOpen, setAcctOpen] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
-  const [catPinned, setCatPinned] = useState(false);
   const [categories, setCategories] = useState([]);
   const [scrolled, setScrolled] = useState(false);
   const acctRef = useRef(null);
@@ -101,7 +92,6 @@ export default function Navbar() {
       if (acctRef.current && !acctRef.current.contains(event.target)) setAcctOpen(false);
       if (catRef.current && !catRef.current.contains(event.target)) {
         setCatOpen(false);
-        setCatPinned(false);
       }
     };
     const onKeyDown = (event) => {
@@ -109,7 +99,6 @@ export default function Navbar() {
         setAcctOpen(false);
         setDrawerOpen(false);
         setCatOpen(false);
-        setCatPinned(false);
         setSearchOpen(false);
       }
     };
@@ -124,7 +113,6 @@ export default function Navbar() {
   useEffect(() => {
     setAcctOpen(false);
     setCatOpen(false);
-    setCatPinned(false);
     setSearchOpen(false);
   }, [location.pathname, location.search]);
 
@@ -158,24 +146,24 @@ export default function Navbar() {
   const searchBar = (
     <form
       onSubmit={runSearch}
-      className="flex h-11 w-full items-center overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-secondary-500"
+      className="flex h-9 w-full items-center overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-secondary-500"
     >
-      <span className="flex shrink-0 pl-4 pr-2 text-slate-400">
-        <Search size={18} />
+      <span className="flex shrink-0 pl-3.5 pr-1.5 text-slate-400">
+        <Search size={16} />
       </span>
       <input
         type="search"
         value={search}
         onChange={(event) => setSearch(event.target.value)}
         placeholder="Search for products, brands and more"
-        className="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400"
+        className="min-w-0 flex-1 bg-transparent text-[13px] text-slate-900 outline-none placeholder:text-slate-400"
       />
       <button
         type="submit"
         aria-label="Search"
-        className="flex h-full shrink-0 items-center justify-center gap-1.5 rounded-r-full bg-secondary-700 px-4 text-sm font-semibold text-white transition hover:bg-secondary-800 active:brightness-90 sm:px-5"
+        className="flex h-full shrink-0 items-center justify-center gap-1.5 rounded-r-full bg-secondary-700 px-3 text-[13px] font-semibold text-white transition hover:bg-secondary-800 active:brightness-90 sm:px-4"
       >
-        <Search size={16} />
+        <Search size={14} />
         <span className="hidden sm:inline">Search</span>
       </button>
     </form>
@@ -221,56 +209,60 @@ export default function Navbar() {
           {/* Centered nav (desktop) */}
           <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex xl:gap-1.5">
             {NAV_ITEMS.map((item, position) => {
+              const isActive = isItemActive(item, location.pathname, location.search);
+
               if (item.dropdown) {
                 return (
                   <div
                     key={item.label}
                     ref={catRef}
                     className="relative flex shrink-0 items-center"
-                    onMouseEnter={() => setCatOpen(true)}
-                    onMouseLeave={() => {
-                      if (!catPinned) setCatOpen(false);
-                    }}
                   >
                     {position > 0 && <span aria-hidden="true" className="w-2 shrink-0" />}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (catOpen && catPinned) {
-                          setCatOpen(false);
-                          setCatPinned(false);
-                        } else {
-                          setCatOpen(true);
-                          setCatPinned(true);
-                        }
-                      }}
-                      aria-expanded={catOpen}
-                      className={`flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-semibold transition ${
-                        isItemActive(item, location.pathname, location.search)
+                    <div
+                      className={`flex items-center rounded-lg text-sm font-semibold transition ${
+                        isActive
                           ? 'bg-brand-800 font-bold text-white shadow-sm'
                           : 'text-slate-800 hover:bg-brand-50 hover:text-brand-800'
                       }`}
                     >
-                      {item.label}
-                      <ChevronDown
-                        size={14}
-                        className={`transition-transform ${catOpen ? 'rotate-180' : ''}`}
-                      />
-                    </button>
+                      <Link to={item.to} className="shrink-0 px-3.5 py-2">
+                        {item.label}
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCatOpen((open) => !open);
+                        }}
+                        aria-label={`Toggle ${item.label} categories`}
+                        aria-expanded={catOpen}
+                        aria-haspopup="menu"
+                        className="flex shrink-0 items-center self-stretch pr-2.5 pl-1 transition hover:opacity-80"
+                      >
+                        <span
+                          className={`inline-block transition-transform ${catOpen ? 'rotate-180' : ''}`}
+                        >
+                          <ChevronDown size={14} />
+                        </span>
+                      </button>
+                    </div>
 
                     {catOpen && (
-                      <div className="absolute left-1/2 top-full z-50 mt-2 w-72 -translate-x-1/2 animate-fade-in rounded-2xl border border-secondary-100 bg-white p-2 shadow-luxe">
+                      <div
+                        role="menu"
+                        className="absolute left-0 top-full z-50 mt-2 w-64 animate-fade-in rounded-2xl border border-secondary-100 bg-white p-2 shadow-luxe"
+                      >
                         <Link
                           to="/products"
                           onClick={() => setCatOpen(false)}
                           className="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-bold text-slate-800 transition hover:bg-secondary-50 hover:text-secondary-800"
                         >
-                          All Categories
+                          All Products
                           <ChevronRight size={15} className="text-slate-400" />
                         </Link>
                         <div className="my-1 h-px bg-slate-100" />
                         {categories.length ? (
-                          <div className="max-h-[50vh] overflow-y-auto">
+                          <div className="max-h-[45vh] overflow-y-auto">
                             {categories.map((category) => (
                               <Link
                                 key={category._id}
@@ -288,22 +280,12 @@ export default function Navbar() {
                         ) : (
                           <p className="px-3 py-2 text-xs text-slate-400">Loading categories…</p>
                         )}
-                        <div className="my-1 h-px bg-slate-100" />
-                        <Link
-                          to="/products?sort=popular"
-                          onClick={() => setCatOpen(false)}
-                          className="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-bold text-brand-700 transition hover:bg-secondary-50"
-                        >
-                          Browse Best Sellers
-                          <ChevronRight size={15} />
-                        </Link>
                       </div>
                     )}
                   </div>
                 );
               }
 
-              const isActive = isItemActive(item, location.pathname, location.search);
               return (
                 <div key={item.label} className="flex shrink-0 items-center">
                   {position > 0 && <span aria-hidden="true" className="w-2 shrink-0" />}
@@ -330,9 +312,9 @@ export default function Navbar() {
               onClick={() => setSearchOpen((open) => !open)}
               aria-label="Toggle search"
               aria-expanded={searchOpen}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95 sm:h-10 sm:w-10"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-brand-700 active:scale-95"
             >
-              <Search size={20} />
+              <Search size={18} />
             </button>
 
             <div className="relative" ref={acctRef}>
@@ -457,22 +439,12 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
-
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-              title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 active:scale-95 sm:h-10 sm:w-10"
-            >
-              {isDark ? <Sun size={19} /> : <Moon size={19} />}
-            </button>
           </div>
         </div>
 
         {searchOpen && (
           <div className="border-t border-secondary-100 bg-white px-3 py-3 sm:px-5">
-            <div className="mx-auto max-w-[1600px]">{searchBar}</div>
+            <div className="ml-auto w-full max-w-[360px]">{searchBar}</div>
           </div>
         )}
       </div>
@@ -521,17 +493,6 @@ export default function Navbar() {
                   {item.label === 'New Arrivals' && <Sparkles size={17} className="text-slate-400" />}
                   {item.label === 'Best Sellers' && <TrendingUp size={17} className="text-slate-400" />}
                   {item.label}
-                </Link>
-              ))}
-              {categories.map((category) => (
-                <Link
-                  key={category._id}
-                  to={`/products?category=${encodeURIComponent(category.name)}`}
-                  onClick={() => setDrawerOpen(false)}
-                  className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
-                >
-                  {category.name}
-                  <span className="text-xs text-slate-400">{category.productCount ?? 0}</span>
                 </Link>
               ))}
             </nav>
