@@ -13,9 +13,31 @@ export default function Hero() {
           <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-secondary-200/40 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
 
-          <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14 lg:p-14">
-            {/* Left: copy */}
-            <div className="animate-fade-up">
+          <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14 lg:p-14">
+            {/* Left: hero image */}
+            <div className="relative mx-auto w-full max-w-md lg:order-1 lg:max-w-none">
+              <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
+                <img
+                  src={HERO_IMAGE}
+                  alt="Shop the latest collection at Velmora"
+                  className="aspect-[4/3] w-full rounded-[22px] object-cover transition duration-700 hover:scale-[1.02]"
+                  loading="eager"
+                />
+
+                <div className="pointer-events-none absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-card ring-1 ring-secondary-100">
+                  <BadgePercent size={16} className="text-brand-700" />
+                  <p className="text-xs font-bold text-slate-800">Up to 40% off</p>
+                </div>
+
+                <div className="pointer-events-none absolute right-4 top-4 hidden items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-4 py-2 text-white shadow-glow ring-1 ring-white/20 md:flex">
+                  <Award size={16} className="shrink-0 text-accent-300" />
+                  <p className="text-xs font-bold">Editor's Pick · 2026</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: copy */}
+            <div className="animate-fade-up lg:order-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-secondary-800 shadow-sm ring-1 ring-secondary-200">
                 <Sparkles size={13} className="text-brand-700" />
                 New Arrival · 2026 Collection
@@ -75,28 +97,6 @@ export default function Hero() {
                     <p className="text-xs font-medium text-slate-500">{stat.label}</p>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            {/* Right: hero image */}
-            <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-              <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
-                <img
-                  src={HERO_IMAGE}
-                  alt="Shop the latest collection at Velmora"
-                  className="aspect-[4/3] w-full rounded-[22px] object-cover transition duration-700 hover:scale-[1.02]"
-                  loading="eager"
-                />
-
-                <div className="pointer-events-none absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-card ring-1 ring-secondary-100">
-                  <BadgePercent size={16} className="text-brand-700" />
-                  <p className="text-xs font-bold text-slate-800">Up to 40% off</p>
-                </div>
-
-                <div className="pointer-events-none absolute right-4 top-4 hidden items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-4 py-2 text-white shadow-glow ring-1 ring-white/20 md:flex">
-                  <Award size={16} className="shrink-0 text-accent-300" />
-                  <p className="text-xs font-bold">Editor's Pick · 2026</p>
-                </div>
               </div>
             </div>
           </div>
