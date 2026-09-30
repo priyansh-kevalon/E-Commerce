@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Quote, RotateCcw, ShieldCheck, Sparkles, Star, Store, Truck } from 'lucide-react';
+import { ArrowLeft, Quote, RotateCcw, ShieldCheck, Sparkles, Star, Store, Truck } from 'lucide-react';
 import { APP_NAME } from '../utils/constants.js';
 
 const PANELS = {
@@ -101,6 +101,13 @@ export default function AuthLayout() {
         <div className="pointer-events-none absolute -bottom-28 -left-16 h-72 w-72 rounded-full bg-brand-100/60 blur-3xl" />
 
         <div className="relative flex min-h-screen flex-col px-4 py-8 sm:px-6 sm:py-10">
+          <Link
+            to="/"
+            className="relative mb-6 inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-sm transition hover:border-brand-400 hover:text-brand-700"
+          >
+            <ArrowLeft size={14} /> Back to home
+          </Link>
+
           <Link to="/" className="mb-8 flex items-center justify-center gap-2.5 lg:hidden">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-secondary-600 text-white shadow-glow">
               <Store size={19} />
