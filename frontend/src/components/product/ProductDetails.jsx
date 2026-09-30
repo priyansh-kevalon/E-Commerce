@@ -94,7 +94,7 @@ export default function ProductDetails({ product }) {
   };
 
   return (
-    <div className={stock.available > 0 ? 'pb-24 lg:pb-0' : undefined}>
+    <div>
       <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-5">
         <nav className="flex min-w-0 items-center gap-1.5 overflow-hidden rounded-md border border-slate-200 bg-white px-4 py-2.5 text-xs text-slate-500">
           <Link to="/products" className="inline-flex shrink-0 items-center gap-1 transition hover:text-brand-600">
