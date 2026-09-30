@@ -287,7 +287,7 @@ export default function Products({ preset = null }) {
           {filterPanel}
         </aside>
 
-        <div className="min-w-0">
+        <div className="min-w-0 lg:max-h-[calc(100vh-108px)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1">
           {/* Category quick pills */}
           <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pb-2">
             <button
@@ -366,6 +366,7 @@ export default function Products({ preset = null }) {
             </div>
           )}
 
+          {/* Compact grid: smaller cards with proportionate spacing */}
           <div className="mt-4">
             <ProductList
               products={data.products}
@@ -374,6 +375,7 @@ export default function Products({ preset = null }) {
               onRetry={() => setReloadKey((key) => key + 1)}
               skeletonCount={PRODUCTS_PER_PAGE}
               emptyText={search ? `No products match "${search}".` : 'No products found.'}
+              gridClassName="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-3.5 lg:grid-cols-4 lg:gap-4 xl:gap-4 2xl:grid-cols-5 2xl:gap-5"
             />
           </div>
 
