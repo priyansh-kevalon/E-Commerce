@@ -170,8 +170,8 @@ export default function Contact() {
             <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary-200/40 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
 
-            <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14 lg:p-12">
-              <div className="animate-fade-up">
+            <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14 lg:p-12">
+              <div className="animate-fade-up order-1 lg:order-2">
                 <Reveal>
                   <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-secondary-800 shadow-sm ring-1 ring-secondary-200">
                     <Headphones size={13} className="text-brand-600" /> Contact {APP_NAME}
@@ -188,7 +188,7 @@ export default function Contact() {
                   </p>
                 </Reveal>
 
-                <Reveal delay={120} className="mt-8 flex items-center gap-3">
+                <Reveal delay={120} className="mt-8 hidden items-center gap-3 lg:flex">
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star key={star} size={14} className="fill-rating text-rating" />
@@ -201,7 +201,7 @@ export default function Contact() {
                 </Reveal>
               </div>
 
-              <Reveal variant="right" className="relative">
+              <Reveal variant="right" className="relative order-2 lg:order-1">
                 <div className="relative mx-auto w-full max-w-md lg:max-w-none">
                   <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
                     <img
@@ -222,6 +222,20 @@ export default function Contact() {
                       <p className="text-xs font-bold">24×7 support</p>
                     </div>
                   </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={120} className="order-3 lg:hidden">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star key={star} size={14} className="fill-rating text-rating" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-slate-600">
+                    <span className="font-extrabold text-slate-900">4.8/5</span> support rating ·
+                    120k+ reviews
+                  </p>
                 </div>
               </Reveal>
             </div>

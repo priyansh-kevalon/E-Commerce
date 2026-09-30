@@ -134,8 +134,8 @@ export default function About() {
             <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
 
             <div className="relative p-7 sm:p-10 lg:p-12">
-              <div className="grid items-center gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14">
-                <div className="animate-fade-up">
+              <div className="grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
+                <div className="animate-fade-up order-1 lg:order-2">
                   <Reveal>
                     <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-secondary-800 shadow-sm ring-1 ring-secondary-200">
                       <Rocket size={13} className="text-brand-600" /> About {APP_NAME}
@@ -168,7 +168,7 @@ export default function About() {
                     </Link>
                   </Reveal>
 
-                  <Reveal delay={200} className="mt-9 flex flex-wrap items-center gap-4">
+                  <Reveal delay={200} className="mt-9 hidden flex-wrap items-center gap-4 lg:flex">
                     <div className="flex -space-x-3">
                       {['A', 'P', 'R', 'S'].map((initial, i) => (
                         <span
@@ -194,7 +194,7 @@ export default function About() {
                   </Reveal>
                 </div>
 
-                <Reveal variant="right" className="relative">
+                <Reveal variant="right" className="relative order-2 lg:order-1">
                   <div className="relative mx-auto w-full max-w-md lg:max-w-none">
                     <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
                       <img
@@ -230,6 +230,33 @@ export default function About() {
                     </div>
                   </div>
                 </Reveal>
+
+                <Reveal delay={200} className="order-3 lg:hidden">
+                  <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex -space-x-3">
+                      {['A', 'P', 'R', 'S'].map((initial, i) => (
+                        <span
+                          key={initial}
+                          className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-lg ${AVATAR_TINTS[i]}`}
+                        >
+                          {initial}
+                        </span>
+                      ))}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star key={star} size={13} className="fill-rating text-rating" />
+                        ))}
+                        <span className="ml-1 text-xs font-extrabold text-slate-900">4.8/5</span>
+                        <span className="text-xs font-medium text-slate-500">· 120k+ reviews</span>
+                      </div>
+                      <p className="text-xs font-medium text-slate-500">
+                        Trusted by shoppers in every state, every day.
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
               </div>
 
               <div className="mt-12 grid grid-cols-2 gap-3 border-t border-secondary-200/70 pt-8 sm:grid-cols-4 sm:gap-4">
@@ -256,7 +283,7 @@ export default function About() {
 
       {/* Story */}
       <section className="mx-auto grid max-w-[1200px] gap-12 px-6 py-12 sm:py-16 lg:grid-cols-2 lg:items-center">
-        <Reveal variant="left" className="relative">
+        <Reveal variant="left" className="relative order-2 lg:order-1">
           <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-gradient-to-br from-secondary-200 via-brand-100 to-secondary-100 blur-2xl" />
           <div className="overflow-hidden rounded-[1.75rem] border border-secondary-100 bg-white shadow-luxe">
             <img
@@ -269,7 +296,7 @@ export default function About() {
 
           </Reveal>
 
-        <div>
+        <div className="order-1 lg:order-2">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-600">Our story</p>
           <h2 className="mt-3 text-balance font-display text-3xl font-extrabold leading-tight text-slate-900 sm:text-4xl">
             Born to fix what broke online shopping
@@ -361,7 +388,7 @@ export default function About() {
             title="Meet the team shipping your orders"
             subtitle="A small, stubborn group of people who care a lot about getting the details right."
           />
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
             {TEAM.map((member, index) => (
               <Reveal
                 key={member.name}

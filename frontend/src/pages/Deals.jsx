@@ -171,7 +171,7 @@ export default function Deals() {
         <div className="pointer-events-none absolute -bottom-24 left-1/4 h-64 w-64 rounded-full bg-brand-100/40 blur-3xl" />
 
         <div className="relative flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
-          <div>
+          <div className="lg:order-2">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-secondary-800 shadow-sm ring-1 ring-secondary-200">
               <Sparkles size={13} className="text-brand-600" /> Limited-time offers
             </span>
@@ -211,7 +211,7 @@ export default function Deals() {
             </div>
           </div>
 
-          <div className="relative shrink-0 lg:pr-2">
+          <div className="relative shrink-0 lg:order-1 lg:pr-2">
 <div className="relative aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[26px] shadow-luxe ring-1 ring-secondary-100">
                 <img
                   src="https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=1000&q=80"
