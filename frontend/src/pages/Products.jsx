@@ -282,8 +282,8 @@ export default function Products({ preset = null }) {
         </div>
 
       <div className="mt-5 grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
-        {/* Filter sidebar */}
-        <aside className="hidden lg:block">
+        {/* Filter sidebar - sticks and scrolls independently while products scroll */}
+        <aside className="hidden lg:sticky lg:top-[92px] lg:block lg:max-h-[calc(100vh-108px)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1">
           {filterPanel}
         </aside>
 
