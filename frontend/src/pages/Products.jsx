@@ -68,6 +68,7 @@ export default function Products({ preset = null }) {
   const [featured, setFeatured] = useState(featuredFromUrl);
   const [page, setPage] = useState(1);
   const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [data, setData] = useState({ products: [], pagination: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -94,7 +95,10 @@ export default function Products({ preset = null }) {
       .then((result) => {
         if (active) setCategories(result);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        if (active) setCategoriesLoading(false);
+      });
     return () => {
       active = false;
     };
@@ -187,6 +191,7 @@ export default function Products({ preset = null }) {
   const filterPanel = (
     <ProductFilter
       categories={categories}
+      categoriesLoading={categoriesLoading}
       filters={filters}
       onChange={handleFilterChange}
       onReset={handleReset}

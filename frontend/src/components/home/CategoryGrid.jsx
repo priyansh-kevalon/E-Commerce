@@ -43,32 +43,20 @@ const CATEGORY_IMAGES = [
 const imageFor = (name = '') =>
   CATEGORY_IMAGES.find((entry) => entry.match.test(name.toLowerCase()))?.image || FALLBACK;
 
-const FALLBACK_CATEGORIES = [
-  { name: 'Grocery', productCount: 120 },
-  { name: 'Mobiles', productCount: 84 },
-  { name: 'Shoes', productCount: 180 },
-  { name: 'Cloths', productCount: 140 },
-  { name: 'Electronics', productCount: 156 },
-  { name: 'Home & Kitchen', productCount: 98 },
-  { name: 'Beauty', productCount: 112 },
-];
+// Fixed column count so the layout never reflows when the data lands.
+// The list is capped at 7 tiles, so 7 columns is always correct.
+const GRID_CLASS = 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-7';
+const VISIBLE_CATEGORIES = 7;
 
-export default function CategoryGrid({ categories = [] }) {
-  const items = (categories.length ? categories : FALLBACK_CATEGORIES)
-    .slice(0, 7)
-    .map((category) => ({
-      _id: category._id || category.name,
-      name: category.name,
-      count: Number(category.productCount) || 0,
-      image: imageFor(category.name),
-    }));
+export default function CategoryGrid({ categories = [], loading = false }) {
+  const items = categories.slice(0, VISIBLE_CATEGORIES).map((category) => ({
+    _id: category._id || category.name,
+    name: category.name,
+    count: Number(category.productCount) || 0,
+    image: imageFor(category.name),
+  }));
 
-  const gridClass =
-    items.length >= 7
-      ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-7'
-      : items.length === 6
-        ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6'
-        : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4';
+  const showSkeletons = loading && !items.length;
 
   return (
     <section className="mx-auto max-w-[1600px] px-3 sm:px-4 lg:px-6">
@@ -93,8 +81,25 @@ export default function CategoryGrid({ categories = [] }) {
         </Link>
       </div>
 
-      <div className={`mt-7 grid gap-3 sm:gap-4 lg:gap-5 ${gridClass}`}>
-        {items.map((category, index) => (
+      <div className={`mt-7 grid gap-3 sm:gap-4 lg:gap-5 ${GRID_CLASS}`}>
+        {showSkeletons
+          ? Array.from({ length: VISIBLE_CATEGORIES }).map((_, index) => (
+              <div
+                key={`category-skeleton-${index}`}
+                className="flex flex-col gap-3.5 rounded-2xl border border-secondary-100 bg-white p-3.5 shadow-sm"
+                aria-hidden="true"
+              >
+                <div className="skeleton aspect-[4/3] w-full rounded-xl" />
+                <div className="mt-auto flex items-center justify-between gap-2 px-0.5 pb-0.5">
+                  <div className="min-w-0 flex-1">
+                    <div className="skeleton h-4 w-3/4 rounded" />
+                    <div className="skeleton mt-1.5 h-3 w-1/2 rounded" />
+                  </div>
+                  <div className="skeleton h-7 w-7 shrink-0 rounded-full" />
+                </div>
+              </div>
+            ))
+          : items.map((category, index) => (
           <Reveal
             key={category._id}
             delay={index * 70}

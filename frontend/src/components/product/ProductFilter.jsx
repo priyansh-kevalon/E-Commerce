@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 import { CircleDollarSign, Clock, RotateCcw, SlidersHorizontal, Tag } from 'lucide-react';
 import { SORT_OPTIONS } from '../../utils/constants.js';
 
-export default function ProductFilter({ categories = [], filters, onChange, onReset, resultCount }) {
+export default function ProductFilter({
+  categories = [],
+  categoriesLoading = false,
+  filters,
+  onChange,
+  onReset,
+  resultCount,
+}) {
   const [priceDraft, setPriceDraft] = useState({
     minPrice: filters.minPrice || '',
     maxPrice: filters.maxPrice || '',
@@ -38,6 +45,17 @@ export default function ProductFilter({ categories = [], filters, onChange, onRe
     </button>
   );
 
+  const skeletonRow = (index) => (
+    <div
+      key={`cat-skeleton-${index}`}
+      className="flex min-h-11 w-full items-center justify-between gap-2 rounded-xl px-3 py-2"
+      aria-hidden="true"
+    >
+      <div className="skeleton h-4 w-2/3 rounded" />
+      <div className="skeleton h-4 w-4 shrink-0 rounded-full" />
+    </div>
+  );
+
   return (
     <aside className="overflow-hidden rounded-2xl border border-secondary-100 bg-white shadow-luxe">
       <div className="relative flex items-center justify-between bg-gradient-to-br from-secondary-200 via-secondary-100 to-brand-100 px-5 py-4">
@@ -63,11 +81,13 @@ export default function ProductFilter({ categories = [], filters, onChange, onRe
         </h3>
         <div className="mt-3 space-y-1">
           {radioRow((filters.category || '') === '', 'All Categories', () => onChange({ category: '' }))}
-          {categories.map((category) =>
-            radioRow((filters.category || '') === category.name, category.name, () =>
-              onChange({ category: category.name }),
-            ),
-          )}
+          {categoriesLoading && !categories.length
+            ? Array.from({ length: 4 }, (_, index) => skeletonRow(index))
+            : categories.map((category) =>
+                radioRow((filters.category || '') === category.name, category.name, () =>
+                  onChange({ category: category.name }),
+                ),
+              )}
         </div>
       </section>
 

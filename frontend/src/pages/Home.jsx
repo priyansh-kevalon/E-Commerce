@@ -44,7 +44,7 @@ export default function Home() {
 
       <div className="mx-auto max-w-[1600px] space-y-10 px-0 pt-6 sm:space-y-14 sm:pt-10">
         {/* 4) Browse by Category */}
-        <CategoryGrid categories={categories} />
+        <CategoryGrid categories={categories} loading={loading} />
 
         {/* 5) Promotional banner */}
         <PromoBanner product={promoProduct} />

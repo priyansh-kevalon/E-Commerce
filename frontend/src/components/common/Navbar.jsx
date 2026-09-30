@@ -62,6 +62,7 @@ export default function Navbar() {
   const [acctOpen, setAcctOpen] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const acctRef = useRef(null);
   const catRef = useRef(null);
@@ -74,7 +75,10 @@ export default function Navbar() {
       .then((list) => {
         if (active) setCategories(list);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        if (active) setCategoriesLoading(false);
+      });
     return () => {
       active = false;
     };
@@ -264,7 +268,19 @@ export default function Navbar() {
                           <ChevronRight size={15} className="text-slate-400" />
                         </Link>
                         <div className="my-1 h-px bg-slate-100" />
-                        {categories.length ? (
+                        {categoriesLoading ? (
+                          <div className="space-y-1 py-1" aria-hidden="true">
+                            {Array.from({ length: 4 }).map((_, index) => (
+                              <div
+                                key={`cat-skeleton-${index}`}
+                                className="flex items-center justify-between gap-3 rounded-xl px-3 py-2"
+                              >
+                                <div className="skeleton h-4 w-3/4 rounded" />
+                                <div className="skeleton h-4 w-7 rounded-full" />
+                              </div>
+                            ))}
+                          </div>
+                        ) : categories.length ? (
                           <div className="max-h-[45vh] overflow-y-auto">
                             {categories.map((category) => (
                               <Link
@@ -281,7 +297,9 @@ export default function Navbar() {
                             ))}
                           </div>
                         ) : (
-                          <p className="px-3 py-2 text-xs text-slate-400">Loading categories…</p>
+                          <p className="px-3 py-2 text-xs text-slate-400">
+                            Categories unavailable right now.
+                          </p>
                         )}
                         </div>
                       </div>
