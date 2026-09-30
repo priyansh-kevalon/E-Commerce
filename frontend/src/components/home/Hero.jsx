@@ -4,6 +4,12 @@ import { ArrowRight, Award, BadgePercent, Sparkles, Star } from 'lucide-react';
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80';
 
+const HERO_STATS = [
+  { value: '10k+', label: 'Products' },
+  { value: '40k+', label: 'Happy buyers' },
+  { value: '4.9', label: 'Avg. rating', star: true },
+];
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
@@ -14,8 +20,8 @@ export default function Hero() {
           <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-brand-100/50 blur-3xl" />
 
           <div className="relative grid items-center gap-10 p-7 sm:p-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14 lg:p-14">
-            {/* Left: hero image */}
-            <div className="relative mx-auto w-full max-w-md lg:order-1 lg:max-w-none">
+            {/* Hero image (mobile: after copy; desktop: left) */}
+            <div className="relative mx-auto order-2 w-full max-w-md lg:order-1 lg:max-w-none">
               <div className="relative overflow-hidden rounded-[22px] border border-secondary-100 bg-white shadow-luxe">
                 <img
                   src={HERO_IMAGE}
@@ -36,8 +42,8 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Right: copy */}
-            <div className="animate-fade-up lg:order-2">
+            {/* Hero copy (mobile: first; desktop: right) */}
+            <div className="animate-fade-up order-1 lg:order-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-secondary-800 shadow-sm ring-1 ring-secondary-200">
                 <Sparkles size={13} className="text-brand-700" />
                 New Arrival · 2026 Collection
@@ -73,12 +79,8 @@ export default function Hero() {
                 </Link>
               </div>
 
-              <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-secondary-200/70 pt-6 sm:gap-x-8">
-                {[
-                  { value: '10k+', label: 'Products' },
-                  { value: '40k+', label: 'Happy buyers' },
-                  { value: '4.9', label: 'Avg. rating', star: true },
-                ].map((stat, index) => (
+              <div className="mt-10 hidden flex-wrap items-center gap-x-5 gap-y-3 border-t border-secondary-200/70 pt-6 sm:gap-x-8 lg:flex">
+                {HERO_STATS.map((stat, index) => (
                   <div
                     key={stat.label}
                     className={`flex items-center gap-2 ${
@@ -99,6 +101,29 @@ export default function Hero() {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Mobile-only stats (after image, before nothing else) */}
+          <div className="order-3 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-secondary-200/70 pt-6 sm:gap-x-8 lg:hidden">
+            {HERO_STATS.map((stat, index) => (
+              <div
+                key={stat.label}
+                className={`flex items-center gap-2 ${
+                  index > 0 ? 'border-l border-secondary-200/70 pl-5 sm:pl-8' : ''
+                }`}
+              >
+                <p className="font-display text-lg font-extrabold text-slate-900 sm:text-xl">
+                  {stat.value}
+                  {stat.star && (
+                    <Star
+                      size={14}
+                      className="mb-0.5 ml-1 inline fill-accent-500 text-accent-500"
+                    />
+                  )}
+                </p>
+                <p className="text-xs font-medium text-slate-500">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
