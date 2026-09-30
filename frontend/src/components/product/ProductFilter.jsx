@@ -21,7 +21,7 @@ export default function ProductFilter({ categories = [], filters, onChange, onRe
     <button
       type="button"
       onClick={onClick}
-      className={`flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-sm transition ${
+      className={`flex min-h-11 w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-sm transition ${
         active
           ? 'bg-brand-50 font-semibold text-brand-800 ring-1 ring-brand-200'
           : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
@@ -51,7 +51,7 @@ export default function ProductFilter({ categories = [], filters, onChange, onRe
         <button
           type="button"
           onClick={onReset}
-          className="relative inline-flex items-center gap-1 rounded-full bg-white/80 px-3 py-1.5 text-xs font-bold text-brand-700 shadow-sm ring-1 ring-secondary-200 transition hover:bg-white"
+          className="relative inline-flex min-h-9 items-center gap-1 rounded-full bg-white/80 px-3 py-2 text-xs font-bold text-brand-700 shadow-sm ring-1 ring-secondary-200 transition hover:bg-white"
         >
           <RotateCcw size={12} /> Clear all
         </button>
@@ -90,7 +90,7 @@ export default function ProductFilter({ categories = [], filters, onChange, onRe
                 onChange={(event) =>
                   setPriceDraft((draft) => ({ ...draft, minPrice: event.target.value }))
                 }
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-6 pr-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-6 pr-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100"
               />
             </div>
             <span className="text-xs font-semibold text-slate-400">to</span>
@@ -107,13 +107,13 @@ export default function ProductFilter({ categories = [], filters, onChange, onRe
                 onChange={(event) =>
                   setPriceDraft((draft) => ({ ...draft, maxPrice: event.target.value }))
                 }
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-6 pr-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-6 pr-2.5 text-sm outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100"
               />
             </div>
           </div>
           <button
             type="submit"
-            className="mt-2.5 w-full rounded-xl border border-brand-200 bg-brand-50 py-2 text-xs font-bold text-brand-700 transition hover:border-brand-400 hover:bg-brand-100"
+            className="mt-2.5 w-full min-h-9 rounded-xl border border-brand-200 bg-brand-50 py-2 text-xs font-bold text-brand-700 transition hover:border-brand-400 hover:bg-brand-100"
           >
             Apply price
           </button>

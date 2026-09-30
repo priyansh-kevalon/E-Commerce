@@ -4,8 +4,6 @@ import {
   BadgePercent,
   Check,
   Heart,
-  Minus,
-  Plus,
   ShoppingCart,
   Star,
   Truck,

@@ -143,7 +143,7 @@ export default function ProductDetails({ product }) {
               </button>
             </div>
 
-            <div className="mt-4 flex gap-2 lg:hidden">
+            <div className="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-1 lg:hidden">
               {images.map((image, index) => (
                 <button
                   key={`${image}-${index}`}
@@ -295,13 +295,13 @@ export default function ProductDetails({ product }) {
         </div>
 
         <div className="mt-5 overflow-hidden rounded-md border border-slate-200 bg-white">
-          <div className="flex gap-1 border-b border-slate-200 px-2 sm:px-4">
+          <div className="no-scrollbar flex gap-1 overflow-x-auto border-b border-slate-200 px-2 sm:px-4">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative px-4 py-3.5 text-sm font-semibold uppercase tracking-wide transition ${
+                className={`relative shrink-0 whitespace-nowrap px-4 py-3.5 text-sm font-semibold uppercase tracking-wide transition ${
                   activeTab === tab.id ? 'text-brand-600' : 'text-slate-500 hover:text-slate-800'
                 }`}
               >

@@ -319,7 +319,7 @@ export default function Products({ preset = null }) {
 
           {/* Toolbar */}
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2.5">
               <button
                 type="button"
                 onClick={() => setFiltersOpen(true)}
@@ -327,7 +327,7 @@ export default function Products({ preset = null }) {
               >
                 <SlidersHorizontal size={15} /> Filters
               </button>
-              <h2 className="text-sm font-extrabold text-slate-900">
+              <h2 className="min-w-0 line-clamp-1 text-sm font-extrabold text-slate-900">
                 {search
                   ? `Results for "${search}"`
                   : presetConfig
@@ -381,12 +381,12 @@ export default function Products({ preset = null }) {
 
           {/* Pagination */}
           {!loading && !error && pagination && pagination.totalPages > 1 && (
-            <div className="mt-7 flex items-center justify-center gap-2">
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
               <button
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={!pagination.hasPrevPage}
-                className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white"
+                className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white sm:px-4"
               >
                 <ChevronLeft size={15} /> Prev
               </button>
@@ -396,7 +396,7 @@ export default function Products({ preset = null }) {
                   key={number}
                   type="button"
                   onClick={() => setPage(number)}
-                  className={`h-9 w-9 rounded-full text-sm font-bold transition ${
+                  className={`h-8 w-8 rounded-full text-xs font-bold transition sm:h-9 sm:w-9 sm:text-sm ${
                     number === pagination.page
                       ? 'bg-gradient-to-br from-brand-600 to-brand-800 text-white shadow-glow'
                       : 'border border-slate-200 bg-white text-slate-600 shadow-sm hover:border-brand-400 hover:text-brand-700'
@@ -410,7 +410,7 @@ export default function Products({ preset = null }) {
                 type="button"
                 onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                 disabled={!pagination.hasNextPage}
-                className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white"
+                className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white sm:px-4"
               >
                 Next <ChevronRight size={15} />
               </button>

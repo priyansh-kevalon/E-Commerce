@@ -54,7 +54,7 @@ export default function CartItem({ item }) {
             type="button"
             aria-label="Remove item"
             onClick={() => removeItem(product._id)}
-            className="rounded-sm p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
+            className="rounded-sm p-2.5 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
           >
             <Trash2 size={16} />
           </button>
@@ -67,11 +67,11 @@ export default function CartItem({ item }) {
               aria-label="Decrease quantity"
               onClick={() => updateQuantity(product._id, quantity - 1)}
               disabled={quantity <= 1}
-              className="px-2.5 py-1.5 text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
+              className="flex h-11 w-11 items-center justify-center text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
             >
               <Minus size={14} />
             </button>
-            <span className="w-9 border-x border-slate-300 text-center text-sm font-semibold text-slate-800">
+            <span className="flex w-11 items-center justify-center border-x border-slate-300 text-center text-sm font-semibold text-slate-800">
               {quantity}
             </span>
             <button
@@ -79,7 +79,7 @@ export default function CartItem({ item }) {
               aria-label="Increase quantity"
               onClick={() => updateQuantity(product._id, quantity + 1)}
               disabled={quantity >= stock.available}
-              className="px-2.5 py-1.5 text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
+              className="flex h-11 w-11 items-center justify-center text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
             >
               <Plus size={14} />
             </button>

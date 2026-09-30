@@ -260,12 +260,12 @@ export default function Deals() {
 
       {/* Toolbar */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-        <div className="flex items-center gap-2.5">
+        <div className="flex min-w-0 items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-secondary-100 text-brand-700 ring-1 ring-secondary-200">
             <Tag size={16} />
           </span>
-          <div>
-            <h2 className="text-sm font-extrabold text-slate-900">
+          <div className="min-w-0">
+            <h2 className="truncate text-sm font-extrabold text-slate-900">
               {filters.category ? `${filters.category} deals` : "Today's live deals"}
             </h2>
             <span className="inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-brand-700 ring-1 ring-brand-200">
@@ -300,7 +300,7 @@ export default function Deals() {
               <div
                 role="listbox"
                 aria-label="Sort products"
-                className="absolute right-0 top-full mt-2 w-64 animate-fade-up rounded-2xl border border-secondary-100 bg-white p-2 shadow-luxe"
+                className="absolute left-0 top-full mt-2 w-64 animate-fade-up rounded-2xl border border-secondary-100 bg-white p-2 shadow-luxe sm:left-auto sm:right-0"
               >
                 <p className="px-2.5 pb-1.5 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
                   Sort deals
@@ -359,12 +359,12 @@ export default function Deals() {
 
       {/* Pagination */}
       {!loading && !error && pagination && pagination.totalPages > 1 && (
-        <div className="mt-7 flex items-center justify-center gap-2">
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
           <button
             type="button"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={!pagination.hasPrevPage}
-            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white"
+            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white sm:px-4"
           >
             <ChevronLeft size={15} /> Prev
           </button>
@@ -374,7 +374,7 @@ export default function Deals() {
               key={number}
               type="button"
               onClick={() => setPage(number)}
-              className={`h-9 w-9 rounded-full text-sm font-bold transition ${
+              className={`h-8 w-8 rounded-full text-xs font-bold transition sm:h-9 sm:w-9 sm:text-sm ${
                 number === pagination.page
                   ? 'bg-gradient-to-br from-brand-600 to-brand-800 text-white shadow-glow'
                   : 'border border-slate-200 bg-white text-slate-600 shadow-sm hover:border-brand-400 hover:text-brand-700'
@@ -388,7 +388,7 @@ export default function Deals() {
             type="button"
             onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
             disabled={!pagination.hasNextPage}
-            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white"
+            className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-brand-600 shadow-sm transition hover:border-brand-400 hover:bg-brand-50 disabled:border-slate-200 disabled:text-slate-300 disabled:shadow-none disabled:hover:bg-white sm:px-4"
           >
             Next <ChevronRight size={15} />
           </button>

@@ -71,9 +71,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Behind a proxy (Render) the client IP must come from the trust proxy.
 app.set('trust proxy', 1);
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 300,
+    limit: isProduction ? 300 : 1000,
     standardHeaders: 'draft-7',
     legacyHeaders: false,
     message: { success: false, message: 'Too many requests, please try again later.' },
@@ -81,7 +83,7 @@ const apiLimiter = rateLimit({
 
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 20,
+    limit: isProduction ? 20 : 60,
     standardHeaders: 'draft-7',
     legacyHeaders: false,
     message: {
