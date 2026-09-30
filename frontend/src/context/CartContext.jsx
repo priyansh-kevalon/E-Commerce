@@ -135,6 +135,13 @@ export function CartProvider({ children }) {
     async (productId, quantity) => {
       const next = Math.max(0, Number(quantity) || 0);
 
+      // A quantity of zero (or less) removes the line entirely, so the UI can
+      // fall back to the "Add to cart" button.
+      if (next === 0) {
+        await removeItem(productId);
+        return;
+      }
+
       if (isAuthenticated) {
         try {
           setItems(await cartApi.updateCartItem(productId, next));
@@ -148,11 +155,11 @@ export function CartProvider({ children }) {
         prev.map((item) => {
           if (item.product._id !== productId) return item;
           const maxStock = Number(item.product.stock) || 1;
-          return { ...item, quantity: Math.max(1, Math.min(next || 1, maxStock)) };
+          return { ...item, quantity: Math.max(1, Math.min(next, maxStock)) };
         })
       );
     },
-    [isAuthenticated]
+    [isAuthenticated, removeItem]
   );
 
   const clearCart = useCallback(async () => {
@@ -168,6 +175,16 @@ export function CartProvider({ children }) {
   }, [isAuthenticated]);
 
   const totalItems = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
+
+  // Lets any product surface read its own cart quantity from the shared cart
+  // state, so listing, detail, search and cart views stay in sync.
+  const getItemQuantity = useCallback(
+    (productId) => {
+      const line = items.find((item) => item.product._id === productId);
+      return line ? Number(line.quantity) || 0 : 0;
+    },
+    [items]
+  );
 
   const subtotal = useMemo(
     () => items.reduce((sum, item) => sum + getEffectivePrice(item.product) * item.quantity, 0),
@@ -189,6 +206,7 @@ export function CartProvider({ children }) {
       updateQuantity,
       clearCart,
       refresh,
+      getItemQuantity,
       totalItems,
       subtotal,
       shippingCost,
@@ -203,6 +221,7 @@ export function CartProvider({ children }) {
       updateQuantity,
       clearCart,
       refresh,
+      getItemQuantity,
       totalItems,
       subtotal,
       shippingCost,

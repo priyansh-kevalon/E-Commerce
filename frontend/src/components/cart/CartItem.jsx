@@ -64,10 +64,9 @@ export default function CartItem({ item }) {
           <div className="inline-flex items-center rounded-sm border border-slate-300">
             <button
               type="button"
-              aria-label="Decrease quantity"
+              aria-label={quantity <= 1 ? 'Remove item' : 'Decrease quantity'}
               onClick={() => updateQuantity(product._id, quantity - 1)}
-              disabled={quantity <= 1}
-              className="flex h-11 w-11 items-center justify-center text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
+              className="flex h-11 w-11 items-center justify-center text-slate-600 transition hover:bg-slate-50"
             >
               <Minus size={14} />
             </button>

@@ -4,6 +4,8 @@ import {
   BadgePercent,
   Check,
   Heart,
+  Minus,
+  Plus,
   ShoppingCart,
   Star,
   Truck,
@@ -20,9 +22,10 @@ import {
 import SmartImage from '../common/SmartImage.jsx';
 
 export default function ProductCard({ product, minimal = false }) {
-  const { addItem } = useCart();
+  const { addItem, getItemQuantity, updateQuantity } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const [adding, setAdding] = useState(false);
+  const [changingQty, setChangingQty] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
   const stock = getStockInfo(product.stock);
@@ -32,6 +35,8 @@ export default function ProductCard({ product, minimal = false }) {
   const rating = Number(product.rating) || 0;
   const category = getCategoryName(product);
   const savings = discount > 0 ? Math.round((Number(product.price) || 0) - effectivePrice) : 0;
+  const cartQuantity = getItemQuantity(product._id);
+  const inCart = cartQuantity > 0;
 
   useEffect(() => {
     if (feedback?.type !== 'success') return undefined;
@@ -49,6 +54,19 @@ export default function ProductCard({ product, minimal = false }) {
       setFeedback({ type: 'error', message: err.message || 'Could not add this item.' });
     } finally {
       setAdding(false);
+    }
+  };
+
+  // Stepper handler: 0 removes the line, so the Add to cart button returns.
+  const handleChangeQuantity = async (nextQuantity) => {
+    setChangingQty(true);
+    setFeedback(null);
+    try {
+      await updateQuantity(product._id, nextQuantity);
+    } catch (err) {
+      setFeedback({ type: 'error', message: err.message || 'Could not update the cart.' });
+    } finally {
+      setChangingQty(false);
     }
   };
 
@@ -118,15 +136,44 @@ export default function ProductCard({ product, minimal = false }) {
               </span>
             )}
           </div>
-          <button
-            type="button"
-            disabled={stock.available <= 0 || adding}
-            onClick={handleAddToCart}
-            className="btn-shine mt-auto inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand-700 to-brand-900 px-3 py-2.5 text-[12px] font-bold text-white shadow-glow transition duration-300 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-100 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
-          >
-            {feedback?.type === 'success' ? <Check size={14} /> : <ShoppingCart size={14} />}
-            {stock.available <= 0 ? 'Sold out' : adding ? 'Adding...' : 'Add to cart'}
-          </button>
+          {inCart ? (
+            <div className="mt-auto flex w-full items-center justify-between rounded-xl border border-brand-200 bg-brand-50 px-1 py-1">
+              <button
+                type="button"
+                aria-label={`Decrease quantity of ${product.name}`}
+                disabled={changingQty}
+                onClick={() => handleChangeQuantity(cartQuantity - 1)}
+                className="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-brand-700 shadow-sm transition hover:bg-white active:scale-95 disabled:opacity-50"
+              >
+                <Minus size={13} />
+              </button>
+              <span
+                aria-live="polite"
+                className="text-[13px] font-extrabold tabular-nums text-slate-900"
+              >
+                {cartQuantity}
+              </span>
+              <button
+                type="button"
+                aria-label={`Increase quantity of ${product.name}`}
+                disabled={changingQty || cartQuantity >= stock.available}
+                onClick={() => handleChangeQuantity(cartQuantity + 1)}
+                className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-700 text-white shadow-sm transition hover:bg-brand-800 active:scale-95 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+              >
+                <Plus size={13} />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              disabled={stock.available <= 0 || adding}
+              onClick={handleAddToCart}
+              className="btn-shine mt-auto inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand-700 to-brand-900 px-3 py-2.5 text-[12px] font-bold text-white shadow-glow transition duration-300 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-100 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
+            >
+              {feedback?.type === 'success' ? <Check size={14} /> : <ShoppingCart size={14} />}
+              {stock.available <= 0 ? 'Sold out' : adding ? 'Adding...' : 'Add to cart'}
+            </button>
+          )}
           {feedback && (
             <p
               role="status"
@@ -214,15 +261,41 @@ export default function ProductCard({ product, minimal = false }) {
           )}
         </div>
 
-        <button
-          type="button"
-          disabled={stock.available <= 0 || adding}
-          onClick={handleAddToCart}
-          className="btn-shine mt-auto inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand-700 to-brand-900 px-3 py-2.5 text-[13px] font-bold text-white shadow-glow transition duration-300 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-100 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
-        >
-          {feedback?.type === 'success' ? <Check size={15} /> : <ShoppingCart size={15} />}
-          {stock.available <= 0 ? 'Sold out' : adding ? 'Adding...' : 'Add to cart'}
-        </button>
+        {inCart ? (
+          <div className="mt-auto flex w-full items-center justify-between rounded-xl border border-brand-200 bg-brand-50 px-1.5 py-1.5">
+            <button
+              type="button"
+              aria-label={`Decrease quantity of ${product.name}`}
+              disabled={changingQty}
+              onClick={() => handleChangeQuantity(cartQuantity - 1)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-brand-700 shadow-sm transition hover:bg-white active:scale-95 disabled:opacity-50"
+            >
+              <Minus size={15} />
+            </button>
+            <span aria-live="polite" className="text-sm font-extrabold tabular-nums text-slate-900">
+              {cartQuantity}
+            </span>
+            <button
+              type="button"
+              aria-label={`Increase quantity of ${product.name}`}
+              disabled={changingQty || cartQuantity >= stock.available}
+              onClick={() => handleChangeQuantity(cartQuantity + 1)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700 text-white shadow-sm transition hover:bg-brand-800 active:scale-95 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+            >
+              <Plus size={15} />
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            disabled={stock.available <= 0 || adding}
+            onClick={handleAddToCart}
+            className="btn-shine mt-auto inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-brand-700 to-brand-900 px-3 py-2.5 text-[13px] font-bold text-white shadow-glow transition duration-300 hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-100 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
+          >
+            {feedback?.type === 'success' ? <Check size={15} /> : <ShoppingCart size={15} />}
+            {stock.available <= 0 ? 'Sold out' : adding ? 'Adding...' : 'Add to cart'}
+          </button>
+        )}
 
         {feedback && (
           <p

@@ -48,7 +48,7 @@ const OFFERS = [
 
 export default function ProductDetails({ product }) {
   const navigate = useNavigate();
-  const { addItem } = useCart();
+  const { addItem, getItemQuantity, updateQuantity } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const [quantity, setQuantity] = useState(1);
   const [addState, setAddState] = useState('idle');
@@ -72,6 +72,8 @@ export default function ProductDetails({ product }) {
   const inWishlist = isWishlisted(product._id);
   const maxQuantity = Math.max(1, stock.available);
   const rating = Number(product.rating) || 0;
+  const cartQuantity = getItemQuantity(product._id);
+  const inCart = cartQuantity > 0;
 
   const deliveryBy = formatDate(new Date(Date.now() + 4 * 24 * 60 * 60 * 1000));
 
@@ -90,6 +92,20 @@ export default function ProductDetails({ product }) {
     } catch (err) {
       setAddState('idle');
       setAddError(err.message || 'Could not add this item to your cart.');
+    }
+  };
+
+  // Keeps the cart line in step with the shared cart state. Reaching 0 removes
+  // the item, which brings the "Add to Cart" button back.
+  const handleChangeQuantity = async (nextQuantity) => {
+    setAddError(null);
+    setAddState('adding');
+    try {
+      await updateQuantity(product._id, nextQuantity);
+      setAddState('idle');
+    } catch (err) {
+      setAddState('idle');
+      setAddError(err.message || 'Could not update your cart.');
     }
   };
 
@@ -160,21 +176,50 @@ export default function ProductDetails({ product }) {
             </div>
 
             <div className="mt-5 flex gap-3">
-              <button
-                type="button"
-                onClick={() => handleAddToCart(false)}
-                disabled={stock.available <= 0 || addState === 'adding'}
-                className="btn-shine flex flex-1 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-accent-500 to-accent-600 px-6 py-3.5 text-sm font-bold text-ink shadow-glow-accent transition hover:brightness-105 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
-              >
-                <ShoppingCart size={18} />
-                {stock.available <= 0
-                  ? 'Out of stock'
-                  : addState === 'adding'
-                    ? 'Adding...'
-                    : addState === 'added'
-                      ? 'Added to cart'
-                      : 'Add to Cart'}
-              </button>
+              {inCart ? (
+                <div className="flex flex-1 items-center justify-between gap-2 rounded-md border border-brand-200 bg-brand-50 px-4 py-2.5">
+                  <button
+                    type="button"
+                    aria-label={`Decrease quantity of ${product.name}`}
+                    disabled={addState === 'adding'}
+                    onClick={() => handleChangeQuantity(cartQuantity - 1)}
+                    className="flex h-9 w-9 items-center justify-center rounded-md bg-white text-brand-700 shadow-sm transition hover:bg-slate-100 active:scale-95 disabled:opacity-50"
+                  >
+                    <Minus size={16} />
+                  </button>
+                  <span
+                    aria-live="polite"
+                    className="min-w-[3rem] text-center text-base font-bold tabular-nums text-slate-900"
+                  >
+                    {cartQuantity}
+                  </span>
+                  <button
+                    type="button"
+                    aria-label={`Increase quantity of ${product.name}`}
+                    disabled={addState === 'adding' || cartQuantity >= maxQuantity}
+                    onClick={() => handleChangeQuantity(cartQuantity + 1)}
+                    className="flex h-9 w-9 items-center justify-center rounded-md bg-brand-700 text-white shadow-sm transition hover:bg-brand-800 active:scale-95 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleAddToCart(false)}
+                  disabled={stock.available <= 0 || addState === 'adding'}
+                  className="btn-shine flex flex-1 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-accent-500 to-accent-600 px-6 py-3.5 text-sm font-bold text-ink shadow-glow-accent transition hover:brightness-105 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:bg-none disabled:text-slate-400 disabled:shadow-none"
+                >
+                  <ShoppingCart size={18} />
+                  {stock.available <= 0
+                    ? 'Out of stock'
+                    : addState === 'adding'
+                      ? 'Adding...'
+                      : addState === 'added'
+                        ? 'Added to cart'
+                        : 'Add to Cart'}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => handleAddToCart(true)}
@@ -365,18 +410,46 @@ export default function ProductDetails({ product }) {
             <div className="min-w-0">
               <p className="truncate text-xs text-slate-500">{product.name}</p>
               <p className="text-lg font-bold text-slate-900">
-                {formatCurrency(effectivePrice * quantity)}
+                {formatCurrency(effectivePrice * (inCart ? cartQuantity : quantity))}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => handleAddToCart(false)}
-              disabled={addState === 'adding'}
-              className="btn-shine ml-auto inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-accent-500 to-accent-600 px-6 py-3 text-sm font-bold text-ink shadow-glow-accent transition hover:brightness-105 disabled:bg-slate-300 disabled:bg-none disabled:shadow-none"
-            >
-              <ShoppingCart size={17} />
-              {addState === 'adding' ? 'Adding...' : addState === 'added' ? 'Added' : 'Add to Cart'}
-            </button>
+            {inCart ? (
+              <div className="ml-auto flex items-center gap-1 rounded-md border border-brand-200 bg-brand-50 p-1">
+                <button
+                  type="button"
+                  aria-label={`Decrease quantity of ${product.name}`}
+                  onClick={() => handleChangeQuantity(cartQuantity - 1)}
+                  className="flex h-9 w-9 items-center justify-center rounded-md bg-white text-brand-700 shadow-sm transition active:scale-95"
+                >
+                  <Minus size={15} />
+                </button>
+                <span
+                  aria-live="polite"
+                  className="min-w-[2rem] text-center text-sm font-bold tabular-nums text-slate-900"
+                >
+                  {cartQuantity}
+                </span>
+                <button
+                  type="button"
+                  aria-label={`Increase quantity of ${product.name}`}
+                  disabled={cartQuantity >= maxQuantity}
+                  onClick={() => handleChangeQuantity(cartQuantity + 1)}
+                  className="flex h-9 w-9 items-center justify-center rounded-md bg-brand-700 text-white shadow-sm transition active:scale-95 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                >
+                  <Plus size={15} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleAddToCart(false)}
+                disabled={addState === 'adding'}
+                className="btn-shine ml-auto inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-accent-500 to-accent-600 px-6 py-3 text-sm font-bold text-ink shadow-glow-accent transition hover:brightness-105 disabled:bg-slate-300 disabled:bg-none disabled:shadow-none"
+              >
+                <ShoppingCart size={17} />
+                {addState === 'adding' ? 'Adding...' : addState === 'added' ? 'Added' : 'Add to Cart'}
+              </button>
+            )}
           </div>
         </div>
       )}
