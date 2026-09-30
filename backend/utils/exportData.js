@@ -23,6 +23,11 @@ await mkdir(DATA_DIR, { recursive: true });
 for (const name of COLLECTIONS) {
     const docs = await conn.connection.db.collection(name).find({}).toArray();
 
+    if (name === 'users') {
+        // Credentials must never land in a backup file on disk / in git.
+        for (const doc of docs) delete doc.password;
+    }
+
     // JSON.stringify turns ObjectId -> hex and Date -> ISO automatically,
     // so the backup files stay readable and portable.
     const serialized = JSON.parse(

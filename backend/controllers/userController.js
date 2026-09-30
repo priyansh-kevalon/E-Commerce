@@ -84,6 +84,9 @@ export const changePassword = async (req, res, next) => {
     }
 
     user.password = newPassword;
+    // Invalidate every previously issued token so a compromised session is
+    // dead the moment the password rotates.
+    user.tokenVersion = (user.tokenVersion || 0) + 1;
     await user.save();
 
     return successResponse(res, 'Password changed successfully');

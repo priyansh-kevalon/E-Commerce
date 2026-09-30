@@ -5,7 +5,7 @@ import { validateRegister, validateLogin } from '../validators/authValidator.js'
 
 // Shape a user for API responses (never includes password).
 const buildAuthPayload = (user) => ({
-  token: generateToken(user._id),
+  token: generateToken(user),
   user: {
     _id: user._id,
     name: user.name,
@@ -18,8 +18,9 @@ const buildAuthPayload = (user) => ({
 
 /**
  * @route   POST /api/auth/register
- * @desc    Register a new customer (or seller) account. Regular users can
- *          never self-assign the admin role.
+ * @desc    Register a new customer account. Self-registration always yields a
+ *          customer - admin and seller roles are granted by an admin only
+ *          (see userController / admin routes).
  * @access  Public
  */
 export const register = async (req, res, next) => {
@@ -30,7 +31,7 @@ export const register = async (req, res, next) => {
     }
 
     const { name, email, password } = req.body;
-    const role = req.body.role === 'seller' ? 'seller' : 'customer';
+    const role = 'customer';
 
     const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
     if (existingUser) {

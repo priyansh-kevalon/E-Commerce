@@ -24,7 +24,7 @@ services:
       - key: JWT_SECRET
         sync: false
       - key: CLIENT_URL
-        value: https://frontend-7t2n.onrender.com
+        value: https://velmora-web.onrender.com
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
@@ -42,4 +42,4 @@ services:
       - key: NODE_ENV
         value: production
       - key: VITE_API_URL
-        value: https://backend-fj6z.onrender.com/api
+        value: https://velmora-api.onrender.com/api

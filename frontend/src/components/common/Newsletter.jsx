@@ -1,16 +1,30 @@
 import { useState } from 'react';
 import { CheckCircle2, Send, Sparkles } from 'lucide-react';
 import Reveal from './Reveal.jsx';
+import api from '../../services/api.js';
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
   const [done, setDone] = useState(false);
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!email.trim()) return;
-    setDone(true);
-    setEmail('');
+    const value = email.trim();
+    if (!value) return;
+
+    setSubmitting(true);
+    setError('');
+    try {
+      await api.post('/newsletter', { email: value });
+      setDone(true);
+      setEmail('');
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -41,26 +55,30 @@ export default function Newsletter() {
               <p className="text-sm font-medium">Subscribed. Check your inbox for the code.</p>
             </div>
           ) : (
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-2 sm:flex-row sm:items-center sm:overflow-hidden sm:rounded-full sm:bg-white sm:p-1 sm:ring-1 sm:ring-brand-200 sm:transition sm:focus-within:ring-2 sm:focus-within:ring-brand-500"
-            >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="Enter your email address"
-                aria-label="Email address"
-                className="min-w-0 flex-1 rounded-full bg-white px-5 py-3 text-sm text-slate-800 outline-none ring-1 ring-brand-200 transition placeholder:text-slate-400 sm:bg-transparent sm:py-2.5 sm:ring-0"
-              />
-              <button
-                type="submit"
-                className="btn-shine inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-brand-800 px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:scale-[1.03] sm:py-2.5"
+            <>
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-2 sm:flex-row sm:items-center sm:overflow-hidden sm:rounded-full sm:bg-white sm:p-1 sm:ring-1 sm:ring-brand-200 sm:transition sm:focus-within:ring-2 sm:focus-within:ring-brand-500"
               >
-                Subscribe <Send size={15} />
-              </button>
-            </form>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="Enter your email address"
+                  aria-label="Email address"
+                  className="min-w-0 flex-1 rounded-full bg-white px-5 py-3 text-sm text-slate-800 outline-none ring-1 ring-brand-200 transition placeholder:text-slate-400 sm:bg-transparent sm:py-2.5 sm:ring-0"
+                />
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="btn-shine inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-brand-800 px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-70 sm:py-2.5"
+                >
+                  {submitting ? 'Subscribing…' : 'Subscribe'} <Send size={15} />
+                </button>
+              </form>
+              {error && <p className="mt-2.5 text-center text-xs font-medium text-red-600">{error}</p>}
+            </>
           )}
         </div>
       </div>

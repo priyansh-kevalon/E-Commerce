@@ -29,6 +29,11 @@ export const protect = async (req, res, next) => {
       return errorResponse(res, 'Your account has been disabled', 403);
     }
 
+    // A token minted before the user's last password change is stale.
+    if ((decoded.tv || 0) !== (user.tokenVersion || 0)) {
+      return errorResponse(res, 'Not authorized, session has expired', 401);
+    }
+
     req.user = user;
     next();
   } catch (error) {
@@ -56,7 +61,7 @@ export const optionalProtect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
-    if (user && user.isActive) {
+    if (user && user.isActive && (decoded.tv || 0) === (user.tokenVersion || 0)) {
       req.user = user;
     }
 

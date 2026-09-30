@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
@@ -14,6 +15,7 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
+import newsletterRoutes from './routes/newsletterRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import sellerRoutes from './routes/sellerRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
@@ -22,6 +24,24 @@ dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(
     import.meta.url));
+
+// -------------------- Startup safety checks --------------------
+// A weak or missing JWT_SECRET means every token the API signs (and any token
+// in the wild) is moot. Fail fast in production; warn loudly in development.
+const jwtSecret = (process.env.JWT_SECRET || '').trim();
+const isPlaceholderSecret =
+    jwtSecret.length < 32 ||
+    /<[a-zA-Z0-9_-]+>/.test(jwtSecret) ||
+    /change_this|your[_ -]?secret/i.test(jwtSecret);
+if (!jwtSecret || isPlaceholderSecret) {
+    const message =
+        'JWT_SECRET must be a unique, random string of at least 32 characters ' +
+        '(e.g. `openssl rand -hex 32`). Refusing to start with an insecure secret.';
+    console.error(`[AUTH] ${message}`);
+    if ((process.env.NODE_ENV || 'development') === 'production') {
+        process.exit(1);
+    }
+}
 
 const app = express();
 
@@ -45,6 +65,33 @@ app.use(
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// -------------------- Rate limiting --------------------
+// A gentle global cap plus a strict limiter on credential endpoints.
+// Behind a proxy (Render) the client IP must come from the trust proxy.
+app.set('trust proxy', 1);
+
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 300,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { success: false, message: 'Too many requests, please try again later.' },
+});
+
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 20,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: {
+        success: false,
+        message: 'Too many login/registration attempts, please try again later.',
+    },
+});
+
+app.use('/api', apiLimiter);
+app.use('/api/auth', authLimiter);
 
 // -------------------- Test route --------------------
 app.get('/api/health', (req, res) => {
@@ -108,6 +155,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/coupons', couponRoutes);
+app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/seller', sellerRoutes);
 

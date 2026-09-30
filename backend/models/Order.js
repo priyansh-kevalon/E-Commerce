@@ -93,6 +93,18 @@ const orderSchema = new mongoose.Schema(
       required: true,
       min: [0, 'Total amount cannot be negative'],
     },
+    couponCode: {
+      type: String,
+      default: '',
+      trim: true,
+      uppercase: true,
+      maxlength: [40, 'Coupon code cannot exceed 40 characters'],
+    },
+    couponDiscount: {
+      type: Number,
+      default: 0,
+      min: [0, 'Coupon discount cannot be negative'],
+    },
   },
   { timestamps: true }
 );

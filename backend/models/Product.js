@@ -23,6 +23,14 @@ const productSchema = new mongoose.Schema(
       type: Number,
       min: [0, 'Discount price cannot be negative'],
       default: 0,
+      validate: {
+        validator(value) {
+          // A discount can never exceed the list price. Zero (or unset) means "no discount".
+          if (!value || value === 0) return true;
+          return !this.price || value <= this.price;
+        },
+        message: 'Discount price cannot be higher than the regular price',
+      },
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,

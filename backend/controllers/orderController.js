@@ -3,6 +3,7 @@ import Order from '../models/Order.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js';
 import User from '../models/User.js';
+import Coupon from '../models/Coupon.js';
 import { successResponse, errorResponse } from '../utils/responseHandler.js';
 import { validateOrder } from '../validators/orderValidator.js';
 
@@ -42,7 +43,7 @@ export const createOrder = async (req, res, next) => {
       return errorResponse(res, errors[0], 400, errors);
     }
 
-    const { shippingAddress, paymentMethod = 'COD' } = req.body;
+    const { shippingAddress, paymentMethod = 'COD', couponCode } = req.body;
 
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart || cart.items.length === 0) {
@@ -80,7 +81,46 @@ export const createOrder = async (req, res, next) => {
     }
 
     const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CHARGE;
-    const totalAmount = subtotal + shippingCost;
+
+    // Resolve + apply the coupon server-side on the re-priced subtotal.
+    // The client is never trusted with the discount amount.
+    let couponDiscount = 0;
+    let appliedCoupon = null;
+    if (couponCode !== undefined && couponCode !== null && String(couponCode).trim() !== '') {
+      const normalizedCode = String(couponCode).replace(/\s+/g, '').toUpperCase();
+      appliedCoupon = await Coupon.findOne({ code: normalizedCode });
+      if (!appliedCoupon) return errorResponse(res, 'Invalid coupon code', 400);
+      if (!appliedCoupon.isActive) {
+        return errorResponse(res, 'This coupon is no longer active', 400);
+      }
+      if (appliedCoupon.expiresAt && new Date(appliedCoupon.expiresAt).getTime() < Date.now()) {
+        return errorResponse(res, 'This coupon has expired', 400);
+      }
+      if (appliedCoupon.usageLimit > 0 && appliedCoupon.usedCount >= appliedCoupon.usageLimit) {
+        return errorResponse(res, 'This coupon has reached its usage limit', 400);
+      }
+      if (subtotal < appliedCoupon.minOrder) {
+        return errorResponse(
+          res,
+          `This coupon needs a minimum order of Rs.${appliedCoupon.minOrder}`,
+          400
+        );
+      }
+
+      if (appliedCoupon.type === 'percentage') {
+        couponDiscount = (subtotal * appliedCoupon.value) / 100;
+        if (appliedCoupon.maxDiscount > 0) {
+          couponDiscount = Math.min(couponDiscount, appliedCoupon.maxDiscount);
+        }
+      } else if (appliedCoupon.type === 'shipping') {
+        couponDiscount = Math.min(appliedCoupon.value, shippingCost);
+      } else {
+        couponDiscount = Math.min(appliedCoupon.value, subtotal);
+      }
+      couponDiscount = Math.round(couponDiscount * 100) / 100;
+    }
+
+    const totalAmount = Math.max(0, subtotal + shippingCost - couponDiscount);
 
     // Reserve stock atomically. Standalone MongoDB has no multi-document
     // transactions, so a guarded $inc prevents overselling and we roll back by
@@ -114,17 +154,31 @@ export const createOrder = async (req, res, next) => {
         orderItems,
         shippingAddress,
         paymentMethod,
-        paymentStatus: paymentMethod === 'COD' ? 'Pending' : 'Paid',
+        // No payment gateway is integrated yet, so no non-COD order can be
+        // treated as actually paid. Only a verified gateway/webhook may set
+        // paymentStatus to "Paid" (see updateOrderStatus for COD-on-delivery).
+        paymentStatus: 'Pending',
         orderStatus: 'Pending',
         subtotal,
         shippingCost,
         totalAmount,
+        couponCode: appliedCoupon ? appliedCoupon.code : '',
+        couponDiscount,
       });
     } catch (createError) {
       for (const line of reserved) {
         await Product.updateOne({ _id: line.product }, { $inc: { stock: line.quantity } });
       }
       throw createError;
+    }
+
+    // Consume the coupon once (and only once the order exists). The guarded
+    // update means a concurrent checkout can't overshoot usageLimit.
+    if (appliedCoupon) {
+      await Coupon.updateOne(
+        { _id: appliedCoupon._id, $or: [{ usageLimit: 0 }, { usedCount: { $lt: appliedCoupon.usageLimit } }] },
+        { $inc: { usedCount: 1 } }
+      );
     }
 
     cart.items = [];
@@ -304,7 +358,10 @@ export const updateOrderStatus = async (req, res, next) => {
     }
 
     order.orderStatus = status;
-    if (status === 'Delivered' && order.paymentStatus !== 'Paid') {
+    // Cash on Delivery is collected when the parcel arrives. For every other
+    // method a gateway webhook is required - a status change alone can't mark
+    // the order paid.
+    if (status === 'Delivered' && order.paymentMethod === 'COD' && order.paymentStatus !== 'Paid') {
       order.paymentStatus = 'Paid';
     }
 

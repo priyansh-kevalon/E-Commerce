@@ -21,6 +21,26 @@ const seedAdmin = async () => {
       throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be configured before seeding an admin.');
     }
 
+    // Guard the most damaging secret in the whole system: the admin password.
+    const WEAK_PASSWORDS = new Set([
+      'admin',
+      'password',
+      'admin123',
+      'admin@123',
+      'password123',
+      '12345678',
+    ]);
+    if (
+      password.length < 12 ||
+      /replace[_ -]?with|change[_ -]?this/i.test(password) ||
+      WEAK_PASSWORDS.has(String(password).toLowerCase()) ||
+      /^[a-z]+$/i.test(password)
+    ) {
+      throw new Error(
+        'ADMIN_PASSWORD is too weak. Use at least 12 characters with mixed case, numbers and symbols.'
+      );
+    }
+
     await connectDB();
 
     let user = await User.findOne({ email }).select('+password');

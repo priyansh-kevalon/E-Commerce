@@ -10,6 +10,10 @@ node_modules/
 uploads/*
 !uploads/.gitkeep
 
+# Database exports / seed dumps (may contain user PII or password hashes)
+data/*.json
+!data/.gitkeep
+
 # Logs
 logs/
 *.log
