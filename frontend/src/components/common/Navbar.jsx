@@ -28,10 +28,10 @@ import { useAuth } from '../../hooks/useAuth.js';
 import { fetchCategories } from '../../services/productService.js';
 
 const PRODUCT_COLLECTIONS = [
-  { to: '/products', label: 'All Products' },
-  { to: '/deals', label: "Today's Deals" },
-  { to: '/new-arrivals', label: 'New Arrivals' },
-  { to: '/best-sellers', label: 'Best Sellers' },
+  { to: '/products', label: 'All Products', icon: Home },
+  { to: '/deals', label: "Today's Deals", icon: Tag },
+  { to: '/new-arrivals', label: 'New Arrivals', icon: Sparkles },
+  { to: '/best-sellers', label: 'Best Sellers', icon: TrendingUp },
 ];
 
 const NAV_ITEMS = [
@@ -49,6 +49,21 @@ const isItemActive = (item, pathname, search) => {
   if (item.to === '/products') return PRODUCT_MENU_PATHS.includes(pathname);
   return pathname === item.to;
 };
+
+// Drawer rows are separate entries, so they match exactly (plus nested dashboard
+// routes) rather than sharing the desktop dropdown's grouped match.
+const isLinkActive = (to, pathname) =>
+  pathname === to || pathname.startsWith(`${to}/`);
+
+const drawerRowClass = (active) =>
+  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition ${
+    active
+      ? 'bg-brand-800 font-bold text-white shadow-sm'
+      : 'font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800'
+  }`;
+
+const drawerIconClass = (active) =>
+  active ? 'shrink-0 text-white' : 'shrink-0 text-slate-400';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -500,24 +515,22 @@ export default function Navbar() {
 
             <p className="bg-mid px-5 py-2 text-sm font-bold text-white">Shop by department</p>
             <nav className="p-2">
-              {PRODUCT_COLLECTIONS.map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  onClick={() => setDrawerOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800 ${
-                    item.label === 'All Products'
-                      ? 'font-semibold text-slate-800'
-                      : 'font-medium text-slate-700'
-                  }`}
-                >
-                  {item.label === 'All Products' && <Home size={17} className="text-slate-400" />}
-                  {item.label === "Today's Deals" && <Tag size={17} className="text-slate-400" />}
-                  {item.label === 'New Arrivals' && <Sparkles size={17} className="text-slate-400" />}
-                  {item.label === 'Best Sellers' && <TrendingUp size={17} className="text-slate-400" />}
-                  {item.label}
-                </Link>
-              ))}
+              {PRODUCT_COLLECTIONS.map(({ icon: Icon, to, label }) => {
+                const active = isLinkActive(to, location.pathname);
+
+                return (
+                  <Link
+                    key={label}
+                    to={to}
+                    onClick={() => setDrawerOpen(false)}
+                    aria-current={active ? 'page' : undefined}
+                    className={drawerRowClass(active)}
+                  >
+                    <Icon size={17} className={drawerIconClass(active)} />
+                    {label}
+                  </Link>
+                );
+              })}
             </nav>
 
             <p className="bg-mid px-5 py-2 text-sm font-bold text-white">Help &amp; Settings</p>
@@ -525,55 +538,62 @@ export default function Navbar() {
               <Link
                 to="/wishlist"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
+                aria-current={isLinkActive('/wishlist', location.pathname) ? 'page' : undefined}
+                className={drawerRowClass(isLinkActive('/wishlist', location.pathname))}
               >
-                <Heart size={17} className="text-slate-400" /> Your Wishlist
+                <Heart size={17} className={drawerIconClass(isLinkActive('/wishlist', location.pathname))} /> Your Wishlist
               </Link>
               <Link
                 to="/orders"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
+                aria-current={isLinkActive('/orders', location.pathname) ? 'page' : undefined}
+                className={drawerRowClass(isLinkActive('/orders', location.pathname))}
               >
-                <Package size={17} className="text-slate-400" /> Your Orders
+                <Package size={17} className={drawerIconClass(isLinkActive('/orders', location.pathname))} /> Your Orders
               </Link>
               {isSeller && (
                 <Link
                   to="/seller"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
+                  aria-current={isLinkActive('/seller', location.pathname) ? 'page' : undefined}
+                  className={drawerRowClass(isLinkActive('/seller', location.pathname))}
                 >
-                  <Store size={17} className="text-slate-400" /> Seller Center
+                  <Store size={17} className={drawerIconClass(isLinkActive('/seller', location.pathname))} /> Seller Center
                 </Link>
               )}
               {isAdmin && (
                 <Link
                   to="/admin"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
+                  aria-current={isLinkActive('/admin', location.pathname) ? 'page' : undefined}
+                  className={drawerRowClass(isLinkActive('/admin', location.pathname))}
                 >
-                  <LayoutGrid size={17} className="text-slate-400" /> Admin Dashboard
+                  <LayoutGrid size={17} className={drawerIconClass(isLinkActive('/admin', location.pathname))} /> Admin Dashboard
                 </Link>
               )}
               <Link
                 to="/contact"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
+                aria-current={isLinkActive('/contact', location.pathname) ? 'page' : undefined}
+                className={drawerRowClass(isLinkActive('/contact', location.pathname))}
               >
-                <Headphones size={17} className="text-slate-400" /> Help Centre
+                <Headphones size={17} className={drawerIconClass(isLinkActive('/contact', location.pathname))} /> Help Centre
               </Link>
               <Link
                 to="/about"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
+                aria-current={isLinkActive('/about', location.pathname) ? 'page' : undefined}
+                className={drawerRowClass(isLinkActive('/about', location.pathname))}
               >
-                <Info size={17} className="text-slate-400" /> About Us
+                <Info size={17} className={drawerIconClass(isLinkActive('/about', location.pathname))} /> About Us
               </Link>
               <Link
                 to="/orders"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
+                aria-current={isLinkActive('/orders', location.pathname) ? 'page' : undefined}
+                className={drawerRowClass(isLinkActive('/orders', location.pathname))}
               >
-                <RotateCcw size={17} className="text-slate-400" /> Returns
+                <RotateCcw size={17} className={drawerIconClass(isLinkActive('/orders', location.pathname))} /> Returns
               </Link>
             </nav>
 
