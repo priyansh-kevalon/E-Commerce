@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import hpp from 'hpp';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
@@ -45,6 +48,32 @@ if (!jwtSecret || isPlaceholderSecret) {
 
 const app = express();
 
+// Do not advertise the framework.
+app.disable('x-powered-by');
+
+// -------------------- Security headers --------------------
+// helmet sets X-Content-Type-Options, X-Frame-Options, Referrer-Policy,
+// Strict-Transport-Security and a default Content-Security-Policy.
+// Mounted first so it also covers static assets and error responses.
+app.use(
+    helmet({
+        // The frontend is served from a different origin, so its own scripts and
+        // styles must not be blocked by this API's CSP.
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: ["'self'"],
+                styleSrc: ["'self'", "'unsafe-inline'"],
+                imgSrc: ["'self'", 'data:', 'blob:'],
+                connectSrc: ["'self'"],
+                objectSrc: ["'none'"],
+                frameAncestors: ["'none'"],
+            },
+        },
+        crossOriginResourcePolicy: { policy: 'cross-origin' },
+    })
+);
+
 // -------------------- CORS --------------------
 // CLIENT_URL may be a single origin or a comma-separated list (e.g. when the
 // frontend is deployed to a different domain, like Render).
@@ -63,7 +92,17 @@ app.use(
     })
 );
 app.use(express.json({ limit: '2mb' }));
-app.use(express.urlencoded({ extended: true, limit: '2mb' }));
+// `extended: false` disables qs' nested-object parsing, so a body/query can
+// never arrive as {"$ne": null} style objects.
+app.use(express.urlencoded({ extended: false, limit: '2mb' }));
+
+// -------------------- NoSQL injection / prototype pollution guards --------------------
+// Strips keys beginning with '$' or containing '.' from req.body / req.query /
+// req.params so operator injection ({_id: {"$ne": null}}) cannot reach Mongo.
+app.use(mongoSanitize());
+// Collapses duplicate query keys so parameter pollution cannot bypass a check.
+app.use(hpp());
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // -------------------- Rate limiting --------------------

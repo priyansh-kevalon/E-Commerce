@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Award, BadgePercent, Sparkles, Star } from 'lucide-react';
+import { ArrowRight, Award, BadgePercent, Sparkles } from 'lucide-react';
+import { FREE_SHIPPING_THRESHOLD, MAX_DISCOUNT_PERCENT, RETURN_POLICY } from '../../utils/constants.js';
 
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80';
 
+// Factual policy claims only. Do not put invented counts ("10k+ products",
+// "40k+ buyers", "4.9 rating") here - they are unverifiable and a consumer
+// -protection risk. Derive these from real data or state the actual policy.
 const HERO_STATS = [
-  { value: '10k+', label: 'Products' },
-  { value: '40k+', label: 'Happy buyers' },
-  { value: '4.9', label: 'Avg. rating', star: true },
+  { value: `${MAX_DISCOUNT_PERCENT}% off`, label: 'Max. discount' },
+  { value: `${RETURN_POLICY.windowDays} days`, label: 'Easy returns' },
+  { value: `₹${FREE_SHIPPING_THRESHOLD}+`, label: 'Free delivery' },
 ];
 
 export default function Hero() {
@@ -32,7 +36,9 @@ export default function Hero() {
 
                 <div className="pointer-events-none absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-card ring-1 ring-secondary-100">
                   <BadgePercent size={16} className="text-brand-700" />
-                  <p className="text-xs font-bold text-slate-800">Up to 40% off</p>
+                  <p className="text-xs font-bold text-slate-800">
+                    Up to {MAX_DISCOUNT_PERCENT}% off
+                  </p>
                 </div>
 
                 <div className="pointer-events-none absolute right-4 top-4 hidden items-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-secondary-700 px-4 py-2 text-white shadow-glow ring-1 ring-white/20 md:flex">
@@ -114,12 +120,6 @@ export default function Hero() {
               >
                 <p className="font-display text-lg font-extrabold text-slate-900 sm:text-xl">
                   {stat.value}
-                  {stat.star && (
-                    <Star
-                      size={14}
-                      className="mb-0.5 ml-1 inline fill-accent-500 text-accent-500"
-                    />
-                  )}
                 </p>
                 <p className="text-xs font-medium text-slate-500">{stat.label}</p>
               </div>

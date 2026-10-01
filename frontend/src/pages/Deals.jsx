@@ -266,7 +266,7 @@ export default function Deals() {
           </span>
           <div className="min-w-0">
             <h2 className="truncate text-sm font-extrabold text-slate-900">
-              {filters.category ? `${filters.category} deals` : "Today's live deals"}
+              {filters.category ? `${filters.category} deals` : "Today's deals"}
             </h2>
             <span className="inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-brand-700 ring-1 ring-brand-200">
               <Flame size={11} className="mr-1" /> {total} active

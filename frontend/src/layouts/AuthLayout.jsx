@@ -5,9 +5,9 @@ import { APP_NAME } from '../utils/constants.js';
 const PANELS = {
   '/register': {
     eyebrow: 'Create your account',
-    title: 'Join 1.2M+ happy shoppers',
-    accent: 'across India.',
-    text: 'Create a free account to unlock member pricing, early access to deals and a checkout that takes less than a minute.',
+    title: 'Create your account',
+    accent: 'and shop faster.',
+    text: 'Create a free account to track your orders, save your favourites and check out in under a minute.',
     image:
       'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1400&q=80',
   },

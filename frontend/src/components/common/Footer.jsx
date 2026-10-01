@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, Phone } from 'lucide-react';
-import { APP_NAME } from '../../utils/constants.js';
+import { APP_NAME, SUPPORT_CONTACT } from '../../utils/constants.js';
 
 const COLUMNS = [
   {
@@ -103,10 +103,10 @@ export default function Footer() {
                   <MapPin size={16} /> Ahmedabad, India
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Phone size={16} /> +91 90000 00000
+                  <Phone size={16} /> {SUPPORT_CONTACT.phone}
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Mail size={16} /> support@velmora.com
+                  <Mail size={16} /> {SUPPORT_CONTACT.email}
                 </li>
               </ul>
 

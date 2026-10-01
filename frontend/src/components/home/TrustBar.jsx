@@ -1,16 +1,17 @@
 import { Headphones, RotateCcw, ShieldCheck, Truck } from 'lucide-react';
 import Reveal from '../common/Reveal.jsx';
+import { RETURN_POLICY, FREE_SHIPPING_THRESHOLD } from '../../utils/constants.js';
 
 const ITEMS = [
   {
     icon: Truck,
     title: 'Free Delivery',
-    text: 'On orders over ₹999',
+    text: `On orders over ₹${FREE_SHIPPING_THRESHOLD}`,
     chip: 'bg-secondary-100 text-secondary-700',
   },
   {
     icon: RotateCcw,
-    title: '30-Day Returns',
+    title: `${RETURN_POLICY.windowDays}-Day Returns`,
     text: 'Easy & hassle-free',
     chip: 'bg-brand-50 text-brand-700',
   },

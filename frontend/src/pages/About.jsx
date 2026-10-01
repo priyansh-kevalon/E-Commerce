@@ -18,17 +18,20 @@ import {
   Truck,
   Twitter,
   Users,
+  Wallet,
 } from 'lucide-react';
 import CountUp from '../components/common/CountUp.jsx';
 import Reveal from '../components/common/Reveal.jsx';
-import Testimonials from '../components/home/Testimonials.jsx';
-import { APP_NAME } from '../utils/constants.js';
+import { APP_NAME, RETURN_POLICY, FREE_SHIPPING_THRESHOLD } from '../utils/constants.js';
 
+// Do not put invented figures here ("1.2M customers", "98.6% on time").
+// These state policies we can actually honour today. Replace with real
+// aggregates from a stats endpoint once one exists.
 const STATS = [
-  { icon: Boxes, value: 10000, suffix: '+', decimals: 0, label: 'Products in catalogue' },
-  { icon: Users, value: 1.2, suffix: 'M+', decimals: 1, label: 'Happy customers' },
-  { icon: MapPin, value: 28, suffix: '', decimals: 0, label: 'States served' },
-  { icon: Star, value: 98.6, suffix: '%', decimals: 1, label: 'Orders delivered on time' },
+  { icon: Truck, value: FREE_SHIPPING_THRESHOLD, suffix: '+', decimals: 0, label: 'Free delivery on orders above this' },
+  { icon: MapPin, value: RETURN_POLICY.windowDays, suffix: '-day', decimals: 0, label: 'Easy returns window' },
+  { icon: Wallet, value: 100, suffix: '%', decimals: 0, label: 'Cash on delivery available' },
+  { icon: ShieldCheck, value: 0, suffix: '', decimals: 0, label: 'Card details stored: never' },
 ];
 
 const VALUES = [
@@ -180,15 +183,17 @@ export default function About() {
                       ))}
                     </div>
                     <div>
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star key={star} size={13} className="fill-rating text-rating" />
-                        ))}
-                        <span className="ml-1 text-xs font-extrabold text-slate-900">4.8/5</span>
-                        <span className="text-xs font-medium text-slate-500">· 120k+ reviews</span>
+                      <div className="flex items-center gap-1.5">
+                        <ShieldCheck size={14} className="text-brand-600" />
+                        <span className="text-xs font-extrabold text-slate-900">
+                          Secure checkout
+                        </span>
+                        <span className="text-xs font-medium text-slate-500">
+                          · {RETURN_POLICY.windowDays}-day returns
+                        </span>
                       </div>
                       <p className="text-xs font-medium text-slate-500">
-                        Trusted by shoppers in every state, every day.
+                        Cash on delivery available on every order.
                       </p>
                     </div>
                   </Reveal>
@@ -244,15 +249,17 @@ export default function About() {
                       ))}
                     </div>
                     <div>
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star key={star} size={13} className="fill-rating text-rating" />
-                        ))}
-                        <span className="ml-1 text-xs font-extrabold text-slate-900">4.8/5</span>
-                        <span className="text-xs font-medium text-slate-500">· 120k+ reviews</span>
+                      <div className="flex items-center gap-1.5">
+                        <ShieldCheck size={14} className="text-brand-600" />
+                        <span className="text-xs font-extrabold text-slate-900">
+                          Secure checkout
+                        </span>
+                        <span className="text-xs font-medium text-slate-500">
+                          · {RETURN_POLICY.windowDays}-day returns
+                        </span>
                       </div>
                       <p className="text-xs font-medium text-slate-500">
-                        Trusted by shoppers in every state, every day.
+                        Cash on delivery available on every order.
                       </p>
                     </div>
                   </div>
@@ -429,17 +436,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="mx-auto max-w-[1200px] px-6 py-12 sm:py-16">
-        <SectionHead
-          eyebrow="Customer love"
-          title="What our customers say"
-          subtitle="Real reviews from real shoppers across India."
-        />
-        <div className="mt-8">
-          <Testimonials />
-        </div>
-      </section>
     </div>
   );
 }

@@ -14,10 +14,38 @@ export const SORT_OPTIONS = [
 export const FREE_SHIPPING_THRESHOLD = 999;
 export const SHIPPING_CHARGE = 49;
 
+// -------------------- Store policy (single source of truth) --------------------
+// Every page must read these. Previously the site advertised 30-day returns in
+// one place and 7-day in three others, and two different discount ceilings.
+export const RETURN_POLICY = {
+  windowDays: 7,
+  label: '7-day returns',
+  description: 'Return eligible items within 7 days of delivery.',
+};
+
+export const MAX_DISCOUNT_PERCENT = 40;
+
+export const SUPPORT_CONTACT = {
+  phone: '+91 98765 43210',
+  email: 'support@velmora.com',
+  hours: 'Mon-Sat, 10am - 7pm IST',
+};
+
+// -------------------- Payments --------------------
+// No payment gateway is integrated, so only Cash on Delivery can actually
+// collect money. Card and UPI are hidden rather than offered and silently
+// dropped: collecting a card number we never charge is the worst outcome.
+// Flip this to true only once a gateway (Razorpay/Stripe) is wired up.
+export const ONLINE_PAYMENTS_ENABLED = false;
+
 export const PAYMENT_METHODS = [
   { value: 'COD', label: 'Cash on Delivery', description: 'Pay in cash when your order arrives.' },
-  { value: 'Card', label: 'Credit / Debit Card', description: 'Demo checkout - no card is charged.' },
-  { value: 'UPI', label: 'UPI', description: 'Demo checkout - no money is transferred.' },
+  ...(ONLINE_PAYMENTS_ENABLED
+    ? [
+        { value: 'Card', label: 'Credit / Debit Card', description: 'Pay securely by card.' },
+        { value: 'UPI', label: 'UPI', description: 'Pay with any UPI app.' },
+      ]
+    : []),
 ];
 
 export const ORDER_STATUSES = ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];

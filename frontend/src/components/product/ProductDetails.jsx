@@ -27,6 +27,7 @@ import {
   getProductImage,
   getStockInfo,
 } from '../../utils/helpers.js';
+import { RETURN_POLICY, FREE_SHIPPING_THRESHOLD } from '../../utils/constants.js';
 
 const STOCK_STYLES = {
   success: 'text-rating',
@@ -40,10 +41,12 @@ const TABS = [
   { id: 'shipping', label: 'Shipping & Returns' },
 ];
 
+// Only state offers that actually exist. Card EMI / bank instant-discount
+// offers were advertised here while checkout is Cash on Delivery only.
 const OFFERS = [
-  { title: 'Bank Offer', text: '10% instant discount on select Credit Cards' },
-  { title: 'No Cost EMI', text: 'Available on orders above Rs.2,999' },
-  { title: 'Special Price', text: 'Get extra savings with the listed deal price' },
+  { title: 'Cash on Delivery', text: `Pay when your order arrives` },
+  { title: 'Easy returns', text: `Return eligible items within ${RETURN_POLICY.windowDays} days` },
+  { title: 'Free delivery', text: `On orders over ₹${FREE_SHIPPING_THRESHOLD}` },
 ];
 
 export default function ProductDetails({ product }) {
@@ -267,7 +270,7 @@ export default function ProductDetails({ product }) {
             </div>
 
             <div className="mt-4">
-              <p className="text-sm font-bold text-slate-800">Available offers</p>
+              <p className="text-sm font-bold text-slate-800">What you get</p>
               <ul className="mt-2 space-y-2">
                 {OFFERS.map((offer) => (
                   <li key={offer.title} className="flex items-start gap-2 text-[13px] text-slate-600">
@@ -333,7 +336,8 @@ export default function ProductDetails({ product }) {
                 <ShieldCheck size={15} className="text-brand-600" /> Secure transaction
               </p>
               <p className="flex items-center gap-2">
-                <RefreshCcw size={15} className="text-brand-600" /> 7-day easy returns
+                <RefreshCcw size={15} className="text-brand-600" />{' '}
+                {RETURN_POLICY.label}
               </p>
             </div>
           </div>
@@ -388,7 +392,7 @@ export default function ProductDetails({ product }) {
                 </li>
                 <li className="flex items-start gap-2.5">
                   <RefreshCcw size={17} className="mt-0.5 shrink-0 text-brand-600" />
-                  Not happy? Return within 7 days in original condition for a full refund.
+                  {RETURN_POLICY.description}
                 </li>
                 <li className="flex items-start gap-2.5">
                   <ShieldCheck size={17} className="mt-0.5 shrink-0 text-brand-600" />
