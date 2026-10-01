@@ -103,16 +103,18 @@ export default function PromoBanner({ product = null }) {
                 </span>
               </div>
 
-              <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2.5 border-t border-secondary-200/70 pt-4 sm:gap-x-7">
+              <div className="mt-5 grid grid-cols-3 gap-y-3 border-t border-secondary-200/70 pt-4">
                 {BENEFITS.map(({ icon: Icon, label }, index) => (
                   <span
                     key={label}
-                    className={`flex items-center gap-2 text-xs font-semibold text-slate-700 ${
-                      index > 0 ? 'border-l border-secondary-200/70 pl-4 sm:pl-7' : ''
+                    className={`flex flex-col items-center gap-1.5 px-1 text-center ${
+                      index > 0 ? 'border-l border-secondary-200/70' : ''
                     }`}
                   >
                     <Icon size={15} className="shrink-0 text-brand-600" />
-                    {label}
+                    <span className="text-[11px] font-semibold leading-tight text-slate-700 sm:text-xs">
+                      {label}
+                    </span>
                   </span>
                 ))}
               </div>

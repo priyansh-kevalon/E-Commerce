@@ -79,7 +79,7 @@ export default function Hero() {
                 </Link>
               </div>
 
-              <div className="mt-10 hidden flex-wrap items-center gap-x-5 gap-y-3 border-t border-secondary-200/70 pt-6 sm:gap-x-8 lg:flex">
+              <div className="mt-10 hidden flex-wrap items-center gap-x-5 gap-y-3 border-t border-secondary-200/70 pt-6 sm:gap-x-8 xl:flex">
                 {HERO_STATS.map((stat, index) => (
                   <div
                     key={stat.label}
@@ -104,15 +104,15 @@ export default function Hero() {
           </div>
 
           {/* Mobile-only stats (after image, before nothing else) */}
-          <div className="order-3 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-secondary-200/70 pt-6 sm:gap-x-8 lg:hidden">
+          <div className="order-3 grid grid-cols-3 gap-y-4 border-t border-secondary-200/70 px-7 pb-7 pt-6 sm:px-10 sm:pb-10 xl:hidden">
             {HERO_STATS.map((stat, index) => (
               <div
                 key={stat.label}
-                className={`flex items-center gap-2 ${
-                  index > 0 ? 'border-l border-secondary-200/70 pl-5 sm:pl-8' : ''
+                className={`flex flex-col items-center gap-1 px-1 text-center ${
+                  index > 0 ? 'border-l border-secondary-200/70' : ''
                 }`}
               >
-                <p className="font-display text-lg font-extrabold text-slate-900 sm:text-xl">
+                <p className="font-display text-lg font-extrabold leading-none text-slate-900 sm:text-xl">
                   {stat.value}
                   {stat.star && (
                     <Star
@@ -121,7 +121,9 @@ export default function Hero() {
                     />
                   )}
                 </p>
-                <p className="text-xs font-medium text-slate-500">{stat.label}</p>
+                <p className="text-[11px] font-medium leading-tight text-slate-500 sm:text-xs">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
