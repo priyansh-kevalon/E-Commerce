@@ -117,6 +117,7 @@ export default function Navbar() {
   useEffect(() => {
     setAcctOpen(false);
     setCatOpen(false);
+    setDrawerOpen(false);
     setSearchOpen(false);
   }, [location.pathname, location.search]);
 
@@ -504,7 +505,7 @@ export default function Navbar() {
                   key={item.label}
                   to={item.to}
                   onClick={() => setDrawerOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition hover:bg-brand-50 hover:text-brand-800 ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800 ${
                     item.label === 'All Products'
                       ? 'font-semibold text-slate-800'
                       : 'font-medium text-slate-700'
@@ -524,14 +525,14 @@ export default function Navbar() {
               <Link
                 to="/wishlist"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
               >
                 <Heart size={17} className="text-slate-400" /> Your Wishlist
               </Link>
               <Link
                 to="/orders"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
               >
                 <Package size={17} className="text-slate-400" /> Your Orders
               </Link>
@@ -539,7 +540,7 @@ export default function Navbar() {
                 <Link
                   to="/seller"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
                 >
                   <Store size={17} className="text-slate-400" /> Seller Center
                 </Link>
@@ -548,7 +549,7 @@ export default function Navbar() {
                 <Link
                   to="/admin"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
                 >
                   <LayoutGrid size={17} className="text-slate-400" /> Admin Dashboard
                 </Link>
@@ -556,21 +557,21 @@ export default function Navbar() {
               <Link
                 to="/contact"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
               >
                 <Headphones size={17} className="text-slate-400" /> Help Centre
               </Link>
               <Link
                 to="/about"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
               >
                 <Info size={17} className="text-slate-400" /> About Us
               </Link>
               <Link
                 to="/orders"
                 onClick={() => setDrawerOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800"
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-800 active:bg-brand-50 active:text-brand-800"
               >
                 <RotateCcw size={17} className="text-slate-400" /> Returns
               </Link>
@@ -581,7 +582,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50 active:bg-red-50"
                 >
                   <LogOut size={16} /> Sign out
                 </button>
@@ -590,14 +591,14 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     onClick={() => setDrawerOpen(false)}
-                    className="rounded-lg border border-slate-300 py-2.5 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+                    className="rounded-lg border border-slate-300 py-2.5 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-100 active:bg-slate-100"
                   >
                     Sign in
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setDrawerOpen(false)}
-                    className="rounded-lg bg-gradient-to-r from-brand-700 to-brand-800 py-2.5 text-center text-sm font-bold text-white transition hover:brightness-110"
+                    className="rounded-lg bg-gradient-to-r from-brand-700 to-brand-800 py-2.5 text-center text-sm font-bold text-white transition hover:brightness-110 active:brightness-95"
                   >
                     Register
                   </Link>
