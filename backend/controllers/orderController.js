@@ -31,34 +31,6 @@ const effectivePrice = (product) => {
 const canCancel = (status) =>
   ['Pending', 'Confirmed', 'Processing'].includes(status);
 
-// Legal next states for each order status. Without this, a Cancelled order
-// could be moved back to Delivered and marked Paid, which double-counts a
-// refund as revenue and re-books stock that was already returned.
-const ORDER_TRANSITIONS = {
-  Pending: ['Confirmed', 'Cancelled'],
-  Confirmed: ['Processing', 'Cancelled'],
-  Processing: ['Shipped', 'Cancelled'],
-  Shipped: ['Delivered'],
-  Delivered: [],
-  Cancelled: [],
-};
-
-const canTransition = (from, to) =>
-  (ORDER_TRANSITIONS[from] || []).includes(to);
-
-/**
- * Claim an order for a status change in a single atomic write.
- * The `orderStatus` filter is part of the update, so two concurrent requests
- * cannot both read the same starting state: whichever loses the race matches
- * zero documents and is rejected.
- */
-const claimOrderTransition = async (id, allowedFrom, to) =>
-  Order.findOneAndUpdate(
-    { _id: id, orderStatus: { $in: allowedFrom } },
-    { $set: { orderStatus: to } },
-    { new: true }
-  );
-
 /**
  * @route   POST /api/orders
  * @desc    Place an order from the authenticated user's cart
@@ -87,16 +59,6 @@ export const createOrder = async (req, res, next) => {
       const product = await Product.findById(item.product);
       if (!product) {
         return errorResponse(res, 'A product in your cart is no longer available', 400);
-      }
-      // Only admin-approved products may be purchased. A seller-submitted
-      // product still sits at status 'pending', so without this a customer
-      // could add it to cart and complete checkout, bypassing moderation.
-      if (product.status !== 'approved') {
-        return errorResponse(
-          res,
-          `"${product.name}" is not available for purchase right now`,
-          400
-        );
       }
       if (product.stock < item.quantity) {
         return errorResponse(
@@ -286,31 +248,14 @@ export const cancelOrder = async (req, res, next) => {
       return errorResponse(res, `An order that is ${order.orderStatus} can no longer be cancelled`, 400);
     }
 
-    // Atomically claim the transition. The status filter is part of the write,
-    // so concurrent cancel requests cannot each restore stock.
-    const claimed = await claimOrderTransition(
-      req.params.id,
-      ['Pending', 'Confirmed', 'Processing'],
-      'Cancelled'
-    );
-
-    if (!claimed) {
-      return errorResponse(res, 'This order was already updated. Please refresh.', 409);
-    }
-
-    for (const item of claimed.orderItems) {
+    for (const item of order.orderItems) {
       await Product.updateOne({ _id: item.product }, { $inc: { stock: item.quantity } });
     }
 
-    // Give the coupon back so a limited-use promotion is not burned by a cancel.
-    if (claimed.couponCode) {
-      await Coupon.updateOne(
-        { code: claimed.couponCode, usedCount: { $gt: 0 } },
-        { $inc: { usedCount: -1 } }
-      );
-    }
+    order.orderStatus = 'Cancelled';
+    await order.save();
 
-    return successResponse(res, 'Order cancelled successfully', { order: claimed });
+    return successResponse(res, 'Order cancelled successfully', { order });
   } catch (error) {
     next(error);
   }
@@ -402,46 +347,28 @@ export const updateOrderStatus = async (req, res, next) => {
       return successResponse(res, 'Order status is already up to date', { order });
     }
 
-    if (!canTransition(order.orderStatus, status)) {
-      return errorResponse(
-        res,
-        `Cannot move an order from ${order.orderStatus} to ${status}`,
-        400
-      );
-    }
-
-    // Atomically claim the transition before any side effects, so a repeated or
-    // concurrent request cannot double-restore stock or double-consume a coupon.
-    const claimed = await claimOrderTransition(req.params.id, [order.orderStatus], status);
-
-    if (!claimed) {
-      return errorResponse(res, 'This order was already updated. Please refresh.', 409);
-    }
-
     if (status === 'Cancelled') {
+      if (!canCancel(order.orderStatus)) {
+        return errorResponse(res, `An order that is ${order.orderStatus} can no longer be cancelled`, 400);
+      }
       // Return the reserved stock to the catalogue.
-      for (const item of claimed.orderItems) {
+      for (const item of order.orderItems) {
         await Product.updateOne({ _id: item.product }, { $inc: { stock: item.quantity } });
       }
-      if (claimed.couponCode) {
-        await Coupon.updateOne(
-          { code: claimed.couponCode, usedCount: { $gt: 0 } },
-          { $inc: { usedCount: -1 } }
-        );
-      }
     }
 
+    order.orderStatus = status;
     // Cash on Delivery is collected when the parcel arrives. For every other
     // method a gateway webhook is required - a status change alone can't mark
     // the order paid.
-    if (status === 'Delivered' && claimed.paymentMethod === 'COD' && claimed.paymentStatus !== 'Paid') {
-      claimed.paymentStatus = 'Paid';
-      await claimed.save();
+    if (status === 'Delivered' && order.paymentMethod === 'COD' && order.paymentStatus !== 'Paid') {
+      order.paymentStatus = 'Paid';
     }
 
-    await claimed.populate('user', 'name email');
+    await order.save();
+    await order.populate('user', 'name email');
 
-    return successResponse(res, 'Order status updated successfully', { order: claimed });
+    return successResponse(res, 'Order status updated successfully', { order });
   } catch (error) {
     next(error);
   }

@@ -144,8 +144,8 @@ export default function Profile() {
             </span>
             <div>
               <p className="text-sm font-semibold text-slate-800">Need help?</p>
-              <Link to="/contact" className="mt-0.5 block text-xs font-medium text-brand-600 hover:text-brand-700">
-                Contact support
+              <Link to="/" className="mt-0.5 block text-xs font-medium text-brand-600 hover:text-brand-700">
+                Visit the help centre →
               </Link>
             </div>
           </div>

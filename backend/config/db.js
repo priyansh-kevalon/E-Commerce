@@ -1,13 +1,5 @@
 import mongoose from 'mongoose';
 
-// Harden query handling globally:
-//  - strictQuery: unknown keys in a filter are stripped instead of being
-//    forwarded to MongoDB (where they could act as operators).
-//  - sanitizeFilter: any '$'-prefixed operator injected into a filter is
-//    wrapped so it cannot escape its intended field.
-mongoose.set('strictQuery', true);
-mongoose.set('sanitizeFilter', true);
-
 /**
  * Connect to MongoDB using the MONGO_URI from environment variables.
  * Does not exit the process on failure so the web server can still start

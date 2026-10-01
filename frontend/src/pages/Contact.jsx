@@ -18,33 +18,30 @@ import {
   Truck,
 } from 'lucide-react';
 import Reveal from '../components/common/Reveal.jsx';
-import { APP_NAME, SUPPORT_CONTACT, RETURN_POLICY } from '../utils/constants.js';
+import { APP_NAME } from '../utils/constants.js';
 import { submitContactMessage } from '../services/contactService.js';
 
-// NOTE: the phone/email below come from SUPPORT_CONTACT in utils/constants.js.
-// Replace those values with the store's real support details before launch -
-// "+91 90000 00000" is a placeholder number, not a working phone line.
 const CONTACT_CHANNELS = [
   {
     icon: Phone,
     title: 'Call us',
-    line: SUPPORT_CONTACT.phone,
-    note: SUPPORT_CONTACT.hours,
-    href: `tel:${SUPPORT_CONTACT.phone.replace(/\s/g, '')}`,
+    line: '+91 90000 00000',
+    note: 'Mon–Sat, 9 AM – 9 PM',
+    href: 'tel:+919000000000',
   },
   {
     icon: Mail,
     title: 'Email us',
-    line: SUPPORT_CONTACT.email,
+    line: 'support@velmora.com',
     note: 'Replies within 24 hours',
-    href: `mailto:${SUPPORT_CONTACT.email}`,
+    href: 'mailto:support@velmora.com',
   },
   {
     icon: MessageCircle,
     title: 'WhatsApp',
-    line: SUPPORT_CONTACT.phone,
+    line: '+91 90000 00000',
     note: 'Replies within 10 minutes',
-    href: `https://wa.me/${SUPPORT_CONTACT.phone.replace(/\D/g, '')}`,
+    href: 'https://wa.me/919000000000',
   },
 ];
 
@@ -65,7 +62,7 @@ const FAQS = [
   },
   {
     q: 'How do I return a product?',
-    a: `Raise a return from your Orders page within ${RETURN_POLICY.windowDays} days of delivery. Once approved, a pickup is scheduled at a slot you choose. Refunds are initiated the moment the product reaches our warehouse.`,
+    a: `Raise a return from your Orders page within 7 days of delivery. Once approved, a pickup is scheduled at a slot you choose. Refunds are initiated the moment the product reaches our warehouse.`,
   },
   {
     q: 'Which payment methods do you accept?',
@@ -341,7 +338,7 @@ export default function Contact() {
                       type="tel"
                       value={form.phone}
                       onChange={(event) => update('phone', event.target.value)}
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 90000 00000"
                       className={fieldClass(Boolean(errors.phone))}
                     />
                     {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}

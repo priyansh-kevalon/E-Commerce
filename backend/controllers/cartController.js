@@ -86,11 +86,6 @@ export const addToCart = async (req, res, next) => {
     if (!product) {
       return errorResponse(res, 'Product not found', 404);
     }
-    // Only admin-approved products may be added to a cart, otherwise a
-    // seller-submitted (pending) product could be purchased before review.
-    if (product.status !== 'approved') {
-      return errorResponse(res, 'This product is not available for purchase', 400);
-    }
     if (product.stock <= 0) {
       return errorResponse(res, 'This product is out of stock', 400);
     }

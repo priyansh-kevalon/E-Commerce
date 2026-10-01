@@ -28,45 +28,6 @@ const growthPercent = (current, previous) => {
   return current > 0 ? 100 : 0;
 };
 
-/**
- * Shape an order for a seller.
- * A seller may only see their OWN line items plus the minimum customer
- * identity and destination needed to fulfil them. Returning the raw document
- * would expose the full shipping address (phone, street, postal code) and the
- * line items belonging to every other seller on the same order.
- */
-const toSellerOrder = (order, productIds) => {
-  const isMine = (objectId) =>
-    productIds.some((id) => id.equals(objectId || objectId?._id || objectId));
-
-  const items = (order.orderItems || [])
-    .filter((item) => isMine(item.product))
-    .map(({ name, image, price, quantity }) => ({ name, image, price, quantity }));
-
-  return {
-    _id: order._id,
-    createdAt: order.createdAt,
-    updatedAt: order.updatedAt,
-    orderStatus: order.orderStatus,
-    paymentStatus: order.paymentStatus,
-    paymentMethod: order.paymentMethod,
-    customer: {
-      name: order.user?.name || 'Customer',
-      email: order.user?.email || '',
-    },
-    // City/state only - never the street address or phone number.
-    destination: {
-      city: order.shippingAddress?.city || '',
-      state: order.shippingAddress?.state || '',
-    },
-    items,
-    itemCount: items.reduce((sum, item) => sum + item.quantity, 0),
-    itemTotal: Math.round(
-      items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    ),
-  };
-};
-
 const monthEndDate = () => {
   const date = new Date();
   return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
@@ -721,16 +682,19 @@ export const getOrders = async (req, res, next) => {
       });
     }
 
-    const rawOrders = await Order.find({ 'orderItems.product': { $in: productIds } })
+    const orders = await Order.find({ 'orderItems.product': { $in: productIds } })
       .sort({ createdAt: -1 })
       .populate('user', 'name email');
 
-    // Strip cross-tenant data before this leaves the server.
-    const orders = rawOrders.map((order) => toSellerOrder(order, productIds));
-
     const totalRevenue = orders.reduce((sum, order) => {
       if (order.orderStatus === 'Cancelled') return sum;
-      return sum + order.itemTotal;
+      return (
+        sum +
+        order.orderItems.reduce((itemSum, item) => {
+          if (!productIds.some((id) => id.equals(item.product))) return itemSum;
+          return itemSum + item.price * item.quantity;
+        }, 0)
+      );
     }, 0);
 
     return successResponse(res, 'Orders fetched successfully', {

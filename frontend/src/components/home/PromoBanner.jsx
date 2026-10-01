@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import Reveal from '../common/Reveal.jsx';
 import { getDiscountPercent } from '../../utils/helpers.js';
-import { MAX_DISCOUNT_PERCENT } from '../../utils/constants.js';
 import SmartImage from '../common/SmartImage.jsx';
 
 const BENEFITS = [
@@ -84,8 +83,7 @@ export default function PromoBanner({ product = null }) {
               </span>
 
               <h2 className="mt-4 text-balance font-display text-2xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-[32px]">
-                Grab up to{' '}
-                <span className="text-gradient">{MAX_DISCOUNT_PERCENT}% off</span> top picks
+                Grab up to <span className="text-gradient">50% off</span> top picks
               </h2>
 
               <p className="mt-3 max-w-md text-sm leading-7 text-slate-600">
