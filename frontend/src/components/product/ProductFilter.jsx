@@ -146,7 +146,7 @@ export default function ProductFilter({
         </h3>
         <div className="mt-3 space-y-1">
           {SORT_OPTIONS.map((option) =>
-            radioRow((filters.sort || 'newest') === option.value, option.label, () =>
+            radioRow(filters.sort === option.value, option.label, () =>
               onChange({ sort: option.value }),
             ),
           )}

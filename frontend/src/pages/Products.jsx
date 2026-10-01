@@ -17,9 +17,9 @@ import {
 import ProductList from '../components/product/ProductList.jsx';
 import ProductFilter from '../components/product/ProductFilter.jsx';
 import { fetchCategories, fetchProducts } from '../services/productService.js';
-import { PRODUCTS_PER_PAGE } from '../utils/constants.js';
+import { PRODUCTS_PER_PAGE, SORT_OPTIONS } from '../utils/constants.js';
 
-const DEFAULT_FILTERS = { category: '', minPrice: '', maxPrice: '', sort: 'newest' };
+const DEFAULT_FILTERS = { category: '', minPrice: '', maxPrice: '', sort: '' };
 
 const PRESETS = {
   deals: {
@@ -187,6 +187,17 @@ export default function Products({ preset = null }) {
       clear: () => handleFilterChange({ minPrice: '', maxPrice: '' }),
     });
   }
+  // Sort is applied even when it is the default, so surface it too - otherwise the
+  // toolbar reads as empty on first load and the ordering looks unexplained.
+  const sortLabel = SORT_OPTIONS.find((option) => option.value === filters.sort)?.label;
+  if (sortLabel) {
+    activeChips.push({
+      label: `Sort: ${sortLabel}`,
+      clear: () => handleFilterChange({ sort: DEFAULT_FILTERS.sort }),
+    });
+  }
+  const activeFilterCount = [filters.category, filters.minPrice, filters.maxPrice].filter(Boolean)
+    .length + (filters.sort !== DEFAULT_FILTERS.sort ? 1 : 0);
 
   const filterPanel = (
     <ProductFilter
@@ -328,9 +339,19 @@ export default function Products({ preset = null }) {
               <button
                 type="button"
                 onClick={() => setFiltersOpen(true)}
+                aria-label={
+                  activeFilterCount > 0
+                    ? `Filters, ${activeFilterCount} active`
+                    : 'Filters'
+                }
                 className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 px-3.5 py-1.5 text-sm font-semibold text-slate-700 transition hover:border-brand-400 hover:text-brand-600 lg:hidden"
               >
                 <SlidersHorizontal size={15} /> Filters
+                {activeFilterCount > 0 && (
+                  <span className="inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brand-700 px-1 text-[10px] font-extrabold leading-none text-white">
+                    {activeFilterCount}
+                  </span>
+                )}
               </button>
               <h2 className="min-w-0 line-clamp-1 text-sm font-extrabold text-slate-900">
                 {search
