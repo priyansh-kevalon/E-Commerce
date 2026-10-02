@@ -3,6 +3,7 @@ import Product from '../models/Product.js';
 import Category from '../models/Category.js';
 import { successResponse, errorResponse } from '../utils/responseHandler.js';
 import { validateProduct } from '../validators/productValidator.js';
+import { createNotification, notifyAllUsers } from './notificationController.js';
 
 // Escape user input before using it inside a RegExp.
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -232,6 +233,15 @@ export const createProduct = async (req, res, next) => {
     const product = await Product.create({ ...req.body, seller: null, status: 'approved' });
     await product.populate('category', 'name');
 
+    // Admin uploads go live immediately, so announce it to the storefront now.
+    notifyAllUsers({
+      exclude: req.user._id,
+      type: 'new_product',
+      title: 'New arrival',
+      body: `${product.name} is now available.`,
+      link: `/products/${product._id}`,
+    });
+
     return successResponse(res, 'Product created successfully', { product }, 201);
   } catch (error) {
     next(error);
@@ -277,12 +287,48 @@ export const updateProduct = async (req, res, next) => {
       'status',
     ];
 
+    const previousStatus = product.status;
+    const productLink = `/products/${product._id}`;
+
     editableFields.forEach((field) => {
       if (req.body[field] !== undefined) product[field] = req.body[field];
     });
 
     await product.save();
     await product.populate('category', 'name');
+
+    // A seller submission only becomes visible once an admin approves it, so
+    // the storefront announcement belongs on the pending -> approved edge
+    // rather than on the seller's own create call.
+    if (previousStatus !== 'approved' && product.status === 'approved') {
+      notifyAllUsers({
+        exclude: req.user._id,
+        type: 'new_product',
+        title: 'New arrival',
+        body: `${product.name} is now available.`,
+        link: productLink,
+      });
+
+      if (product.seller) {
+        createNotification({
+          user: product.seller,
+          type: 'product_status',
+          title: 'Your product is live',
+          body: `${product.name} was approved and is now visible to shoppers.`,
+          link: productLink,
+        });
+      }
+    }
+
+    if (previousStatus !== 'rejected' && product.status === 'rejected' && product.seller) {
+      createNotification({
+        user: product.seller,
+        type: 'product_status',
+        title: 'Product submission rejected',
+        body: `${product.name} was not approved. Update it and resubmit.`,
+        link: '/seller/products',
+      });
+    }
 
     return successResponse(res, 'Product updated successfully', { product });
   } catch (error) {

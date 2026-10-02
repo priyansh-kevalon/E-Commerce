@@ -578,6 +578,17 @@ export const createProduct = async (req, res, next) => {
 
     await product.populate('category', 'name');
 
+    // The listing is invisible until an admin reviews it, so prompt the admins
+    // directly rather than announcing anything to shoppers.
+    notifyRole({
+      role: 'admin',
+      exclude: req.user._id,
+      type: 'product_submitted',
+      title: 'Product awaiting review',
+      body: `${req.user.name || 'A seller'} submitted "${product.name}" for approval.`,
+      link: '/admin/products',
+    });
+
     return successResponse(res, 'Product submitted for review', { product }, 201);
   } catch (error) {
     next(error);

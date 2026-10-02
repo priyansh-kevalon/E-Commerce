@@ -15,6 +15,7 @@ const About = lazy(() => import('../pages/About.jsx'));
 const Contact = lazy(() => import('../pages/Contact.jsx'));
 const Cart = lazy(() => import('../pages/Cart.jsx'));
 const Wishlist = lazy(() => import('../pages/Wishlist.jsx'));
+const Notifications = lazy(() => import('../pages/Notifications.jsx'));
 const Checkout = lazy(() => import('../pages/Checkout.jsx'));
 const MyOrders = lazy(() => import('../pages/MyOrders.jsx'));
 const OrderDetails = lazy(() => import('../pages/OrderDetails.jsx'));
@@ -100,6 +101,14 @@ export default function AppRoutes() {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route
+          path="/notifications"
+          element={
+            <RequireAuth>
+              <Notifications />
+            </RequireAuth>
+          }
+        />
         <Route
           path="/checkout"
           element={

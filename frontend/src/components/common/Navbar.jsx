@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
+  Bell,
   ChevronDown,
   ChevronRight,
   Headphones,
@@ -22,6 +23,8 @@ import {
   X,
 } from 'lucide-react';
 import { APP_NAME } from '../../utils/constants.js';
+import useUnreadNotifications from '../../hooks/useUnreadNotifications.js';
+import NotificationBell from './NotificationBell.jsx';
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
@@ -71,6 +74,7 @@ export default function Navbar() {
   const { totalItems: cartCount } = useCart();
   const { totalItems: wishlistCount } = useWishlist();
   const { user, isAuthenticated, isAdmin, isSeller, logout } = useAuth();
+  const { unreadCount } = useUnreadNotifications();
   const [search, setSearch] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -446,6 +450,8 @@ export default function Navbar() {
               )}
             </div>
 
+            <NotificationBell />
+
             <Link
               to="/wishlist"
               aria-label="Wishlist"
@@ -535,6 +541,25 @@ export default function Navbar() {
 
             <p className="bg-mid px-5 py-2 text-sm font-bold text-white">Help &amp; Settings</p>
             <nav className="p-2">
+              {isAuthenticated && (
+                <Link
+                  to="/notifications"
+                  onClick={() => setDrawerOpen(false)}
+                  aria-current={isLinkActive('/notifications', location.pathname) ? 'page' : undefined}
+                  className={drawerRowClass(isLinkActive('/notifications', location.pathname))}
+                >
+                  <Bell
+                    size={17}
+                    className={drawerIconClass(isLinkActive('/notifications', location.pathname))}
+                  />
+                  Notifications
+                  {unreadCount > 0 && (
+                    <span className="ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full bg-brand-600 px-1.5 text-[10px] font-extrabold leading-none text-white">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
+                </Link>
+              )}
               <Link
                 to="/wishlist"
                 onClick={() => setDrawerOpen(false)}

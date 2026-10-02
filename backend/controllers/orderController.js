@@ -6,6 +6,7 @@ import User from '../models/User.js';
 import Coupon from '../models/Coupon.js';
 import { successResponse, errorResponse } from '../utils/responseHandler.js';
 import { validateOrder } from '../validators/orderValidator.js';
+import { createNotification } from './notificationController.js';
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -184,6 +185,36 @@ export const createOrder = async (req, res, next) => {
     cart.items = [];
     await cart.save();
 
+    const shortId = order._id.toString().slice(-6).toUpperCase();
+
+    // Confirmation for the buyer.
+    createNotification({
+      user: req.user._id,
+      type: 'order_placed',
+      title: 'Order placed successfully',
+      body: `Order #${shortId} is now pending confirmation.`,
+      link: `/orders/${order._id}`,
+    });
+
+    // A heads-up per seller, with their own unit count. orderItems does not
+    // denormalise `seller`, so resolve it from the products we already loaded.
+    const unitsBySeller = new Map();
+    for (const { product, quantity } of stockUpdates) {
+      const sellerId = product.seller?.toString();
+      if (!sellerId || sellerId === req.user._id.toString()) continue;
+      unitsBySeller.set(sellerId, (unitsBySeller.get(sellerId) || 0) + quantity);
+    }
+
+    for (const [sellerId, units] of unitsBySeller) {
+      createNotification({
+        user: sellerId,
+        type: 'new_order',
+        title: 'New order received',
+        body: `Order #${shortId} contains ${units} of your product${units === 1 ? '' : 's'}.`,
+        link: '/seller/orders',
+      });
+    }
+
     return successResponse(res, 'Order placed successfully', { order }, 201);
   } catch (error) {
     next(error);
@@ -254,6 +285,14 @@ export const cancelOrder = async (req, res, next) => {
 
     order.orderStatus = 'Cancelled';
     await order.save();
+
+    createNotification({
+      user: order.user._id,
+      type: 'order_cancelled',
+      title: `Order #${order._id.toString().slice(-6).toUpperCase()} cancelled`,
+      body: 'Your order was cancelled and the reserved stock was released.',
+      link: `/orders/${order._id}`,
+    });
 
     return successResponse(res, 'Order cancelled successfully', { order });
   } catch (error) {
@@ -367,6 +406,17 @@ export const updateOrderStatus = async (req, res, next) => {
 
     await order.save();
     await order.populate('user', 'name email');
+
+    createNotification({
+      user: order.user._id,
+      type: 'order_status',
+      title: `Order #${order._id.toString().slice(-6).toUpperCase()} is now ${status}`,
+      body:
+        status === 'Delivered'
+          ? 'Your parcel has been delivered. Thanks for shopping with us.'
+          : `We have updated your order status to ${status}.`,
+      link: `/orders/${order._id}`,
+    });
 
     return successResponse(res, 'Order status updated successfully', { order });
   } catch (error) {
