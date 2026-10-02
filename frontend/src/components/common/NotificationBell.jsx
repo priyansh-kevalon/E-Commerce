@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BadgeCheck,
@@ -59,6 +59,10 @@ const TONE_BY_TYPE = {
   user_login: 'bg-slate-100 text-slate-600',
 };
 
+const MOBILE_BREAKPOINT = 768;
+const EDGE_MARGIN = 12;
+const PANEL_MAX_WIDTH = 360;
+
 const timeAgo = (value) => {
   const then = new Date(value).getTime();
   if (Number.isNaN(then)) return '';
@@ -90,7 +94,53 @@ export default function NotificationBell() {
   const [rejectingId, setRejectingId] = useState(null);
   const [rejectNote, setRejectNote] = useState('');
   const [actionError, setActionError] = useState({ id: null, message: '' });
+  const [panelStyle, setPanelStyle] = useState({ right: 0 });
   const panelRef = useRef(null);
+
+  // The panel is absolutely positioned against the bell, so on narrow screens
+  // its horizontal offset is measured and clamped to keep it inside the
+  // viewport. At >= 768px the stylesheet handles placement instead.
+  const syncPanelPosition = useCallback(() => {
+    const anchor = panelRef.current;
+    if (!anchor) return;
+
+    if (window.innerWidth >= MOBILE_BREAKPOINT) {
+      setPanelStyle({ right: 0 });
+      return;
+    }
+
+    const anchorRect = anchor.getBoundingClientRect();
+    const viewport = window.innerWidth;
+    const width = Math.min(PANEL_MAX_WIDTH, viewport - EDGE_MARGIN * 2);
+    const maxLeft = Math.max(EDGE_MARGIN, viewport - EDGE_MARGIN - width);
+    const preferredLeft = anchorRect.right - width;
+    const left = Math.min(Math.max(preferredLeft, EDGE_MARGIN), maxLeft);
+
+    setPanelStyle({ left: Math.round(left - anchorRect.left) });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    syncPanelPosition();
+  }, [open, syncPanelPosition]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    let frame = 0;
+    const onViewportChange = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(syncPanelPosition);
+    };
+
+    window.addEventListener('resize', onViewportChange);
+    window.addEventListener('orientationchange', onViewportChange);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', onViewportChange);
+      window.removeEventListener('orientationchange', onViewportChange);
+    };
+  }, [open, syncPanelPosition]);
 
   const loadPanel = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -236,7 +286,10 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="notif-panel-height absolute right-0 top-full z-50 mt-2 flex w-[calc(100vw-1.5rem)] max-w-[22rem] animate-fade-in flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-luxe">
+        <div
+          style={panelStyle}
+          className="notif-panel-height absolute top-full z-50 mt-2 flex w-[calc(100vw-24px)] max-w-[360px] animate-fade-in flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-luxe md:w-[22rem] md:max-w-[22rem]"
+        >
           <div className="flex shrink-0 items-center justify-between gap-2 border-b border-slate-100 px-4 py-3">
             <p className="min-w-0 truncate text-sm font-extrabold text-slate-900">Notifications</p>
             <div className="flex shrink-0 items-center gap-1">
@@ -244,7 +297,7 @@ export default function NotificationBell() {
                 <button
                   type="button"
                   onClick={handleMarkAll}
-                  className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-bold text-brand-700 transition hover:bg-brand-50"
+                  className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-[11px] font-bold text-brand-700 transition hover:bg-brand-50"
                 >
                   <CheckCheck size={12} /> Mark all read
                 </button>
@@ -253,7 +306,7 @@ export default function NotificationBell() {
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close notifications"
-                className="rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+                className="shrink-0 rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
               >
                 <X size={15} />
               </button>
@@ -298,7 +351,7 @@ export default function NotificationBell() {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span
-                          className={`block text-sm leading-snug ${
+                          className={`block break-words text-sm leading-snug ${
                             item.read
                               ? 'font-medium text-slate-600'
                               : 'font-bold text-slate-900'
@@ -307,7 +360,7 @@ export default function NotificationBell() {
                           {item.title}
                         </span>
                         {item.body && (
-                          <span className="mt-0.5 block text-xs leading-snug text-slate-500">
+                          <span className="mt-0.5 block break-words text-xs leading-snug text-slate-500">
                             {item.body}
                           </span>
                         )}
