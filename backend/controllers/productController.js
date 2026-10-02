@@ -272,6 +272,12 @@ export const updateProduct = async (req, res, next) => {
       }
     }
 
+    const PRODUCT_STATUSES = ['pending', 'approved', 'rejected'];
+
+    if (req.body.status !== undefined && !PRODUCT_STATUSES.includes(req.body.status)) {
+      return errorResponse(res, `Status must be one of: ${PRODUCT_STATUSES.join(', ')}`, 400);
+    }
+
     const editableFields = [
       'name',
       'description',

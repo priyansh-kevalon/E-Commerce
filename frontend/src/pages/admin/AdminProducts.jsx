@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  CheckCircle2,
   Clock3,
   Package,
   PackagePlus,
@@ -8,7 +7,6 @@ import {
   Pencil,
   RotateCcw,
   Search,
-  ShieldCheck,
   Trash2,
   XCircle,
 } from 'lucide-react';
@@ -17,6 +15,7 @@ import Loader from '../../components/common/Loader.jsx';
 import Modal from '../../components/admin/Modal.jsx';
 import ModalFooter from '../../components/admin/ModalFooter.jsx';
 import ProductForm from '../../components/admin/ProductForm.jsx';
+import ProductStatusToggle from '../../components/admin/ProductStatusToggle.jsx';
 import { fetchProducts, fetchCategories } from '../../services/productService.js';
 import { createProduct, updateProduct, deleteProduct } from '../../services/adminService.js';
 import {
@@ -41,6 +40,8 @@ export default function AdminProducts() {
   const [loadError, setLoadError] = useState('');
   const [notice, setNotice] = useState({ type: '', message: '' });
   const [reloadKey, setReloadKey] = useState(0);
+  const [statusBusy, setStatusBusy] = useState(null);
+  const [rejecting, setRejecting] = useState(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -121,18 +122,28 @@ export default function AdminProducts() {
   };
 
   const handleStatus = async (product, status) => {
+    setStatusBusy({ id: product._id, status });
     try {
-      await updateProduct(product._id, { status });
+      const updated = await updateProduct(product._id, { status });
+      if (updated?._id) {
+        setProducts((prev) =>
+          prev.map((entry) => (entry._id === product._id ? { ...entry, ...updated } : entry))
+        );
+      } else {
+        loadProducts();
+      }
       setNotice({
         type: 'success',
         message:
           status === 'approved'
             ? `"${product.name}" is now live on the store.`
-            : `"${product.name}" was rejected.`,
+            : `"${product.name}" was rejected and is no longer visible.`,
       });
-      loadProducts();
     } catch (err) {
       setNotice({ type: 'error', message: err.message });
+    } finally {
+      setStatusBusy(null);
+      setRejecting(null);
     }
   };
 
@@ -278,39 +289,20 @@ export default function AdminProducts() {
                       </td>
                       <td>
                         <div className="flex flex-col items-start gap-1.5">
-                          {product.status === 'approved' && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200">
-                              <ShieldCheck size={12} /> Live
-                            </span>
-                          )}
                           {product.status === 'pending' && (
                             <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 ring-1 ring-inset ring-amber-200">
                               <Clock3 size={12} /> Pending review
                             </span>
                           )}
-                          {product.status === 'rejected' && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700 ring-1 ring-inset ring-rose-200">
-                              <XCircle size={12} /> Rejected
-                            </span>
-                          )}
-                          {product.status !== 'approved' && (
-                            <button
-                              type="button"
-                              onClick={() => handleStatus(product, 'approved')}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 transition hover:text-emerald-700"
-                            >
-                              <CheckCircle2 size={12} /> Approve
-                            </button>
-                          )}
-                          {product.status !== 'rejected' && (
-                            <button
-                              type="button"
-                              onClick={() => handleStatus(product, 'rejected')}
-                              className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-500 transition hover:text-rose-600"
-                            >
-                              <XCircle size={12} /> Reject
-                            </button>
-                          )}
+                          <ProductStatusToggle
+                            status={product.status}
+                            busy={statusBusy?.id === product._id ? statusBusy.status : null}
+                            productName={product.name}
+                            onChange={(next) => {
+                              if (next === 'rejected') setRejecting(product);
+                              else handleStatus(product, next);
+                            }}
+                          />
                         </div>
                       </td>
                       <td>
@@ -445,6 +437,46 @@ export default function AdminProducts() {
           onSubmit={handleSubmit}
           serverError={formError}
         />
+      </Modal>
+
+      <Modal
+        open={Boolean(rejecting)}
+        title="Reject this product?"
+        subtitle={rejecting?.name}
+        icon={<XCircle size={19} className="text-rose-600" />}
+        onClose={() => setRejecting(null)}
+        size="sm"
+        footer={
+          <>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setRejecting(null)}
+              disabled={Boolean(statusBusy)}
+            >
+              Keep live
+            </Button>
+            <Button
+              type="button"
+              variant="danger"
+              onClick={() => handleStatus(rejecting, 'rejected')}
+              disabled={Boolean(statusBusy)}
+            >
+              {statusBusy?.status === 'rejected' ? 'Rejecting...' : 'Reject product'}
+            </Button>
+          </>
+        }
+      >
+        <p className="text-sm leading-relaxed text-slate-600">
+          <strong className="font-semibold text-slate-800">{rejecting?.name}</strong> will be hidden
+          from the storefront straight away.
+          {rejecting?.seller
+            ? ' The seller is notified and can submit a revised version.'
+            : ' This is a store product, so no seller is notified.'}
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-500">
+          You can put it back live at any time with the same control.
+        </p>
       </Modal>
     </div>
   );
