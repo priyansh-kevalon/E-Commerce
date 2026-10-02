@@ -55,6 +55,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    // Stamped on the first successful sign-in after registration, so admins can
+    // be alerted about a new account's first sign-in without being notified
+    // about every later login.
+    lastLoginAt: {
+      type: Date,
+      default: null,
+    },
     tokenVersion: {
       type: Number,
       default: 0,

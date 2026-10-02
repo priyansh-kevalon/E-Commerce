@@ -2,6 +2,7 @@ import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 import { successResponse, errorResponse } from '../utils/responseHandler.js';
 import { validateRegister, validateLogin } from '../validators/authValidator.js';
+import { notifyRole } from './notificationController.js';
 
 // Shape a user for API responses (never includes password).
 const buildAuthPayload = (user) => ({
@@ -44,6 +45,18 @@ export const register = async (req, res, next) => {
 
     const user = await User.create({ name, email, password, role });
 
+    // Let the admins know a new account exists. Self-registration can only ever
+    // create a customer, so this never alerts an admin about themselves.
+    notifyRole({
+      role: 'admin',
+      exclude: user._id,
+      type: 'user_registered',
+      title: 'New user registered',
+      body: `${user.name} (${user.email}) created a customer account.`,
+      link: '/admin/users',
+      meta: { userId: String(user._id), name: user.name, email: user.email },
+    });
+
     return res.status(201).json({
       success: true,
       message: 'Registration successful',
@@ -75,6 +88,24 @@ export const login = async (req, res, next) => {
 
     if (!user.isActive) {
       return errorResponse(res, 'Your account has been disabled', 403);
+    }
+
+    // Alert the admins to a brand new account's first sign-in, then stay quiet
+    // for every later login. Admins are skipped so they do not alert each other
+    // every time one of them opens the dashboard.
+    if (user.role !== 'admin' && !user.lastLoginAt) {
+      user.lastLoginAt = new Date();
+      await user.save();
+
+      notifyRole({
+        role: 'admin',
+        exclude: user._id,
+        type: 'user_login',
+        title: 'First sign-in by a new user',
+        body: `${user.name} (${user.email}) signed in for the first time.`,
+        link: '/admin/users',
+        meta: { userId: String(user._id), name: user.name, email: user.email },
+      });
     }
 
     return successResponse(res, 'Login successful', buildAuthPayload(user));

@@ -12,6 +12,8 @@ export const NOTIFICATION_TYPES = [
   'seller_request',
   'seller_approved',
   'seller_rejected',
+  'user_registered',
+  'user_login',
   'low_stock',
   'product_status',
   'contact_message',

@@ -7,11 +7,13 @@ import {
   CheckCheck,
   ClipboardCheck,
   Loader2,
+  LogIn,
   Package,
   PencilLine,
   Sparkles,
   Store,
   Tag,
+  UserPlus,
   X,
   XCircle,
 } from 'lucide-react';
@@ -39,6 +41,8 @@ const ICON_BY_TYPE = {
   seller_request: Store,
   seller_approved: BadgeCheck,
   seller_rejected: X,
+  user_registered: UserPlus,
+  user_login: LogIn,
 };
 
 const TONE_BY_TYPE = {
@@ -51,6 +55,8 @@ const TONE_BY_TYPE = {
   seller_request: 'bg-amber-50 text-amber-600',
   seller_approved: 'bg-emerald-50 text-emerald-600',
   seller_rejected: 'bg-red-50 text-red-600',
+  user_registered: 'bg-indigo-50 text-indigo-600',
+  user_login: 'bg-slate-100 text-slate-600',
 };
 
 const timeAgo = (value) => {
