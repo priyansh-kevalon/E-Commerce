@@ -10,6 +10,7 @@ const toClient = (notification) => ({
   title: notification.title,
   body: notification.body,
   link: notification.link,
+  meta: notification.meta || {},
   read: notification.read,
   createdAt: notification.createdAt,
 });
@@ -19,7 +20,7 @@ const toClient = (notification) => ({
  * request that triggered it (order placement, status change, ...). Callers
  * deliberately do not await this.
  */
-export const createNotification = async ({ user, type, title, body = '', link = '' }) => {
+export const createNotification = async ({ user, type, title, body = '', link = '', meta = {} }) => {
   const recipients = (Array.isArray(user) ? user : [user]).filter(Boolean);
   if (!recipients.length) return [];
 
@@ -31,6 +32,7 @@ export const createNotification = async ({ user, type, title, body = '', link = 
         title,
         body,
         link,
+        meta,
       }))
     );
     return docs.map(toClient);
@@ -52,7 +54,7 @@ export const createNotification = async ({ user, type, title, body = '', link = 
  * Resolve an audience from a User filter and fan a notification out to them.
  * Shared by the storefront-wide and role-scoped broadcasts below.
  */
-const fanOut = async (filter, { type, title, body, link }) => {
+const fanOut = async (filter, { type, title, body, link, meta }) => {
   try {
     const User = (await import('../models/User.js')).default;
 
@@ -70,15 +72,16 @@ const fanOut = async (filter, { type, title, body, link }) => {
       // Sequential on purpose: this runs after the response and we would rather
       // not pile up parallel writes against the same collection.
       // eslint-disable-next-line no-await-in-loop
-      created.push(
-        ...(await createNotification({
-          user: batch,
-          type,
-          title,
-          body,
-          link,
-        }))
-      );
+        created.push(
+          ...(await createNotification({
+            user: batch,
+            type,
+            title,
+            body,
+            link,
+            meta,
+          }))
+        );
     }
 
     console.log(`[notification] "${type}" sent to ${created.length} user(s)`);

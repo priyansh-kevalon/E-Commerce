@@ -12,6 +12,10 @@ const buildAuthPayload = (user) => ({
     email: user.email,
     role: user.role,
     isActive: user.isActive,
+    sellerStatus: user.sellerStatus,
+    sellerRequestedAt: user.sellerRequestedAt,
+    sellerDecidedAt: user.sellerDecidedAt,
+    sellerNote: user.sellerNote,
     createdAt: user.createdAt,
   },
 });

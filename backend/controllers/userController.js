@@ -133,7 +133,9 @@ export const requestSellerAccount = async (req, res, next) => {
       type: 'seller_request',
       title: 'Seller application received',
       body: `${user.name} (${user.email}) applied to become a seller.`,
-      link: '/admin/users',
+      link: '/admin/users#seller-requests',
+      // Lets the admin bell approve or reject this application in place.
+      meta: { userId: String(user._id), name: user.name, email: user.email },
     });
 
     return successResponse(

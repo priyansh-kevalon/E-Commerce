@@ -49,6 +49,12 @@ const notificationSchema = new mongoose.Schema(
       default: '',
       trim: true,
     },
+    // Small payload for actionable notifications, e.g. the applicant a seller
+    // request notification refers to, so the bell can approve it in place.
+    meta: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
     read: {
       type: Boolean,
       default: false,

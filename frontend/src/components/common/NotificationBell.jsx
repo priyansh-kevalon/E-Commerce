@@ -9,11 +9,14 @@ import {
   Loader2,
   Package,
   Sparkles,
+  Store,
   Tag,
   X,
+  XCircle,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth.js';
 import useUnreadNotifications from '../../hooks/useUnreadNotifications.js';
+import { decideSellerRequest } from '../../services/adminService.js';
 import {
   clearNotifications,
   fetchNotifications,
@@ -31,6 +34,9 @@ const ICON_BY_TYPE = {
   product_sold: BadgeCheck,
   low_stock: Tag,
   product_status: Check,
+  seller_request: Store,
+  seller_approved: BadgeCheck,
+  seller_rejected: X,
 };
 
 const TONE_BY_TYPE = {
@@ -39,6 +45,9 @@ const TONE_BY_TYPE = {
   new_product: 'bg-brand-50 text-brand-700',
   product_submitted: 'bg-violet-50 text-violet-600',
   product_sold: 'bg-emerald-50 text-emerald-600',
+  seller_request: 'bg-amber-50 text-amber-600',
+  seller_approved: 'bg-emerald-50 text-emerald-600',
+  seller_rejected: 'bg-red-50 text-red-600',
 };
 
 const timeAgo = (value) => {
@@ -61,11 +70,17 @@ const timeAgo = (value) => {
 };
 
 export default function NotificationBell() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAdmin } = useAuth();
   const { unreadCount, setUnreadCount } = useUnreadNotifications();
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  // Notification id currently being approved/rejected, so only that row spins.
+  const [actingId, setActingId] = useState(null);
+  // Notification id showing the optional rejection-reason input.
+  const [rejectingId, setRejectingId] = useState(null);
+  const [rejectNote, setRejectNote] = useState('');
+  const [actionError, setActionError] = useState({ id: null, message: '' });
   const panelRef = useRef(null);
 
   const loadPanel = useCallback(async () => {
@@ -139,6 +154,42 @@ export default function NotificationBell() {
       // Ignore; the list simply stays as-is.
     }
   };
+
+  const closeRejectInput = () => {
+    setRejectingId(null);
+    setRejectNote('');
+  };
+
+  /**
+   * Approve or reject a seller application without leaving the bell. On success
+   * the notification is retired, because the request it points at is settled.
+   */
+  const handleDecision = async (item, status, note = '') => {
+    const applicantId = item.meta?.userId;
+    if (!applicantId) return;
+
+    setActingId(item.id);
+    setActionError({ id: null, message: '' });
+    try {
+      await decideSellerRequest(applicantId, status, note);
+      setItems((prev) => prev.filter((entry) => entry.id !== item.id));
+      setUnreadCount((count) => Math.max(0, count - (item.read ? 0 : 1)));
+      closeRejectInput();
+      // Keep any Admin Users list open elsewhere in sync with this decision.
+      window.dispatchEvent(
+        new CustomEvent('seller-request-decided', { detail: { id: applicantId, status } })
+      );
+    } catch (err) {
+      setActionError({ id: item.id, message: err.message });
+    } finally {
+      setActingId(null);
+    }
+  };
+
+  // A seller request is only actionable by an admin, and only while the
+  // notification still carries the applicant it refers to.
+  const isActionable = (item) =>
+    isAdmin && item.type === 'seller_request' && Boolean(item.meta?.userId);
 
   if (!isAuthenticated) return null;
 
@@ -215,6 +266,8 @@ export default function NotificationBell() {
                 {items.map((item) => {
                   const Icon = ICON_BY_TYPE[item.type] || Bell;
                   const tone = TONE_BY_TYPE[item.type] || 'bg-brand-50 text-brand-700';
+                  const actionable = isActionable(item);
+                  const busy = actingId === item.id;
 
                   const body = (
                     <>
@@ -251,13 +304,85 @@ export default function NotificationBell() {
                     </>
                   );
 
+                  // Approve / Reject controls, rendered under an actionable
+                  // seller request.
+                  const actions = actionable ? (
+                    <div className="mt-2.5 pl-12">
+                      {rejectingId === item.id ? (
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            value={rejectNote}
+                            onChange={(event) => setRejectNote(event.target.value)}
+                            maxLength={300}
+                            placeholder="Optional reason, shown to the applicant"
+                            aria-label="Rejection reason"
+                            className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                          />
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              disabled={busy}
+                              onClick={() => handleDecision(item, 'rejected', rejectNote.trim())}
+                              className="rounded-lg bg-red-600 px-2.5 py-1.5 text-[11px] font-bold text-white transition hover:bg-red-700 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
+                            >
+                              {busy ? 'Working…' : 'Confirm reject'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={closeRejectInput}
+                              className="rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-[11px] font-bold text-slate-600 transition hover:bg-slate-50"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            disabled={busy}
+                            onClick={() => handleDecision(item, 'approved')}
+                            className="inline-flex items-center gap-1 rounded-lg bg-brand-600 px-2.5 py-1.5 text-[11px] font-bold text-white shadow-glow transition hover:bg-brand-700 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
+                          >
+                            {busy ? <Loader2 size={12} className="animate-spin" /> : <BadgeCheck size={12} />}
+                            Approve
+                          </button>
+                          <button
+                            type="button"
+                            disabled={busy}
+                            onClick={() => {
+                              setRejectingId(item.id);
+                              setActionError({ id: null, message: '' });
+                            }}
+                            className="inline-flex items-center gap-1 rounded-lg border border-red-300 bg-white px-2.5 py-1.5 text-[11px] font-bold text-red-600 transition hover:bg-red-50 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
+                          >
+                            <XCircle size={12} /> Reject
+                          </button>
+                        </div>
+                      )}
+
+                      {actionError.id === item.id && (
+                        <p className="mt-2 text-[11px] font-semibold text-red-600">
+                          {actionError.message}
+                        </p>
+                      )}
+                    </div>
+                  ) : null;
+
                   return (
-                    <li key={item.id}>
-                      {item.link ? (
+                    <li key={item.id} className="px-4 py-3">
+                      {actionable ? (
+                        // Not a link: clicking the row must not navigate away
+                        // while the decision controls are right underneath.
+                        <div className="flex items-start gap-3">
+                          {body}
+                        </div>
+                      ) : item.link ? (
                         <Link
                           to={item.link}
                           onClick={() => handleOpenItem(item)}
-                          className="flex items-start gap-3 px-4 py-3 transition hover:bg-slate-50"
+                          className="-mx-4 -my-3 flex items-start gap-3 px-4 py-3 transition hover:bg-slate-50"
                         >
                           {body}
                         </Link>
@@ -265,11 +390,12 @@ export default function NotificationBell() {
                         <button
                           type="button"
                           onClick={() => handleOpenItem(item)}
-                          className="flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-slate-50"
+                          className="-mx-4 -my-3 flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-slate-50"
                         >
                           {body}
                         </button>
                       )}
+                      {actions}
                     </li>
                   );
                 })}
