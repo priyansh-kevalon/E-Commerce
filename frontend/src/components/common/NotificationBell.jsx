@@ -236,10 +236,10 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 flex max-h-[70vh] w-[min(22rem,calc(100vw-2rem))] animate-fade-in flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-luxe">
-          <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-3">
-            <p className="text-sm font-extrabold text-slate-900">Notifications</p>
-            <div className="flex items-center gap-1">
+        <div className="notif-panel-height absolute right-0 top-full z-50 mt-2 flex w-[calc(100vw-1.5rem)] max-w-[22rem] animate-fade-in flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-luxe">
+          <div className="flex shrink-0 items-center justify-between gap-2 border-b border-slate-100 px-4 py-3">
+            <p className="min-w-0 truncate text-sm font-extrabold text-slate-900">Notifications</p>
+            <div className="flex shrink-0 items-center gap-1">
               {unreadCount > 0 && (
                 <button
                   type="button"
@@ -260,7 +260,7 @@ export default function NotificationBell() {
             </div>
           </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="min-h-0 flex-1 overscroll-contain overflow-y-auto">
             {loading && items.length === 0 ? (
               <div className="flex items-center justify-center gap-2 px-4 py-10 text-sm text-slate-500">
                 <Loader2 size={16} className="animate-spin" /> Loading notifications
@@ -338,7 +338,7 @@ export default function NotificationBell() {
                             aria-label="Rejection reason"
                             className="w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
                           />
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex flex-wrap items-center gap-1.5">
                             <button
                               type="button"
                               disabled={busy}
@@ -357,7 +357,7 @@ export default function NotificationBell() {
                           </div>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex flex-wrap items-center gap-1.5">
                           <button
                             type="button"
                             disabled={busy}
@@ -423,7 +423,7 @@ export default function NotificationBell() {
           </div>
 
           {items.length > 0 && (
-            <div className="border-t border-slate-100 px-2 py-2">
+            <div className="shrink-0 border-t border-slate-100 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2">
               <button
                 type="button"
                 onClick={handleClearAll}

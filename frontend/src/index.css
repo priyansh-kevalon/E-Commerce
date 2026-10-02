@@ -279,6 +279,12 @@ h4 {
 }
 
 @layer utilities {
+  /* dvh tracks the visible viewport, so the panel is never clipped by mobile
+     browser chrome. The second term leaves room for the sticky header. */
+  .notif-panel-height {
+    max-height: min(70dvh, calc(100dvh - 7.5rem));
+  }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
