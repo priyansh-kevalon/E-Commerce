@@ -2,6 +2,7 @@ import User from '../models/User.js';
 import Cart from '../models/Cart.js';
 import Wishlist from '../models/Wishlist.js';
 import Order from '../models/Order.js';
+import Notification from '../models/Notification.js';
 import { successResponse, errorResponse } from '../utils/responseHandler.js';
 import { validateProfileUpdate, validatePasswordChange } from '../validators/userValidator.js';
 import { createNotification, notifyRole } from './notificationController.js';
@@ -205,6 +206,19 @@ export const decideSellerRequest = async (req, res, next) => {
             : 'Your application was not approved. You may apply again later.',
       link: status === 'approved' ? '/seller' : '/profile',
     });
+
+    // Retire the original request alert for every admin. The application is no
+    // longer pending, so leaving it unread would show a decision that now fails
+    // with "no pending seller request". meta.userId is stored as a string, so
+    // match both representations.
+    await Notification.updateMany(
+      {
+        type: 'seller_request',
+        'meta.userId': { $in: [String(user._id), user._id] },
+        read: false,
+      },
+      { $set: { read: true, readAt: new Date() } }
+    );
 
     return successResponse(res, `Seller application ${status}`, {
       user: {

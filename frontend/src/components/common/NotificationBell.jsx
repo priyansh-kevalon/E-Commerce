@@ -196,9 +196,14 @@ export default function NotificationBell() {
   };
 
   // A seller request is only actionable by an admin, and only while the
-  // notification still carries the applicant it refers to.
+  // notification still carries the applicant it refers to. Deciding a request
+  // marks its alert read server-side, so a read alert is already settled and
+  // must not keep offering Approve/Reject.
   const isActionable = (item) =>
-    isAdmin && item.type === 'seller_request' && Boolean(item.meta?.userId);
+    isAdmin &&
+    item.type === 'seller_request' &&
+    !item.read &&
+    Boolean(item.meta?.userId);
 
   if (!isAuthenticated) return null;
 
