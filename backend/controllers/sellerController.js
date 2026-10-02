@@ -4,6 +4,7 @@ import Category from '../models/Category.js';
 import Order from '../models/Order.js';
 import { successResponse, errorResponse } from '../utils/responseHandler.js';
 import { validateProduct } from '../validators/productValidator.js';
+import { notifyRole } from './notificationController.js';
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 

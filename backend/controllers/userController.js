@@ -4,6 +4,7 @@ import Wishlist from '../models/Wishlist.js';
 import Order from '../models/Order.js';
 import { successResponse, errorResponse } from '../utils/responseHandler.js';
 import { validateProfileUpdate, validatePasswordChange } from '../validators/userValidator.js';
+import { createNotification, notifyRole } from './notificationController.js';
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -96,13 +97,135 @@ export const changePassword = async (req, res, next) => {
 };
 
 /**
+ * @route   POST /api/users/seller-request
+ * @desc    Apply to become a seller. Puts the account into a pending state and
+ *          prompts the admins to review it.
+ * @access  Private
+ */
+export const requestSellerAccount = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return errorResponse(res, 'User not found', 404);
+    }
+
+    if (user.role === 'seller') {
+      return errorResponse(res, 'You are already a seller', 400);
+    }
+
+    if (user.role === 'admin') {
+      return errorResponse(res, 'Admin accounts cannot request seller access', 400);
+    }
+
+    if (user.sellerStatus === 'pending') {
+      return errorResponse(res, 'Your request is already being reviewed', 409);
+    }
+
+    user.sellerStatus = 'pending';
+    user.sellerRequestedAt = new Date();
+    user.sellerDecidedAt = null;
+    user.sellerNote = '';
+    await user.save();
+
+    notifyRole({
+      role: 'admin',
+      exclude: req.user._id,
+      type: 'seller_request',
+      title: 'Seller application received',
+      body: `${user.name} (${user.email}) applied to become a seller.`,
+      link: '/admin/users',
+    });
+
+    return successResponse(
+      res,
+      'Application submitted. An admin will review it shortly.',
+      { sellerStatus: user.sellerStatus, sellerRequestedAt: user.sellerRequestedAt },
+      201
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @route   PATCH /api/users/:id/seller-request
+ * @desc    Approve or reject a seller application. Approving flips the account
+ *          to the seller role and tells the applicant either way.
+ * @access  Private/Admin
+ */
+export const decideSellerRequest = async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    if (!['approved', 'rejected'].includes(status)) {
+      return errorResponse(res, 'Status must be either approved or rejected', 400);
+    }
+
+    const note = String(req.body.note ?? '').trim();
+    if (note.length > 300) {
+      return errorResponse(res, 'Note cannot exceed 300 characters', 400);
+    }
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return errorResponse(res, 'User not found', 404);
+    }
+
+    if (user.role === 'admin') {
+      return errorResponse(res, 'Admin accounts cannot be converted to sellers', 400);
+    }
+
+    if (user.sellerStatus !== 'pending') {
+      return errorResponse(res, 'This account has no pending seller request', 400);
+    }
+
+    user.sellerStatus = status;
+    user.sellerDecidedAt = new Date();
+    user.sellerNote = note;
+
+    // Approval is what actually grants seller access.
+    if (status === 'approved') {
+      user.role = 'seller';
+    }
+
+    await user.save();
+
+    createNotification({
+      user: user._id,
+      type: status === 'approved' ? 'seller_approved' : 'seller_rejected',
+      title: status === 'approved' ? 'Your seller account is approved' : 'Seller application rejected',
+      body:
+        status === 'approved'
+          ? 'You can now list products and manage orders from your seller dashboard.'
+          : note
+            ? `Reason: ${note}`
+            : 'Your application was not approved. You may apply again later.',
+      link: status === 'approved' ? '/seller' : '/profile',
+    });
+
+    return successResponse(res, `Seller application ${status}`, {
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        sellerStatus: user.sellerStatus,
+        sellerDecidedAt: user.sellerDecidedAt,
+        sellerNote: user.sellerNote,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * @route   GET /api/users
- * @desc    List all users (optional ?search= and ?role=)
+ * @desc    List all users (optional ?search=, ?role= and ?sellerStatus=)
  * @access  Private/Admin
  */
 export const getUsers = async (req, res, next) => {
   try {
-    const { search, role } = req.query;
+    const { search, role, sellerStatus } = req.query;
     const filter = {};
 
     if (role) {
@@ -110,6 +233,14 @@ export const getUsers = async (req, res, next) => {
         return errorResponse(res, 'Role filter must be either customer, seller or admin', 400);
       }
       filter.role = role;
+    }
+
+    // Lets the admin users page list just the applications awaiting review.
+    if (sellerStatus) {
+      if (!['none', 'pending', 'approved', 'rejected'].includes(sellerStatus)) {
+        return errorResponse(res, 'Invalid seller status filter', 400);
+      }
+      filter.sellerStatus = sellerStatus;
     }
 
     if (search && String(search).trim()) {

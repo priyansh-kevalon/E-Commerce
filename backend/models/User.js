@@ -29,6 +29,28 @@ const userSchema = new mongoose.Schema(
       enum: ['customer', 'seller', 'admin'],
       default: 'customer',
     },
+    // Track of a customer's application to become a seller. Approval is what
+    // actually flips `role` to 'seller'; this field is the audit trail.
+    sellerStatus: {
+      type: String,
+      enum: ['none', 'pending', 'approved', 'rejected'],
+      default: 'none',
+    },
+    sellerRequestedAt: {
+      type: Date,
+      default: null,
+    },
+    sellerDecidedAt: {
+      type: Date,
+      default: null,
+    },
+    // Optional admin remark, shown to the applicant on rejection.
+    sellerNote: {
+      type: String,
+      default: '',
+      trim: true,
+      maxlength: 300,
+    },
     isActive: {
       type: Boolean,
       default: true,

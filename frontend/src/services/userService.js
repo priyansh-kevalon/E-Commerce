@@ -16,3 +16,12 @@ export const changePassword = async (payload) => {
   const { data } = await api.put('/users/password', payload);
   return data;
 };
+
+/**
+ * Apply to become a seller. Puts the account into a pending state that an
+ * admin has to approve.
+ */
+export const requestSellerAccount = async () => {
+  const { data } = await api.post('/users/seller-request');
+  return data.data;
+};

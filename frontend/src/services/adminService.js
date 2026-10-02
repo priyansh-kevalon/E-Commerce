@@ -53,6 +53,15 @@ export const updateUser = async (id, payload) => {
   return data.data.user;
 };
 
+/**
+ * Approve or reject a pending seller application. Approving is what grants the
+ * seller role, and the applicant is notified either way.
+ */
+export const decideSellerRequest = async (id, status, note = '') => {
+  const { data } = await api.patch(`/users/${id}/seller-request`, { status, note });
+  return data.data.user;
+};
+
 export const deleteUser = async (id) => {
   const { data } = await api.delete(`/users/${id}`);
   return data;

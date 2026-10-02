@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import ProfileForm from '../components/profile/ProfileForm.jsx';
 import ChangePasswordForm from '../components/profile/ChangePasswordForm.jsx';
+import SellerRequestCard from '../components/profile/SellerRequestCard.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 import { formatDate } from '../utils/helpers.js';
 
@@ -169,6 +170,7 @@ export default function Profile() {
 
           <ProfileForm />
           <ChangePasswordForm />
+          <SellerRequestCard user={user} isSeller={isSeller} isAdmin={isAdmin} />
         </div>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Bell,
   ChevronRight,
   LayoutDashboard,
   LogOut,
@@ -13,6 +12,7 @@ import {
 } from 'lucide-react';
 import { APP_NAME } from '../utils/constants.js';
 import { useAuth } from '../hooks/useAuth.js';
+import NotificationBell from '../components/common/NotificationBell.jsx';
 
 const NAV = [
   {
@@ -213,10 +213,7 @@ export default function SellerLayout() {
           </div>
 
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
-            <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-500 shadow-sm ring-1 ring-slate-200">
-              <Bell size={17} />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-accent-500 ring-2 ring-white" />
-            </span>
+            <NotificationBell />
 
             <span className="h-8 w-px bg-slate-200" />
 

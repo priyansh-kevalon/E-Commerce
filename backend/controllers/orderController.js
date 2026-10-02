@@ -33,6 +33,28 @@ const canCancel = (status) =>
   ['Pending', 'Confirmed', 'Processing'].includes(status);
 
 /**
+ * One-line summary of what a seller sold, e.g.
+ * "2x Widget A, 1x Widget B sold in order #AB12CD."
+ * Kept inside the Notification body's 300-char limit.
+ */
+const summariseSoldLines = (lines, shortId) => {
+  const MAX_BODY = 300;
+  const prefix = `Sold in order #${shortId}: `;
+
+  const rendered = lines.map((line) => `${line.quantity}x ${line.name}`);
+  let summary = prefix + rendered.join(', ') + '.';
+
+  if (summary.length <= MAX_BODY) return summary;
+
+  // Too many products to list - fall back to a count and keep the tail short.
+  const total = lines.reduce((sum, line) => sum + line.quantity, 0);
+  const first = rendered[0];
+  const overflow = ` +${lines.length - 1} more`;
+  summary = `${prefix}${total} unit${total === 1 ? '' : 's'} (${first}${overflow}).`;
+  return summary.slice(0, MAX_BODY);
+};
+
+/**
  * @route   POST /api/orders
  * @desc    Place an order from the authenticated user's cart
  * @access  Private
@@ -196,21 +218,41 @@ export const createOrder = async (req, res, next) => {
       link: `/orders/${order._id}`,
     });
 
-    // A heads-up per seller, with their own unit count. orderItems does not
-    // denormalise `seller`, so resolve it from the products we already loaded.
-    const unitsBySeller = new Map();
+    // A heads-up per seller, with their own unit count and the products that
+    // actually sold. orderItems does not denormalise `seller`, so resolve it
+    // from the products we already loaded.
+    const soldBySeller = new Map();
     for (const { product, quantity } of stockUpdates) {
       const sellerId = product.seller?.toString();
       if (!sellerId || sellerId === req.user._id.toString()) continue;
-      unitsBySeller.set(sellerId, (unitsBySeller.get(sellerId) || 0) + quantity);
+
+      if (!soldBySeller.has(sellerId)) soldBySeller.set(sellerId, []);
+      const lines = soldBySeller.get(sellerId);
+
+      const existing = lines.find((line) => line.productId === product._id.toString());
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        lines.push({ productId: product._id.toString(), name: product.name, quantity });
+      }
     }
 
-    for (const [sellerId, units] of unitsBySeller) {
+    for (const [sellerId, lines] of soldBySeller) {
+      const units = lines.reduce((sum, line) => sum + line.quantity, 0);
+
       createNotification({
         user: sellerId,
         type: 'new_order',
         title: 'New order received',
         body: `Order #${shortId} contains ${units} of your product${units === 1 ? '' : 's'}.`,
+        link: '/seller/orders',
+      });
+
+      createNotification({
+        user: sellerId,
+        type: 'product_sold',
+        title: units === 1 ? 'Your product sold' : `${units} of your products sold`,
+        body: summariseSoldLines(lines, shortId),
         link: '/seller/orders',
       });
     }

@@ -1,6 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, Check, CheckCheck, Loader2, Package, Sparkles, Tag, X } from 'lucide-react';
+import {
+  BadgeCheck,
+  Bell,
+  Check,
+  CheckCheck,
+  ClipboardCheck,
+  Loader2,
+  Package,
+  Sparkles,
+  Tag,
+  X,
+} from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth.js';
 import useUnreadNotifications from '../../hooks/useUnreadNotifications.js';
 import {
@@ -16,6 +27,8 @@ const ICON_BY_TYPE = {
   order_cancelled: X,
   new_order: Tag,
   new_product: Sparkles,
+  product_submitted: ClipboardCheck,
+  product_sold: BadgeCheck,
   low_stock: Tag,
   product_status: Check,
 };
@@ -24,6 +37,8 @@ const TONE_BY_TYPE = {
   order_cancelled: 'bg-red-50 text-red-600',
   new_order: 'bg-amber-50 text-amber-600',
   new_product: 'bg-brand-50 text-brand-700',
+  product_submitted: 'bg-violet-50 text-violet-600',
+  product_sold: 'bg-emerald-50 text-emerald-600',
 };
 
 const timeAgo = (value) => {

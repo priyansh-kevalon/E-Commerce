@@ -1,6 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, CheckCheck, Loader2, Package, Sparkles, Tag, X } from 'lucide-react';
+import {
+  BadgeCheck,
+  Bell,
+  CheckCheck,
+  ClipboardCheck,
+  Loader2,
+  Package,
+  Sparkles,
+  Tag,
+  X,
+} from 'lucide-react';
 import {
   clearNotifications,
   fetchNotifications,
@@ -14,6 +24,8 @@ const ICON_BY_TYPE = {
   order_cancelled: X,
   new_order: Tag,
   new_product: Sparkles,
+  product_submitted: ClipboardCheck,
+  product_sold: BadgeCheck,
   low_stock: Tag,
   product_status: CheckCheck,
 };
@@ -22,6 +34,8 @@ const TONE_BY_TYPE = {
   order_cancelled: 'bg-red-50 text-red-600',
   new_order: 'bg-amber-50 text-amber-600',
   new_product: 'bg-brand-50 text-brand-700',
+  product_submitted: 'bg-violet-50 text-violet-600',
+  product_sold: 'bg-emerald-50 text-emerald-600',
 };
 
 const fullTimestamp = (value) => {
