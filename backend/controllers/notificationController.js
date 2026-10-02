@@ -113,16 +113,21 @@ export const notifyAllUsers = ({ exclude, ...payload }) =>
  * Fan a notification out to every active user holding a given role. Used for
  * internal workflow prompts, e.g. telling admins a seller product is waiting
  * for approval.
+ *
+ * Pass `roles: ['admin', 'seller']` to notify several roles at once.
  */
-export const notifyRole = ({ role, exclude, ...payload }) =>
-  fanOut(
+export const notifyRole = ({ role, roles, exclude, ...payload }) => {
+  const targets = roles ?? (Array.isArray(role) ? role : [role]);
+
+  return fanOut(
     {
-      role,
+      role: targets.length > 1 ? { $in: targets } : targets[0],
       isActive: { $ne: false },
       ...(exclude ? { _id: { $ne: exclude } } : {}),
     },
     payload
   );
+};
 
 export const getNotifications = async (req, res, next) => {
   try {

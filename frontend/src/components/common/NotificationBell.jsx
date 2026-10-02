@@ -8,6 +8,7 @@ import {
   ClipboardCheck,
   Loader2,
   Package,
+  PencilLine,
   Sparkles,
   Store,
   Tag,
@@ -31,6 +32,7 @@ const ICON_BY_TYPE = {
   new_order: Tag,
   new_product: Sparkles,
   product_submitted: ClipboardCheck,
+  product_updated: PencilLine,
   product_sold: BadgeCheck,
   low_stock: Tag,
   product_status: Check,
@@ -44,6 +46,7 @@ const TONE_BY_TYPE = {
   new_order: 'bg-amber-50 text-amber-600',
   new_product: 'bg-brand-50 text-brand-700',
   product_submitted: 'bg-violet-50 text-violet-600',
+  product_updated: 'bg-sky-50 text-sky-600',
   product_sold: 'bg-emerald-50 text-emerald-600',
   seller_request: 'bg-amber-50 text-amber-600',
   seller_approved: 'bg-emerald-50 text-emerald-600',
@@ -268,6 +271,12 @@ export default function NotificationBell() {
                   const tone = TONE_BY_TYPE[item.type] || 'bg-brand-50 text-brand-700';
                   const actionable = isActionable(item);
                   const busy = actingId === item.id;
+                  // Seller requests are also sent to sellers, who have no
+                  // access to /admin/users, so only admins get the link.
+                  const href =
+                    item.link && (item.type !== 'seller_request' || isAdmin)
+                      ? item.link
+                      : '';
 
                   const body = (
                     <>
@@ -306,8 +315,7 @@ export default function NotificationBell() {
 
                   // Approve / Reject controls, rendered under an actionable
                   // seller request.
-                  const actions = actionable ? (
-                    <div className="mt-2.5 pl-12">
+                  const actions = actionable ? (                    <div className="mt-2.5 pl-12">
                       {rejectingId === item.id ? (
                         <div className="space-y-2">
                           <input
@@ -378,9 +386,9 @@ export default function NotificationBell() {
                         <div className="flex items-start gap-3">
                           {body}
                         </div>
-                      ) : item.link ? (
+                      ) : href ? (
                         <Link
-                          to={item.link}
+                          to={href}
                           onClick={() => handleOpenItem(item)}
                           className="-mx-4 -my-3 flex items-start gap-3 px-4 py-3 transition hover:bg-slate-50"
                         >

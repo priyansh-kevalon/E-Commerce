@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth.js';
 import {
   BadgeCheck,
   Bell,
@@ -7,6 +8,7 @@ import {
   ClipboardCheck,
   Loader2,
   Package,
+  PencilLine,
   Sparkles,
   Store,
   Tag,
@@ -26,6 +28,7 @@ const ICON_BY_TYPE = {
   new_order: Tag,
   new_product: Sparkles,
   product_submitted: ClipboardCheck,
+  product_updated: PencilLine,
   product_sold: BadgeCheck,
   low_stock: Tag,
   product_status: CheckCheck,
@@ -39,6 +42,7 @@ const TONE_BY_TYPE = {
   new_order: 'bg-amber-50 text-amber-600',
   new_product: 'bg-brand-50 text-brand-700',
   product_submitted: 'bg-violet-50 text-violet-600',
+  product_updated: 'bg-sky-50 text-sky-600',
   product_sold: 'bg-emerald-50 text-emerald-600',
   seller_request: 'bg-amber-50 text-amber-600',
   seller_approved: 'bg-emerald-50 text-emerald-600',
@@ -55,6 +59,7 @@ const fullTimestamp = (value) => {
 };
 
 export default function Notifications() {
+  const { isAdmin } = useAuth();
   const [items, setItems] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -196,6 +201,10 @@ export default function Notifications() {
             {items.map((item) => {
               const Icon = ICON_BY_TYPE[item.type] || Bell;
               const tone = TONE_BY_TYPE[item.type] || 'bg-brand-50 text-brand-700';
+              // Seller requests are also sent to sellers, who cannot open
+              // /admin/users, so only admins get the link.
+              const href =
+                item.link && (item.type !== 'seller_request' || isAdmin) ? item.link : '';
 
               const inner = (
                 <>
@@ -234,9 +243,9 @@ export default function Notifications() {
 
               return (
                 <li key={item.id}>
-                  {item.link ? (
+                  {href ? (
                     <Link
-                      to={item.link}
+                      to={href}
                       onClick={() => handleOpen(item)}
                       className="flex items-start gap-3 px-4 py-4 transition hover:bg-slate-50"
                     >

@@ -7,6 +7,7 @@ export const NOTIFICATION_TYPES = [
   'new_order',
   'new_product',
   'product_submitted',
+  'product_updated',
   'product_sold',
   'seller_request',
   'seller_approved',

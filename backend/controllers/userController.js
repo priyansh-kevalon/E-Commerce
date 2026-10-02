@@ -127,8 +127,10 @@ export const requestSellerAccount = async (req, res, next) => {
     user.sellerNote = '';
     await user.save();
 
+    // Admins review the application; sellers are told so the marketplace team
+    // knows a new seller is onboarding.
     notifyRole({
-      role: 'admin',
+      roles: ['admin', 'seller'],
       exclude: req.user._id,
       type: 'seller_request',
       title: 'Seller application received',

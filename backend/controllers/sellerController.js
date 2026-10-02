@@ -639,12 +639,49 @@ export const updateProduct = async (req, res, next) => {
       'stock',
     ];
 
+    // Changes an admin should look at. Restocking is routine, so `stock` is
+    // deliberately absent - it must not trigger a review prompt.
+    const reviewFields = [
+      'name',
+      'description',
+      'price',
+      'discountPrice',
+      'category',
+      'brand',
+      'images',
+    ];
+
+    // Snapshot the reviewed fields so we can tell what actually changed, and
+    // ignore saves that resubmit identical values.
+    const before = {};
+    reviewFields.forEach((field) => {
+      before[field] = JSON.stringify(product[field] ?? null);
+    });
+
     editableFields.forEach((field) => {
       if (req.body[field] !== undefined) product[field] = req.body[field];
     });
 
+    const changedFields = reviewFields.filter(
+      (field) => JSON.stringify(product[field] ?? null) !== before[field]
+    );
+
     await product.save();
     await product.populate('category', 'name');
+
+    // Only live products are worth re-reviewing: a product still awaiting its
+    // first approval already has a pending prompt sitting with the admins.
+    if (changedFields.length > 0 && product.status === 'approved') {
+      notifyRole({
+        role: 'admin',
+        exclude: req.user._id,
+        type: 'product_updated',
+        title: 'Product update awaiting review',
+        body: `${req.user.name || 'A seller'} updated "${product.name}" (${changedFields.join(', ')}).`,
+        link: '/admin/products',
+        meta: { productId: String(product._id) },
+      });
+    }
 
     return successResponse(res, 'Product updated successfully', { product });
   } catch (error) {
